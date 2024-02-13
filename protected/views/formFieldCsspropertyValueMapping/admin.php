@@ -3,25 +3,25 @@
 /* @var $model FormFieldCsspropertyValueMapping */
 
 $this->breadcrumbs=array(
-	'Form Field Cssproperty Value Mappings'=>array('index'),
-	'Manage',
+    'Form Field Cssproperty Value Mappings'=>array('index'),
+    'Manage',
 );
 
 $this->menu=array(
-	array('label'=>'List FormFieldCsspropertyValueMapping', 'url'=>array('index')),
-	array('label'=>'Create FormFieldCsspropertyValueMapping', 'url'=>array('create')),
+    array('label'=>'List FormFieldCsspropertyValueMapping', 'url'=>array('index')),
+    array('label'=>'Create FormFieldCsspropertyValueMapping', 'url'=>array('create')),
 );
 
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
-	$('.search-form').toggle();
-	return false;
+    $('.search-form').toggle();
+    return false;
 });
 $('.search-form form').submit(function(){
-	$('#form-field-cssproperty-value-mapping-grid').yiiGridView('update', {
-		data: $(this).serialize()
-	});
-	return false;
+    $('#form-field-cssproperty-value-mapping-grid').yiiGridView('update', {
+        data: $(this).serialize()
+    });
+    return false;
 });
 ");
 ?>
@@ -36,22 +36,34 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 <?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
-	'model'=>$model,
+    'model'=>$model,
 )); ?>
 </div><!-- search-form -->
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'form-field-cssproperty-value-mapping-grid',
-	'dataProvider'=>$model->search(),
-	'filter'=>$model,
-	'columns'=>array(
-		'id',
-		'form_id',
-		'field_id',
-		'css_property_id',
-		'value',
-		array(
-			'class'=>'CButtonColumn',
-		),
-	),
+    'id'=>'form-field-cssproperty-value-mapping-grid',
+    'dataProvider'=>$model->search(),
+    'filter'=>$model,
+    'columns'=>array(
+        'id',
+        'form_id',
+        'field_id',
+        'css_property_id',
+        'value',
+        array(
+            'class'=>'CButtonColumn',
+            'template'=>'{update}{delete}',
+            'buttons'=>array(
+                'update'=>array(
+                    'url'=>'Yii::app()->createUrl("formFieldCsspropertyValueMapping/update", array("id"=>$data->id))',
+                ),
+                'delete'=>array(
+                    'url'=>'Yii::app()->createUrl("formFieldCsspropertyValueMapping/customDelete")',
+                    'options'=>array(
+                        'class'=>'delete', // You can add custom classes for styling
+                    ),
+                ),
+            ),
+        ),
+    ),
 )); ?>

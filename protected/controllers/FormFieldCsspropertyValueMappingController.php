@@ -32,7 +32,7 @@ class FormFieldCsspropertyValueMappingController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','applyStylesToFormElement','fetchFields'),
+				'actions'=>array('create','update','applyStylesToFormElement','fetchFields','customDelete','formDelete'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -259,7 +259,45 @@ private function combinationValidation($model)
     echo CJSON::encode($cssStylesString);
     Yii::app()->end();
 }
+public function actionCustomDelete(){
+    
+    $this->render('deletePage');
+        
+}
+public function actionFormDelete(){
+    $formId = Yii::app()->request->getPost('formId');
+//    print_r($formId);
+//    die();
+    
+    if($formId!=null){
+        
+        $formFieldCssModel = FormFieldCsspropertyValueMapping::model()->findAllByAttributes(array('form_id'=>$formId));
+        
+        $id = array();
+        foreach($formFieldCssModel as $model){
+            $ids[]=$model->id;
+            
+        }
+//        print_r($ids);
+//        die();
+        if(!empty($ids)){
+            
+            $idList = implode(',', $ids);
+            $delete = "DELETE FROM form_field_cssproperty_value_mapping WHERE form_id IN ($idsList)";
+            $command = Yii::app()->db->createCommand($delete);
+            $command->execute();
+                        echo "Records deleted successfully.";
 
+            
+        }
+        else{
+           echo  "No Style for Form Found";
+        }
+    }
+    else{
+        echo "Form Id not found ";
+    }
+}
 
         
 }
