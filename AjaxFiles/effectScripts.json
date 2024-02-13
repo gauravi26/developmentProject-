@@ -1,0 +1,134 @@
+{
+    "2": [
+        {
+            "form_id": "2",
+            "field_id": "4",
+            "effect_id": "1",
+            "trigger": "hover",
+            "title": "department_btn",
+            "code": {
+                "css": ".blink { border: 3px solid #FBB72D; font-weight: bold; border-radius: 5px; }",
+                "js": "$(document).ready(function() { $('#department_btn').triggerValue(function() { var element = $(this); element.addClass('blink'); setTimeout(function() { element.removeClass('blink'); }, 1000); }); });"
+            }
+        },
+        {
+            "form_id": "2",
+            "field_id": "4",
+            "effect_id": "89",
+            "trigger": "mouseover",
+            "title": "department_btn",
+            "code": {
+                "css": "\/\/",
+                "js": "\/\/ Get the button by its ID using querySelector\nconst fadeButton = document.querySelector('#department_btn');\n\n\/\/ Function to toggle the fading effect\nfunction toggleFading() {\n    if (isFaded) {\n        fadeButton.style.opacity = '1';\n    } else {\n        fadeButton.style.opacity = '0.2';\n    }\n    isFaded = !isFaded;\n}\n\n\/\/ Flag to track the fading state\nlet isFaded = false;\n\n\/\/ Add a mouseover event listener to the button\nfadeButton.addEventListener('mouseover', toggleFading);\n"
+            }
+        },
+        {
+            "form_id": "2",
+            "field_id": "4",
+            "effect_id": "3",
+            "trigger": "focus",
+            "title": "department_btn",
+            "code": {
+                "css": ".shake { animation: shake 0.5s; } @keyframes shake { 0% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-10px); } 80% { transform: translateX(10px); } 100% { transform: translateX(0); } }",
+                "js": "$('#department_btn').focus(function() { var element = $(this); element.addClass('shake'); setTimeout(function() { element.removeClass('shake'); }, 1000); });"
+            }
+        }
+    ],
+    "1": [
+        {
+            "form_id": "1",
+            "field_id": "14",
+            "effect_id": "82",
+            "trigger": "hover",
+            "title": "faculty_name",
+            "code": {
+                "css": "",
+                "js": "  var opacity=0; \n    var intervalID=0; \n    window.onload=fadeout; \n        function fadeout(){ \n            setInterval(hide, 200); \n        } \n    function hide(){ \n        var body=document.getElementById(\"faculty_name\"); \n        opacity = \n    Number(window.getComputedStyle(body).getPropertyValue(\"opacity\")) \n      \n            if(opacity>0){ \n                opacity=opacity-0.1; \n                        body.style.opacity=opacity \n            } \n            else{ \n                clearInterval(intervalID); \n            } \n        } "
+            }
+        },
+        {
+            "form_id": "1",
+            "field_id": "14",
+            "effect_id": "82",
+            "trigger": "load",
+            "title": "faculty_name",
+            "code": {
+                "css": "",
+                "js": "  var opacity=0; \n    var intervalID=0; \n    window.onload=fadeout; \n        function fadeout(){ \n            setInterval(hide, 200); \n        } \n    function hide(){ \n        var body=document.getElementById(\"faculty_name\"); \n        opacity = \n    Number(window.getComputedStyle(body).getPropertyValue(\"opacity\")) \n      \n            if(opacity>0){ \n                opacity=opacity-0.1; \n                        body.style.opacity=opacity \n            } \n            else{ \n                clearInterval(intervalID); \n            } \n        } "
+            }
+        },
+        {
+            "form_id": "1",
+            "field_id": "14",
+            "effect_id": "90",
+            "trigger": "mouseover",
+            "title": "faculty_name",
+            "code": {
+                "css": ",",
+                "js": "  var opacity=0; \n    var intervalID=0; \n    window.onload=fadeout; \n        function fadeout(){ \n            setInterval(hide, 200); \n        } \n    function hide(){ \n        var body=document.getElementById('#faculty_name'); \n        opacity = \n    Number(window.getComputedStyle(body).getPropertyValue(\"opacity\")) \n      \n            if(opacity>0){ \n                opacity=opacity-0.1; \n                        body.style.opacity=opacity \n            } \n            else{ \n                clearInterval(intervalID); \n            } \n        } "
+            }
+        }
+    ],
+    "6": [
+        {
+            "form_id": "6",
+            "field_id": "6",
+            "effect_id": "84",
+            "trigger": "hover",
+            "title": "course_type_btn",
+            "code": {
+                "css": "",
+                "js": "var animateButton = function(e) {\n\n  e.preventDefault;\n  \/\/reset animation\n  e.target.classList.remove('animate');\n  \n  e.target.classList.add('animate');\n  setTimeout(function(){\n    e.target.classList.remove('animate');\n  },700);\n};\n\nvar bubblyButtons = document.getElementsByClassName(\"course_type_btn\");\n\nfor (var i = 0; i < bubblyButtons.length; i++) {\n  bubblyButtons[i].addEventListener('triggerValue', animateButton, false);\n}"
+            }
+        },
+        {
+            "form_id": "6",
+            "field_id": "6",
+            "effect_id": "86",
+            "trigger": "hover",
+            "title": "course_type_btn",
+            "code": {
+                "css": "$fuschia:#ff0081;$button-bg:$fuschia;$button-text-color:#fff;$baby-blue:#f8faff;.department_btn{font-family:'Helvetica','Arial',sans-serif;display:inline-block;font-size:1em;padding:1em2em;margin-top:100px;margin-bottom:60px;-webkit-appearance:none;appearance:none;background-color:$button-bg;color:$button-text-color;border-radius:4px;border:none;cursor:pointer;position:relative;transition:transformease-in0.1s,box-shadowease-in0.25s;box-shadow:02px25pxrgba(255,0,130,0.5);&:focus{outline:0;}&:before,&:after{position:absolute;content:'';display:block;width:140%;height:100%;left:-20%;z-index:-1000;transition:allease-in-out0.5s;background-repeat:no-repeat;}&:before{display:none;top:-75%;background-image:radial-gradient(circle,$button-bg20%,transparent20%),radial-gradient(circle,transparent20%,$button-bg20%,transparent30%),radial-gradient(circle,$button-bg20%,transparent20%),radial-gradient(circle,$button-bg20%,transparent20%),radial-gradient(circle,transparent10%,$button-bg15%,transparent20%),radial-gradient(circle,$button-bg20%,transparent20%),radial-gradient(circle,$button-bg20%,transparent20%),radial-gradient(circle,$button-bg20%,transparent20%),radial-gradient(circle,$button-bg20%,transparent20%);background-size:10%10%,20%20%,15%15%,20%20%,18%18%,10%10%,15%15%,10%10%,18%18%;\/\/background-position:0%80%,-5%20%,10%40%,20%0%,30%30%,22%50%,50%50%,65%20%,85%30%;}&:after{display:none;bottom:-75%;background-image:radial-gradient(circle,$button-bg20%,transparent20%),radial-gradient(circle,$button-bg20%,transparent20%),radial-gradient(circle,transparent10%,$button-bg15%,transparent20%),radial-gradient(circle,$button-bg20%,transparent20%),radial-gradient(circle,$button-bg20%,transparent20%),radial-gradient(circle,$button-bg20%,transparent20%),radial-gradient(circle,$button-bg20%,transparent20%);background-size:15%15%,20%20%,18%18%,20%20%,15%15%,10%10%,20%20%;\/\/background-position:5%90%,10%90%,10%90%,15%90%,25%90%,25%90%,40%90%,55%90%,70%90%;}&:active{transform:scale(0.9);background-color:darken($button-bg,5%);box-shadow:02px25pxrgba(255,0,130,0.2);}&.animate{&:before{display:block;animation:topBubblesease-in-out0.75sforwards;}&:after{display:block;animation:bottomBubblesease-in-out0.75sforwards;}}}@keyframestopBubbles{0%{background-position:5%90%,10%90%,10%90%,15%90%,25%90%,25%90%,40%90%,55%90%,70%90%;}50%{background-position:0%80%,0%20%,10%40%,20%0%,30%30%,22%50%,50%50%,65%20%,90%30%;}100%{background-position:0%70%,0%10%,10%30%,20%-10%,30%20%,22%40%,50%40%,65%10%,90%20%;background-size:0%0%,0%0%,0%0%,0%0%,0%0%,0%0%;}}@keyframesbottomBubbles{0%{background-position:10%-10%,30%10%,55%-10%,70%-10%,85%-10%,70%-10%,70%0%;}50%{background-position:0%80%,20%80%,45%60%,60%100%,75%70%,95%60%,105%0%;}100%{background-position:0%90%,20%90%,45%70%,60%110%,75%80%,95%70%,110%10%;background-size:0%0%,0%0%,0%0%,0%0%,0%0%,0%0%;}}",
+                "js": "var animateButton = function(e) {\n\n  e.preventDefault;\n  \/\/reset animation\n  e.target.classList.remove('animate');\n  \n  e.target.classList.add('animate');\n  setTimeout(function(){\n    e.target.classList.remove('animate');\n  },700);\n};\n\nvar bubblyButtons = document.getElementsByClassName(\"course_type_btn\");\n\nfor (var i = 0; i < bubblyButtons.length; i++) {\n  bubblyButtons[i].addEventListener('triggerValue', animateButton, false);\n}"
+            }
+        }
+    ],
+    "3": [
+        {
+            "form_id": "3",
+            "field_id": "12",
+            "effect_id": "89",
+            "trigger": "mouseover",
+            "title": "course_btn",
+            "code": {
+                "css": "\/\/",
+                "js": "\/\/ Get the button by its ID using querySelector\nconst fadeButton = document.querySelector('#course_btn');\n\n\/\/ Function to toggle the fading effect\nfunction toggleFading() {\n    if (isFaded) {\n        fadeButton.style.opacity = '1';\n    } else {\n        fadeButton.style.opacity = '0.2';\n    }\n    isFaded = !isFaded;\n}\n\n\/\/ Flag to track the fading state\nlet isFaded = false;\n\n\/\/ Add a mouseover event listener to the button\nfadeButton.addEventListener('mouseover', toggleFading);\n"
+            }
+        }
+    ],
+   
+    "4": [
+        {
+            "form_id": "4",
+            "field_id": "42",
+            "effect_id": "95",
+            "trigger": "DOMContentLoaded",
+            "title": "table td:nth-child(8)",
+            "code": {
+                "css": ".",
+                "js": "document.addEventListener('DOMContentLoaded', function () {\n  var percentageElements = document.querySelector('#table td:nth-child(8)');\n  percentageElements.forEach(function (element) {\n    var percentage = parseInt(element.textContent);\n    if (percentage >= 45) {\n      element.style.setProperty('color', 'green', 'important');\n    } else {\n      element.style.setProperty('color', 'red', 'important');\n    }\n  });\n});\n"
+            }
+        },
+        {
+            "form_id": "4",
+            "field_id": "42",
+            "effect_id": "96",
+            "trigger": "focus",
+            "title": "table td:nth-child(8)",
+            "code": {
+                "css": ".",
+                "js": "document.addEventListener('focus', function () {\n    var percentageElements = document.querySelectorAll('table td:nth-child(8)');\n    percentageElements.forEach(function (element) {\n      var percentage = parseInt(element.textContent);\n      if (percentage >= 45) {\n        element.style.setProperty('color', 'green', 'important');\n      } else {\n        element.style.setProperty('color', 'red', 'important');\n      }\n    });\n  });"
+            }
+        }
+    ]
+}
