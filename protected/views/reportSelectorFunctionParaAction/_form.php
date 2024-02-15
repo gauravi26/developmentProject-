@@ -9,6 +9,10 @@
  $scriptCodes = FunctionLibrary::model()->findAll(array('order' => 'function_display_name'));
 $scriptCodeList = CHtml::listData($scriptCodes, 'id', 'function_display_name');
 
+$sctions = ActionLibrary::model()->findAll(array('order'=>'action_display_name'));
+$actionsList = Chtml::listData($sctions, 'id','action_display_name' );
+
+
 ?>
 
 <div class="form">
@@ -33,7 +37,7 @@ $scriptCodeList = CHtml::listData($scriptCodes, 'id', 'function_display_name');
 		<?php echo $form->error($model,'report_id'); ?>
 	</div>
 
-	<div class="row">
+	<div class="row" style="color: white ;display: none;">
 		<?php echo $form->labelEx($model,'report_column'); ?>
                 <?php echo "Columns of Report Selected. Remove the column for which script is NOT required" ?>
 		<?php echo $form->textField($model,'report_column',array('size'=>60,'maxlength'=>255)); ?>
@@ -44,27 +48,27 @@ $scriptCodeList = CHtml::listData($scriptCodes, 'id', 'function_display_name');
                 <div id="columnScriptFields">
                 </div>
 
-	<div class="row">
+<!--	<div class="row">
 		<?php echo $form->labelEx($model,'report_row'); ?>
 		<?php echo $form->textField($model,'report_row'); ?>
 		<?php echo $form->error($model,'report_row'); ?>
-	</div>
+	</div>-->
 
-	  <div class="row">
+<div class="row" style="color: white ;display: none;">
             <?php echo $form->labelEx($model, 'function_library_id'); ?>
             <?php echo $form->dropDownList($model, 'function_library_id', $scriptCodeList, array('prompt' => 'Select Function', 'id' => 'fieldIdDropdown')); ?>
             <?php echo $form->error($model, 'function_library_id'); ?>
         </div>
 
-	<div class="row">
+<!--	<div class="row">
 		<?php echo $form->labelEx($model,'function_library_parameter'); ?>
 		<?php echo $form->textField($model,'function_library_parameter',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'function_library_parameter'); ?>
-	</div>
+	</div>-->
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'action_id'); ?>
-		<?php echo $form->textField($model,'action_id'); ?>
+            <?php echo $form->dropDownList($model, 'action_id', $actionsList, array('prompt' => 'Select Action', 'id' => 'actionIdDropdown')); ?>
 		<?php echo $form->error($model,'action_id'); ?>
 	</div>
 

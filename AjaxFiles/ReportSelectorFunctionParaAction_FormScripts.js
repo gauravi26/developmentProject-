@@ -52,14 +52,24 @@ $(document).ready(function(){
             size: '60',
             maxlength: '255',
             class: 'reportRowField',
-            style: 'width: 225px;'
+            style: 'width: 225px; margin-right: 1000px'
         });
+        
+        reportRowField.after('<br><br>');
+
         var sciptIdDropdown = $('<select>').attr({
             id: 'fieldIdDropdown_' + columnName,
             name: 'ReportSelectorFunctionParaAction[function_library_id][' + columnName + ']',
         }).html($('#fieldIdDropdown').html());
 
-        inputFieldContainer.append(label).append(textField).append(reportRowField).append(sciptIdDropdown);
+
+ var actionIdDropdown = $('<select>').attr({
+            id: 'actionIdDropdown_' + columnName,
+            name: 'ReportSelectorFunctionParaAction[action_id][' + columnName + ']',
+        }).html($('#actionIdDropdown').html());
+
+
+        inputFieldContainer.append(label).append(textField).append(reportRowField).append(sciptIdDropdown).append(actionIdDropdown);
         $('#columnScriptFields').append(inputFieldContainer).append('<br>');
 
         attachFunctionDropdownChangeEvent(columnName);
@@ -88,28 +98,32 @@ $(document).ready(function(){
     }
 
     // Function to handle response and populate function parameters
-    function handleFunctionParameters(data, columnName) {
-        var functionArgumentDiv = $('#functionArgument_' + columnName);
-        if (functionArgumentDiv.length === 0) {
-            functionArgumentDiv = $('<div>').attr('id', 'functionArgument_' + columnName);
-            $('#columnScriptFields').append(functionArgumentDiv).append('<br>');
-        } else {
-            functionArgumentDiv.empty();
-        }
+    // Function to handle response and populate function parameters for a specific column
+function handleFunctionParameters(data, columnName) {
+    var row = $('#fieldIdDropdown_' + columnName).closest('.row'); // Find the parent row of the dropdown
+    var functionArgumentDiv = row.find('.functionArgumentDiv');
+    
+    if (functionArgumentDiv.length === 0) {
+        functionArgumentDiv = $('<div>').addClass('functionArgumentDiv');
+        row.append(functionArgumentDiv).append('<br>'); // Append function argument div inside the row
+    } else {
+        functionArgumentDiv.empty();
+    }
 
-        for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-                var label = $('<label>').text(data[key]).attr('for', 'parameter_' + key);
-                var input = $('<input>').attr({
-                    type: 'text',
-                    id: 'parameter_' + key,
-                    name:'function_argument_id_'+key,
-                    placeholder: 'Value for ' + data[key]
-                });
-                functionArgumentDiv.append(label).append(input);
-            }
+    for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+            var label = $('<label>').text(data[key]).attr('for', 'parameter_' + key);
+            var input = $('<input>').attr({
+                type: 'text',
+                id: 'parameter_' + key,
+                name:'function_argument_id_'+key,
+                placeholder: 'Function Argument'
+            });
+            functionArgumentDiv.append(label).append(input);
         }
     }
+}
+
 
     // Event listener for reportIdDropbox change event
     $('#reportIdDropbox').on('change', function(){

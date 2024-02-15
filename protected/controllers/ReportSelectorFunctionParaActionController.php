@@ -32,7 +32,7 @@ class ReportSelectorFunctionParaActionController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','applyfunctionAction','query'),
+				'actions'=>array('create','update','applyfunctionAction','query','fetchParametersForFunction'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -260,7 +260,8 @@ public function actionFetchParametersForFunction()
 
     // Find all records with the given function_library_id
     $functionModels = FunctionArgumentMap::model()->findAllByAttributes(array('function_library_id' => $selectedFunctionId));
-    
+        $functionParameters = array();
+
     // Initialize arrays to store parameter IDs and names
     $functionParameterIds = array();
     $functionParameterNames = array();
@@ -366,6 +367,8 @@ public function actionFetchParametersForFunction()
 			Yii::app()->end();
 		}
 	}
+        
+        //****************Applying Script to report ************//
         
        function actionApplyfunctionAction($reportId) {
     // Fetch function action models for the given report ID
