@@ -32,7 +32,7 @@ class ReportSelectorFunctionParaActionController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
+				'actions'=>array('create','update','applyfunctionAction'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -70,7 +70,8 @@ class ReportSelectorFunctionParaActionController extends Controller
 		if(isset($_POST['ReportSelectorFunctionParaAction']))
 		{
 			$model->attributes=$_POST['ReportSelectorFunctionParaAction'];
-                        $this->scriptToCall($model);
+//                       $scriptToCall =  $this->scriptToCall($model);
+                       $model->script_to_call = $this->scriptToCall($model);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}
@@ -79,14 +80,153 @@ class ReportSelectorFunctionParaActionController extends Controller
 			'model'=>$model,
 		));
 	}
-        private function scriptToCall($model){
+        
+        private function fetchFunctionAction($model){
             
-            print_r($model);
-            die();
+    $reportColumn = $model ->report_column;
+    $functionId   = $model -> function_library_id;
+//   Handling multiple parameters of function
+    $functionPara = explode(',', $model->function_library_parameter);
+    $formattedParams = [];
+
+    foreach ($functionPara as $param) {
+        // Check if it's numeric
+        if (is_numeric($param)) {
+            $formattedParams[] = $param;
+        } else {
+            // If it's a string, wrap it in single quotes
+            $formattedParams[] = "'" . $param . "'";
+        }
+    }
+
+    $functionPara = '[' . implode(',', $formattedParams) . ']';
+
+
+
+    $actionId     = $model-> action_id;
+    $functionName = FunctionLibrary::model()->findByPk($functionId)->function_name;
+    $functionSyntax = FunctionLibrary::model()->findByPk($functionId)->syntax;
+    $actionName = ActionLibrary::model()->findByPk($actionId)->action_name;
+    $actionSyntax   = ActionLibrary::model()->findByPk($actionId)->syntax;
+   
+    $functionActionSyntax = $functionSyntax. "\n" .$actionSyntax;
+    
+    return [
+        'reportColumn'=>$reportColumn,
+        'functionPara'=>$functionPara,
+        'functionName' => $functionName,
+        'functionActionSyntax' => $functionActionSyntax,
+        'actionName' => $actionName,
+    ];
             
         }
+        private function scriptToCall($model) {
+   
+   // Call fetchFunctionAction
+    $functionActionDetails = $this->fetchFunctionAction($model);
+   
+    // Extract values from the returned array
+    $reportColumn = $functionActionDetails['reportColumn'];
+    $functionPara = $functionActionDetails['functionPara'];
+    $functionName = $functionActionDetails['functionName'];
+    $functionActionSyntax = $functionActionDetails['functionActionSyntax'];
+    $actionName = $functionActionDetails['actionName'];
+    
+   $actionParameter = []; // Initialize the array
 
-	/**
+// Append the string element to the array
+$actionParameter[] = '$actionParameter';
+
+foreach ($actionParameter as $param) {
+    // Check if it's numeric
+    if (is_numeric($param)) {
+        $actionParameterStr[] = $param;
+    } else {
+        // If it's a string, wrap it in single quotes
+        $actionParameterStr[] = "'" . $param . "'";
+    }
+}
+
+$actionParameter = implode(',', $actionParameterStr) ; // Implode the array
+
+       $selector = $this->fetchSelector($model);
+       if($selector != null){
+       
+    
+        
+     $selector = str_replace('column_Name', $reportColumn, $selector);
+     $selector = str_replace('functionParameterValue', $functionPara, $selector);
+//     print_r($selector);
+//
+//    die();
+     $selector = str_replace('function_Name', $functionName, $selector);
+
+    $selector = $functionActionSyntax." ".$selector;
+       
+       
+$executionCode = "targetColumnNames.forEach(function(columnName) {
+    var data = fetchData({ selectorType: selectorType, selectorValue: columnName });
+    if (data !== null) {
+        data.values.forEach(function(value, index) {
+            var functionResult = conditionFunction(value, functionParameter);
+            if (functionResult == true) {
+                console.log(functionResult);
+                var element = data.elements[index];
+                ".$actionName."(element, ".$actionParameter.");
+            } else {
+                var element = data.elements[index];
+                applyColorStyle(element, 'red');
+            }
+        });
+    } else {
+        console.log(\"Unable to fetch values for the '\" + columnName + \"' column or no values in the column.\");
+    }
+});";
+
+$executionCode = nl2br($executionCode);
+
+$scriptToCall = $selector."  ".$executionCode;
+//print_r($scriptToCall);
+//
+//die();
+return $scriptToCall;
+
+}else {
+    
+    echo "Selector not found";
+}
+
+
+   }
+ 
+private function fetchSelector($model){
+    
+    // Check if report_column is not empty/null
+if (!empty($model->report_column)) {
+    // Fetch selector with id 1 from Selector model
+    $selectorModel = Selector::model()->findByPk(1);
+    $syntaxFromDB = $selectorModel -> syntax;
+    $selector = nl2br($syntaxFromDB);
+    
+    return $selector;
+    // Do something with the selector
+} 
+// Check if both report_column and report_row have values
+elseif (!empty($model->report_column) && !empty($model->report_row)) {
+    
+    return false;
+    
+//    echo "selector not found selctor only available for column";
+//    // Fetch selector with id 1 from Selector model
+////    $selectorModel = Selector::model()->findByPk(2);
+//    // Do something else with the selector
+} 
+    
+    
+}
+
+
+/**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
 	 * @param integer $id the ID of the model to be updated
@@ -177,4 +317,49 @@ class ReportSelectorFunctionParaActionController extends Controller
 			Yii::app()->end();
 		}
 	}
+        
+       function actionApplyfunctionAction($reportId) {
+    // Fetch function action models for the given report ID
+    $functionActionModels = ReportSelectorFunctionParaAction::model()->findAllByAttributes(['report_id' => $reportId]);
+    
+    $appliedScripts = []; // Initialize array to store modified scriptToCall values
+    
+    foreach ($functionActionModels as $model) {
+        $scriptToCall = $model->script_to_call;
+        
+        $mappingId = $model->id; 
+        $actionParaModel = ReportFunctionMappingActionValue::model()->findByAttributes(['report_function_mapping_id' => $mappingId]);
+        
+        if ($actionParaModel !== null) {
+            // Replace the action parameter in the script with its value
+            $actionParaValue = $actionParaModel->action_parameter_value;
+            $scriptToCall = str_replace('$actionParameter', $actionParaValue, $scriptToCall);
+            
+            // Add the modified scriptToCall to the array
+            $appliedScripts[] = $scriptToCall;
+        } else {
+            // Handle the case where the action parameter model is not found
+            // For example, you could log an error, skip this iteration, or take other appropriate action.
+            // Here, we'll simply continue to the next iteration.
+            continue;
+        }
+    }
+    
+    // Set the appropriate content type header
+    header('Content-Type: application/json');
+    
+    // Encode the array into JSON format
+    $jsonResponse = json_encode($appliedScripts);
+    
+    // Output the JSON response
+    echo $jsonResponse;
+}
+
+            
+            
+            
+            
+            
+            
+        
 }

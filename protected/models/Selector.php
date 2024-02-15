@@ -1,26 +1,23 @@
 <?php
 
 /**
- * This is the model class for table "report_selector_function_para_action".
+ * This is the model class for table "selector".
  *
- * The followings are the available columns in table 'report_selector_function_para_action':
+ * The followings are the available columns in table 'selector':
  * @property integer $id
- * @property integer $report_id
- * @property string $report_column
- * @property integer $report_row
- * @property integer $function_library_id
- * @property string $function_library_parameter
- * @property integer $action_id
- * @property string $script_to_call
+ * @property string $selector_for_element
+ * @property string $syntax
+ * @property string $description
+ * @property string $selector_return
  */
-class ReportSelectorFunctionParaAction extends CActiveRecord
+class Selector extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'report_selector_function_para_action';
+		return 'selector';
 	}
 
 	/**
@@ -31,12 +28,12 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('report_id, report_column, function_library_id, function_library_parameter, action_id, script_to_call', 'required'),
-			array('report_id, report_row, function_library_id, action_id', 'numerical', 'integerOnly'=>true),
-			array('report_column, function_library_parameter', 'length', 'max'=>255),
+			array('id, selector_for_element, syntax, description, selector_return', 'required'),
+			array('id', 'numerical', 'integerOnly'=>true),
+			array('selector_for_element, description, selector_return', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, report_id, report_column, report_row, function_library_id, function_library_parameter, action_id, script_to_call', 'safe', 'on'=>'search'),
+			array('id, selector_for_element, syntax, description, selector_return', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -58,13 +55,10 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'report_id' => 'Report',
-			'report_column' => 'Report Column',
-			'report_row' => 'Report Row',
-			'function_library_id' => 'Function Library',
-			'function_library_parameter' => 'Function Library Parameter',
-			'action_id' => 'Action',
-			'script_to_call' => 'Script To Call',
+			'selector_for_element' => 'Selector For Element',
+			'syntax' => 'Syntax',
+			'description' => 'Description',
+			'selector_return' => 'Selector Return',
 		);
 	}
 
@@ -87,13 +81,10 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('report_id',$this->report_id);
-		$criteria->compare('report_column',$this->report_column,true);
-		$criteria->compare('report_row',$this->report_row);
-		$criteria->compare('function_library_id',$this->function_library_id);
-		$criteria->compare('function_library_parameter',$this->function_library_parameter,true);
-		$criteria->compare('action_id',$this->action_id);
-		$criteria->compare('script_to_call',$this->script_to_call,true);
+		$criteria->compare('selector_for_element',$this->selector_for_element,true);
+		$criteria->compare('syntax',$this->syntax,true);
+		$criteria->compare('description',$this->description,true);
+		$criteria->compare('selector_return',$this->selector_return,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -104,7 +95,7 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ReportSelectorFunctionParaAction the static model class
+	 * @return Selector the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

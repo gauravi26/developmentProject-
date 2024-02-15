@@ -16,7 +16,8 @@
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
-
+    
+           
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
@@ -55,11 +56,11 @@
 		<?php echo $form->error($model,'action_id'); ?>
 	</div>
 
-	<div class="row">
+<!--	<div class="row">
 		<?php echo $form->labelEx($model,'script_to_call'); ?>
 		<?php echo $form->textField($model,'script_to_call',array('size'=>60,'maxlength'=>255)); ?>
 		<?php echo $form->error($model,'script_to_call'); ?>
-	</div>
+	</div>-->
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>

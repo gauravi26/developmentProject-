@@ -7,6 +7,7 @@
  * @property integer $id
  * @property integer $report_function_mapping_id
  * @property string $action_parameter_value
+ * @property integer $action_argument_id
  */
 class ReportFunctionMappingActionValue extends CActiveRecord
 {
@@ -26,12 +27,12 @@ class ReportFunctionMappingActionValue extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('report_function_mapping_id, action_parameter_value', 'required'),
-			array('report_function_mapping_id', 'numerical', 'integerOnly'=>true),
+			array('report_function_mapping_id, action_parameter_value, action_argument_id', 'required'),
+			array('report_function_mapping_id, action_argument_id', 'numerical', 'integerOnly'=>true),
 			array('action_parameter_value', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, report_function_mapping_id, action_parameter_value', 'safe', 'on'=>'search'),
+			array('id, report_function_mapping_id, action_parameter_value, action_argument_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -55,6 +56,7 @@ class ReportFunctionMappingActionValue extends CActiveRecord
 			'id' => 'ID',
 			'report_function_mapping_id' => 'Report Function Mapping',
 			'action_parameter_value' => 'Action Parameter Value',
+			'action_argument_id' => 'Action Argument',
 		);
 	}
 
@@ -79,6 +81,7 @@ class ReportFunctionMappingActionValue extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('report_function_mapping_id',$this->report_function_mapping_id);
 		$criteria->compare('action_parameter_value',$this->action_parameter_value,true);
+		$criteria->compare('action_argument_id',$this->action_argument_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

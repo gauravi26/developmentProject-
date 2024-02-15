@@ -1,26 +1,29 @@
 <?php
 
 /**
- * This is the model class for table "report_selector_function_para_action".
+ * This is the model class for table "action_library".
  *
- * The followings are the available columns in table 'report_selector_function_para_action':
+ * The followings are the available columns in table 'action_library':
  * @property integer $id
- * @property integer $report_id
- * @property string $report_column
- * @property integer $report_row
- * @property integer $function_library_id
- * @property string $function_library_parameter
- * @property integer $action_id
- * @property string $script_to_call
+ * @property string $action_display_name
+ * @property string $action_name
+ * @property string $syntax
+ * @property integer $parameter_count
+ * @property string $parameter_description
+ * @property integer $action_type
+ *
+ * The followings are the available model relations:
+ * @property ActionArgumentMap[] $actionArgumentMaps
+ * @property ActionType $actionType
  */
-class ReportSelectorFunctionParaAction extends CActiveRecord
+class ActionLibrary extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'report_selector_function_para_action';
+		return 'action_library';
 	}
 
 	/**
@@ -31,12 +34,12 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('report_id, report_column, function_library_id, function_library_parameter, action_id, script_to_call', 'required'),
-			array('report_id, report_row, function_library_id, action_id', 'numerical', 'integerOnly'=>true),
-			array('report_column, function_library_parameter', 'length', 'max'=>255),
+			array('action_display_name, action_name, syntax, parameter_count, parameter_description, action_type', 'required'),
+			array('parameter_count, action_type', 'numerical', 'integerOnly'=>true),
+			array('action_display_name, action_name, parameter_description', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, report_id, report_column, report_row, function_library_id, function_library_parameter, action_id, script_to_call', 'safe', 'on'=>'search'),
+			array('id, action_display_name, action_name, syntax, parameter_count, parameter_description, action_type', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -48,6 +51,8 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'actionArgumentMaps' => array(self::HAS_MANY, 'ActionArgumentMap', 'action_library_id'),
+			'actionType' => array(self::BELONGS_TO, 'ActionType', 'action_type'),
 		);
 	}
 
@@ -58,13 +63,12 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'report_id' => 'Report',
-			'report_column' => 'Report Column',
-			'report_row' => 'Report Row',
-			'function_library_id' => 'Function Library',
-			'function_library_parameter' => 'Function Library Parameter',
-			'action_id' => 'Action',
-			'script_to_call' => 'Script To Call',
+			'action_display_name' => 'Action Display Name',
+			'action_name' => 'Action Name',
+			'syntax' => 'Syntax',
+			'parameter_count' => 'Parameter Count',
+			'parameter_description' => 'Parameter Description',
+			'action_type' => 'Action Type',
 		);
 	}
 
@@ -87,13 +91,12 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('report_id',$this->report_id);
-		$criteria->compare('report_column',$this->report_column,true);
-		$criteria->compare('report_row',$this->report_row);
-		$criteria->compare('function_library_id',$this->function_library_id);
-		$criteria->compare('function_library_parameter',$this->function_library_parameter,true);
-		$criteria->compare('action_id',$this->action_id);
-		$criteria->compare('script_to_call',$this->script_to_call,true);
+		$criteria->compare('action_display_name',$this->action_display_name,true);
+		$criteria->compare('action_name',$this->action_name,true);
+		$criteria->compare('syntax',$this->syntax,true);
+		$criteria->compare('parameter_count',$this->parameter_count);
+		$criteria->compare('parameter_description',$this->parameter_description,true);
+		$criteria->compare('action_type',$this->action_type);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -104,7 +107,7 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return ReportSelectorFunctionParaAction the static model class
+	 * @return ActionLibrary the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
