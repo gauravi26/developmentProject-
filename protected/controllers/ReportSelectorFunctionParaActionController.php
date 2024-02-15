@@ -32,7 +32,7 @@ class ReportSelectorFunctionParaActionController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','applyfunctionAction'),
+				'actions'=>array('create','update','applyfunctionAction','query'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -80,6 +80,7 @@ class ReportSelectorFunctionParaActionController extends Controller
 			'model'=>$model,
 		));
 	}
+        //***************************Building Script to Call Function********************//
         
         private function fetchFunctionAction($model){
             
@@ -100,8 +101,6 @@ class ReportSelectorFunctionParaActionController extends Controller
     }
 
     $functionPara = '[' . implode(',', $formattedParams) . ']';
-
-
 
     $actionId     = $model-> action_id;
     $functionName = FunctionLibrary::model()->findByPk($functionId)->function_name;
@@ -224,8 +223,58 @@ elseif (!empty($model->report_column) && !empty($model->report_row)) {
     
     
 }
+//**************************************UI Functions**********************************//
+public function actionQuery()
+{
+    if (Yii::app()->request->isAjaxRequest) {
+        $selectedReportId = Yii::app()->request->getPost('reportId');
 
+        $fetchQuery = Report::model()->findByPk($selectedReportId);
+        $reportColumns = $fetchQuery->reportColumn;
+        $db = Yii::app()->db;
 
+        if ($fetchQuery !== null) {
+            $sql = $fetchQuery->query;
+            // Execute the query
+            $command = $db->createCommand($sql);
+            $result = $command->queryAll();
+            $columnNames = array_keys($result[0]);
+
+            // Print column names
+            echo $reportColumns;
+        } else {
+            echo "Report not found";
+            echo "Error in running the query";
+            return; // Exit the function if the report is not found
+        }
+    } else {
+        echo "Error in Getting POST From Form ";
+    }
+}
+
+public function actionFetchParametersForFunction()
+{
+ // Extracting the value of selectedFunctionId from POST data
+     $selectedFunctionId = Yii::app()->request->getPost('selectedFunctionId');
+//    $selectedFunctionId = 2; // Assuming 2 is the function_library_id
+
+    // Find all records with the given function_library_id
+    $functionModels = FunctionArgumentMap::model()->findAllByAttributes(array('function_library_id' => $selectedFunctionId));
+    
+    // Initialize arrays to store parameter IDs and names
+    $functionParameterIds = array();
+    $functionParameterNames = array();
+    
+    // Iterate over each record to collect IDs and names
+    foreach ($functionModels as $functionModel) {
+                $functionParameters[$functionModel->id] = $functionModel->argument_name; // Assuming "argument_name" is the correct attribute name
+
+        }
+    
+    echo json_encode($functionParameters); 
+
+    // Now you can use the $selectedFunctionId variable for further processing
+}
 /**
 	 * Updates a particular model.
 	 * If update is successful, the browser will be redirected to the 'view' page.
@@ -321,6 +370,8 @@ elseif (!empty($model->report_column) && !empty($model->report_row)) {
        function actionApplyfunctionAction($reportId) {
     // Fetch function action models for the given report ID
     $functionActionModels = ReportSelectorFunctionParaAction::model()->findAllByAttributes(['report_id' => $reportId]);
+    $modelCount = count($functionActionModels);
+//    print_r($modelCount);
     
     $appliedScripts = []; // Initialize array to store modified scriptToCall values
     
@@ -344,22 +395,12 @@ elseif (!empty($model->report_column) && !empty($model->report_row)) {
             continue;
         }
     }
-    
-    // Set the appropriate content type header
-    header('Content-Type: application/json');
-    
-    // Encode the array into JSON format
-    $jsonResponse = json_encode($appliedScripts);
+     $jsonResponse = json_encode($appliedScripts);
     
     // Output the JSON response
     echo $jsonResponse;
+//    var_dump($appliedScripts);
+//    die();
 }
-
-            
-            
-            
-            
-            
-            
         
 }
