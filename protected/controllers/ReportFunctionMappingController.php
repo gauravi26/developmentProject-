@@ -122,6 +122,9 @@ public function actionCreate()
     $model = new ReportFunctionMapping;
 
     if (isset($_POST['ReportFunctionMapping'])) {
+        print_r($model);
+        die();
+       
         $model->attributes = $_POST['ReportFunctionMapping'];
         $functionLibraryId = $model->function_library_id;
         $columns = $model->report_columns;

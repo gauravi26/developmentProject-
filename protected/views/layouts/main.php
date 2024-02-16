@@ -111,7 +111,7 @@
                                 <li><a href="index.php?r=report/index">Report</a></li>
                                 <li><a href="index.php?r=themeForReport/reportTheme">Create Theme for Report</a></li>
                                 <li><a href="index.php?r=reportThemeMapping/create">Apply Theme to Report</a></li>
-                                <li><a href="index.php?r=reportFunctionMapping/create">Report Function Map</a></li>
+                                <li><a href="index.php?r=reportSelectorFunctionParaAction/create">Apply Conditional Style to Report</a></li>
                                 <li><a href="index.php?r=report/testReport">Testing</a></li>
                                 <li><a href="index.php?r=studentinformation/reportTest">Student Report</a></li>
                                 <li><a href="index.php?r=courses/reportTest">Course Report</a></li>

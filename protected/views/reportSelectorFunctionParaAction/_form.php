@@ -66,7 +66,7 @@ $actionsList = Chtml::listData($sctions, 'id','action_display_name' );
 		<?php echo $form->error($model,'function_library_parameter'); ?>
 	</div>-->
 
-	<div class="row">
+	<div class="row" style="color: white ;display: none;">
 		<?php echo $form->labelEx($model,'action_id'); ?>
             <?php echo $form->dropDownList($model, 'action_id', $actionsList, array('prompt' => 'Select Action', 'id' => 'actionIdDropdown')); ?>
 		<?php echo $form->error($model,'action_id'); ?>
