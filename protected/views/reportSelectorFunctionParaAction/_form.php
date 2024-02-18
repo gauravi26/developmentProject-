@@ -86,3 +86,60 @@ $actionsList = Chtml::listData($sctions, 'id','action_display_name' );
 
 </div><!-- form -->
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ReportSelectorFunctionParaAction_FormScripts.js"></script>
+    <script>
+  function collectRowData() {
+    var rowsData = [];
+
+    // Iterate over each row
+    $('.row').each(function(index, row) {
+        var rowData = {};
+
+        // Iterate over each input field in the row
+        $(row).find('input').each(function() {
+            var fieldName = $(this).attr('name');
+            var fieldValue = $(this).val();
+
+            // If the field has a name attribute
+            if (fieldName) {
+                // Split the name attribute to get the column name and parameter name
+                var nameParts = fieldName.split('[');
+
+                // Check if the nameParts array has expected elements
+                if (nameParts.length >= 3) {
+                    var columnName = nameParts[1].replace(']', '');
+                    var parameterName = nameParts[2].replace(']', '');
+
+                    // If the column name is not present in the rowData object, initialize it as an empty object
+                    if (!rowData[columnName]) {
+                        rowData[columnName] = {};
+                    }
+
+                    // Store the parameter value in the rowData object
+                    rowData[columnName][parameterName] = fieldValue;
+                } else {
+                    console.error('Unexpected field name format:', fieldName);
+                }
+            }
+        });
+
+        // Add the row data to the array
+        rowsData.push(rowData);
+    });
+
+    console.log('Collected row data:', rowsData);
+}
+ 
+    // Add an event listener for form submission
+$('#report-selector-function-para-action-form').submit(function(event) {
+    // Prevent the default form submission behavior
+    event.preventDefault();
+    
+    // Call the function to collect row data
+    collectRowData();
+    
+    // Optionally, you can continue with the form submission here if needed
+    // For example, you can uncomment the following line to submit the form
+    // $(this).unbind('submit').submit();
+});
+
+    </script>

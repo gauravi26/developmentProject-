@@ -31,62 +31,107 @@ $(document).ready(function(){
     }
 
     // Function to create input fields for each column
-    function createColumnInputFields(columnName) {
-        var inputFieldContainer = $('<div class="row"></div>');
-var label = $('<label for="ReportSelectorFunctionParaAction_columns_' + columnName + '">' + "Report Column: " + columnName + '</label>').css({
+   function createColumnInputFields(columnName) {
+    var label = $('<label for="ReportSelectorFunctionParaAction_columns_' + columnName + '">' + "Report Column: " + columnName + '</label>').css({
+        'font-size': '16px',
+        'margin-bottom': '12px'
+    });
+
+    var textField = $('<input>').attr({
+        type: 'text',
+        id: 'ReportSelectorFunctionParaAction_columns_' + columnName,
+        name: 'ReportSelectorFunctionParaAction[columns][' + columnName + ']',
+        value: columnName,
+        size: '60',
+        maxlength: '255',
+        class: 'textField',
+        style: 'display: none;'
+    });
+
+    var labelRow = $('<label for="ReportSelectorFunctionParaAction_report_row_' + columnName + '">' + "Row(word)" + '</label>');
+    var reportRowField = $('<input>').attr({
+        type: 'text',
+        id: 'ReportSelectorFunctionParaAction_report_row_' + columnName,
+        name: 'ReportSelectorFunctionParaAction[report_row][' + columnName + ']',
+        placeholder: 'Enter Word to Specify Row',
+        size: '60',
+        maxlength: '255',
+        class: 'reportRowField',
+        style: 'width: 225px; margin-right: 1000px; margin-bottom:12px'
+    });
+
+    var functionActionDiv = $('<div>').addClass('FUNCTION_ACTION');
+
+var functionDiv = $('<div>').addClass('functionDiv');
+reportRowField.after('<br><br>');
+
+var labelFunction = $('<label>').attr('for', 'ReportSelectorFunctionParaAction[function_library_id][' + columnName + ']').text("Function").css({
     'font-size': '16px',
-    'margin-bottom': '12px'
-});
-        var textField = $('<input>').attr({
-            type: 'text',
-            id: 'ReportSelectorFunctionParaAction_columns_' + columnName,
-            name: 'ReportSelectorFunctionParaAction[columns][' + columnName + ']',
-            value: columnName,
-            size: '60',
-            maxlength: '255',
-            class: 'textField',
-            style: 'display: none;'
-        });
-       var labelRow = $('<label for="ReportSelectorFunctionParaAction_report_row_' + columnName + '">' + "Row(word)" + '</label>');
-        var reportRowField = $('<input>').attr({
-            type: 'text',
-            id: 'ReportSelectorFunctionParaAction_report_row_' + columnName,
-            name: 'ReportSelectorFunctionParaAction[report_row][' + columnName + ']',
-            placeholder: 'Enter Word to Specify Row',
-            size: '60',
-            maxlength: '255',
-            class: 'reportRowField',
-            style: 'width: 225px; margin-right: 1000px; margin-bottom:12px'
-        });
-        
-        reportRowField.after('<br><br>');
-       var labelFunction = $('<label for="ReportSelectorFunctionParaAction[function_library_id][' + columnName+ ']' + '">' + "Function" + '</label>').css({
-    'font-size': '16px',
-    'margin-up': '12px',
+    'margin-top': '12px', // Corrected property name
     'margin-left': '18px'
 });
 
-       var sciptIdDropdown = $('<select>').attr({
+var sciptIdDropdown = $('<select>').attr({
     id: 'fieldIdDropdown_' + columnName,
     name: 'ReportSelectorFunctionParaAction[function_library_id][' + columnName + ']',
 }).html($('#fieldIdDropdown').html()).css('margin-left', '16px');
+handleFunctionParameters({}, columnName); // Call handleFunctionParameters here to initialize function parameters
 
+functionDiv.append(labelFunction)
+    .append(sciptIdDropdown)
+    .append(attachFunctionDropdownChangeEvent(columnName));
 
+functionActionDiv.append(functionDiv);
 
- var actionIdDropdown = $('<select>').attr({
-            id: 'actionIdDropdown_' + columnName,
-            name: 'ReportSelectorFunctionParaAction[action_id][' + columnName + ']',
-        }).html($('#actionIdDropdown').html());
+// Create the actionDiv
+var actionDiv = $('<div>').addClass('actionDiv').attr('id', 'actionDiv_' + columnName);
 
+var labelAction = $('<label>').attr('for', 'ReportSelectorFunctionParaAction[action_library_id][' + columnName + ']')
+    .text("Action")
+    .css({
+        'font-size': '16px',
+        'margin-top': '12px'
+    });
 
-        inputFieldContainer.append(label).append(textField).append(labelRow).append(reportRowField).append(labelFunction).append(sciptIdDropdown).append(sciptIdDropdown).append(actionIdDropdown);
-        $('#columnScriptFields').append(inputFieldContainer).append('<br>');
+var actionIdDropdown = $('<select>').attr({
+    id: 'actionIdDropdown_' + columnName,
+    name: 'ReportSelectorFunctionParaAction[action_id][' + columnName + ']',
+}).html($('#actionIdDropdown').html())
+    ;
 
-        attachFunctionDropdownChangeEvent(columnName);
-                attachActionParameter(columnName);
+actionDiv.append(labelAction)
+    .append(actionIdDropdown)
+    .append(attachActionParameter(columnName)); // Append attachActionParameter after actionIdDropdown
 
-        
-    }
+functionActionDiv.append(actionDiv);
+ var addMoreFunctionButton = $('<button>').attr('id', 'addMoreFunctionButton_' + columnName).text('Add More Function').click(function() {
+        // Call a function to add another function-action div for the same column
+        addFunctionActionDiv(columnName, functionActionDiv);
+    });
+
+// Append the combined function and action div to wherever it needs to go
+// For example, assuming reportRowField is where you want to append it:
+reportRowField.after(functionActionDiv);
+
+    var inputFieldContainer = $('<div>').addClass('row');
+    inputFieldContainer.append(label)
+                        .append(textField)
+                        .append(labelRow)
+                        .append(reportRowField)
+                        .append(functionActionDiv)
+                        .append('<br>');
+                
+inputFieldContainer.append(addMoreFunctionButton).append('<br>');
+
+ 
+ 
+//    // Append the actionDiv to the inputFieldContainer
+//    inputFieldContainer.append(actionDiv);
+
+    // Append the inputFieldContainer to the columnScriptFields
+    $('#columnScriptFields').append(inputFieldContainer).append('<br>');
+}
+
 
     // Function to attach event listener for function dropdown change event
     function attachFunctionDropdownChangeEvent(columnName) {
@@ -113,17 +158,10 @@ var label = $('<label for="ReportSelectorFunctionParaAction_columns_' + columnNa
 
     // Function to handle response and populate function parameters
     // Function to handle response and populate function parameters for a specific column
-function handleFunctionParameters(data, columnName) {
-    var row = $('#fieldIdDropdown_' + columnName).closest('.row'); // Find the parent row of the dropdown
-    var functionArgumentDiv = row.find('.functionArgumentDiv');
+    function handleFunctionParameters(data, columnName) {
+    // Find the parent functionDiv of the dropdown
+    var functionDiv = $('#fieldIdDropdown_' + columnName).closest('.functionDiv');
     
-    if (functionArgumentDiv.length === 0) {
-        functionArgumentDiv = $('<div>').addClass('functionArgumentDiv');
-        row.append(functionArgumentDiv).append('<br>'); // Append function argument div inside the row
-    } else {
-        functionArgumentDiv.empty();
-    }
-
     for (var key in data) {
         if (data.hasOwnProperty(key)) {
             var label = $('<label>').text(data[key]).attr('for', 'parameter_' + key);
@@ -131,12 +169,14 @@ function handleFunctionParameters(data, columnName) {
                 type: 'text',
                 id: 'parameter_' + key,
                 name:'function_argument_id_'+key,
-                placeholder: 'Function Argument'
+                placeholder: 'Function Argument',
+                style:'  margin-top: 10px;'
             });
-            functionArgumentDiv.append(label).append(input);
+            functionDiv.append(label).append(input);
         }
     }
 }
+
 //***************For action Parameter ////////////////
 
 function attachActionParameter(columnName) {
@@ -164,15 +204,9 @@ function attachActionParameter(columnName) {
     
 }
 function handleActionParameters(data, columnName) {
-    var row = $('#actionIdDropdown_' + columnName).closest('.row'); // Find the parent row of the dropdown
-    var actionArgumentDiv = row.find('.actionArgumentDiv');
+    var actionDiv = $('#actionIdDropdown_' + columnName).closest('.actionDiv'); // Find the parent row of the dropdown
     
-    if (actionArgumentDiv.length === 0) {
-        actionArgumentDiv = $('<div>').addClass('actionArgumentDiv');
-        row.append(actionArgumentDiv).append('<br>'); // Append action argument div inside the row
-    } else {
-        actionArgumentDiv.empty();
-    }
+  
 
     for (var key in data) {
         if (data.hasOwnProperty(key)) {
@@ -183,11 +217,46 @@ function handleActionParameters(data, columnName) {
                 name:'action_argument_id_'+key,
                 placeholder: 'Action Argument'
             });
-            actionArgumentDiv.append(label).append(input);
+            actionDiv.append(label).append(input);
         }
     }
 }
 
+function addFunctionActionDiv(columnName, functionDiv) {
+    // Create a new function-action div
+    var functionActionDiv = $('<div>').addClass('FUNCTION_ACTION');
+
+    // Create the actionDiv
+    var actionDiv = $('<div>').addClass('actionDiv').attr('id', 'actionDiv_' + columnName);
+
+    var labelAction = $('<label>').attr('for', 'ReportSelectorFunctionParaAction[action_library_id][' + columnName + ']')
+        .text("Action")
+        .css({
+            'font-size': '16px',
+            'margin-top': '12px'
+        });
+
+    var actionIdDropdown = $('<select>').attr({
+        id: 'actionIdDropdown_' + columnName,
+        name: 'ReportSelectorFunctionParaAction[action_id][' + columnName + ']',
+    }).html($('#actionIdDropdown').html());
+
+    actionDiv.append(labelAction)
+        .append(actionIdDropdown)
+        .append(attachActionParameter(columnName)); // Append attachActionParameter after actionIdDropdown
+
+    functionActionDiv.append(functionDiv)
+        .append(actionDiv);
+
+    var addMoreFunctionButton = $('<button>').attr('id', 'addMoreFunctionButton_' + columnName).text('Add More Function').click(function() {
+        // Call a function to add another function-action div for the same column
+        addFunctionActionDiv(columnName, functionDiv);
+    });
+
+    // Append the combined function and action div to wherever it needs to go
+    // For example, assuming reportRowField is where you want to append it:
+    functionDiv.after(functionActionDiv).after(addMoreFunctionButton).append('<br>');
+}
 
     // Event listener for reportIdDropbox change event
     $('#reportIdDropbox').on('change', function(){
@@ -195,3 +264,6 @@ function handleActionParameters(data, columnName) {
         fetchReportColumns(selectedReportId);
     });
 });
+
+// Function to collect POST data for each row
+
