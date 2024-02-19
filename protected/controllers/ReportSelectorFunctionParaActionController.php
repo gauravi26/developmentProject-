@@ -30,7 +30,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update', 'applyfunctionAction', 'query', 'fetchParametersForFunction', 'fetchParametersForAction'),
+                'actions' => array('create', 'update', 'applyfunctionAction', 'query', 'fetchParametersForFunction', 'fetchParametersForAction','customCreate'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -58,26 +58,43 @@ class ReportSelectorFunctionParaActionController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
 //*********************Creat functions to multiple records using UI**************//
-    public function actionCreate() {
-        $model = new ReportSelectorFunctionParaAction;
+  public function actionCreate() {
+      
+      
+         
+    $model = new ReportSelectorFunctionParaAction;
+    
+     
 
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+    // Uncomment the following line if AJAX validation is needed
+    // $this->performAjaxValidation($model);
 
-        if (isset($_POST['ReportSelectorFunctionParaAction'])) {
-            print_r($_POST);
-            die();
-            $model->attributes = $_POST['ReportSelectorFunctionParaAction'];
-//                       $scriptToCall =  $this->scriptToCall($model);
-            $model->script_to_call = $this->scriptToCall($model);
-            if ($model->save())
-                $this->redirect(array('view', 'id' => $model->id));
-        }
-
-        $this->render('create', array(
-            'model' => $model,
-        ));
+    if (isset($_POST['ReportSelectorFunctionParaAction'])) {
+        print_r($_POST);
+          die();
+         $postData = Yii::app()->request->getPost(); // Get POST data
+         
+        $model->attributes = $_POST['ReportSelectorFunctionParaAction'];
+        // $scriptToCall =  $this->scriptToCall($model);
+        $model->script_to_call = $this->scriptToCall($model);
+        if ($model->save())
+            $this->redirect(array('view', 'id' => $model->id));
     }
+
+    $this->render('create', array(
+        'model' => $model,
+    ));
+}
+ public function actionCustomCreate() {
+     
+     var_dump($_POST);
+     print_r("custom create");
+     die();
+//              $postData = Yii::app()->request->getPost(); // Get POST data
+
+   
+}
+
 
     //***************************Building Script to Call Function********************//
 
@@ -102,6 +119,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
         $functionPara = '[' . implode(',', $formattedParams) . ']';
 
         $actionId = $model->action_id;
+         
         $functionName = FunctionLibrary::model()->findByPk($functionId)->function_name;
         $functionSyntax = FunctionLibrary::model()->findByPk($functionId)->syntax;
         $actionName = ActionLibrary::model()->findByPk($actionId)->action_name;
@@ -123,7 +141,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
 
         // Call fetchFunctionAction
         $functionActionDetails = $this->fetchFunctionAction($model);
-
+       
         // Extract values from the returned array
         $reportColumn = $functionActionDetails['reportColumn'];
         $functionPara = $functionActionDetails['functionPara'];

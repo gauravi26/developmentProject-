@@ -44,7 +44,7 @@ $actionsList = Chtml::listData($sctions, 'id','action_display_name' );
 		<?php echo $form->error($model,'report_column'); ?>
 	</div>
                 
-                <!-- Add this container in your view file -->
+                <!-- Add this container in  view file -->
                 <div id="columnScriptFields">
                 </div>
 
@@ -78,68 +78,117 @@ $actionsList = Chtml::listData($sctions, 'id','action_display_name' );
 		<?php echo $form->error($model,'script_to_call'); ?>
 	</div>-->
 
-	<div class="row buttons">
+	
+<!--	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+	</div>-->
+<div class="row buttons">
+    <button id="createButton">Create</button>
+
 	</div>
 
 <?php $this->endWidget(); ?>
 
 </div><!-- form -->
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ReportSelectorFunctionParaAction_FormScripts.js"></script>
-    <script>
-  function collectRowData() {
-    var rowsData = [];
-
-    // Iterate over each row
-    $('.row').each(function(index, row) {
-        var rowData = {};
-
-        // Iterate over each input field in the row
-        $(row).find('input').each(function() {
-            var fieldName = $(this).attr('name');
-            var fieldValue = $(this).val();
-
-            // If the field has a name attribute
-            if (fieldName) {
-                // Split the name attribute to get the column name and parameter name
-                var nameParts = fieldName.split('[');
-
-                // Check if the nameParts array has expected elements
-                if (nameParts.length >= 3) {
-                    var columnName = nameParts[1].replace(']', '');
-                    var parameterName = nameParts[2].replace(']', '');
-
-                    // If the column name is not present in the rowData object, initialize it as an empty object
-                    if (!rowData[columnName]) {
-                        rowData[columnName] = {};
-                    }
-
-                    // Store the parameter value in the rowData object
-                    rowData[columnName][parameterName] = fieldValue;
-                } else {
-                    console.error('Unexpected field name format:', fieldName);
-                }
+    
+       <script>
+   $(document).ready(function() {
+    $('#createButton').click(function() {
+        // Data to send in the POST request
+        var postData = {
+            message: 'Hello, server!'
+        };
+        
+        // AJAX POST request
+        $.ajax({
+            url: 'index.php?r=reportSelectorFunctionParaAction/customCreate', // Replace 'controllerName' with the actual name of your controller
+            type: 'POST',
+            data: postData,
+            success: function(response) {
+                console.log("Success:", response);
+                // Handle success response here
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+                // Handle error here
             }
         });
-
-        // Add the row data to the array
-        rowsData.push(rowData);
     });
-
-    console.log('Collected row data:', rowsData);
-}
- 
-    // Add an event listener for form submission
-$('#report-selector-function-para-action-form').submit(function(event) {
-    // Prevent the default form submission behavior
-    event.preventDefault();
-    
-    // Call the function to collect row data
-    collectRowData();
-    
-    // Optionally, you can continue with the form submission here if needed
-    // For example, you can uncomment the following line to submit the form
-    // $(this).unbind('submit').submit();
 });
 
-    </script>
+   
+   </script><!--
+<!--    <script>
+$(document).ready(function() {
+    // Function to handle form submission
+   $('#createButton').click(function() {
+                event.preventDefault(); // Prevent default form submission
+
+        // Fetch column names from the form field
+        var reportColumnValue = $("input[name='ReportSelectorFunctionParaAction[report_column]']").val();
+        var columnNames = reportColumnValue.split(',').map(function(column) {
+            return column.trim();
+        });
+        
+        // Construct POST data
+        var postData = constructPostData(columnNames);
+        // Stringify the postData object
+        var jsonData = JSON.stringify(postData);
+//                console.log(jsonData);
+ var message = "hi";
+        // Submit the form with AJAX
+        $.ajax({
+            url: 'index.php?r=reportSelectorFunctionParaAction/customCreate', //url 
+            type: 'POST',
+//            data: jsonData, // Send the JSON string as data
+            data: message,
+            success: function(responseData) {
+                console.log(responseData);
+                console.log("Response data received from the server.");
+                // Handle success response
+            },
+            error: function() {
+                console.log("Error occurred during the AJAX request.");
+                // Handle error
+            }
+        });
+    });
+
+    // Function to construct column-wise POST data
+    function constructPostData(columnNames) {
+        var postData = {};
+        columnNames.forEach(function(columnName) {
+            var columnData = constructColumnData(columnName);
+            postData[columnName] = columnData;
+        });
+        return postData;
+    }
+
+    function constructColumnData(columnName) {
+        // Get the values of the input fields and dropdowns for the current column
+        var reportId = $("select[name='ReportSelectorFunctionParaAction[report_id]']").val();
+        var reportRowInput = $("input[name='ReportSelectorFunctionParaAction[report_row][" + columnName + "]']");
+        var reportRow = reportRowInput.length ? reportRowInput.val().trim() : '';
+        var functionLibraryId = $("select[name='ReportSelectorFunctionParaAction[function_library_id][" + columnName + "]']").val();
+        var actionId = $("select[name='ReportSelectorFunctionParaAction[action_id][" + columnName + "]']").val();
+        var functionArgumentIdInput = $("input[name='function_argument_id_" + functionLibraryId + "']");
+        var functionArgumentId = functionArgumentIdInput.length ? functionArgumentIdInput.val().trim() : '';
+        var actionArgumentIdInput = $("input[name^='action_argument_id_']");
+        var actionArgumentId = actionArgumentIdInput.length ? actionArgumentIdInput.val().trim() : '';
+
+        // Construct an object for the current column
+        var columnData = {
+            report_id: reportId,
+            report_column: columnName,
+            report_row: reportRow,
+            function_library_id: functionLibraryId,
+            function_argument_id: functionArgumentId,
+            action_id: actionId,
+            action_argument_id: actionArgumentId
+        };
+
+        return columnData;
+    }
+});
+</script>-->
