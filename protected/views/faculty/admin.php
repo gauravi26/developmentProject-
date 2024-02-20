@@ -1,7 +1,7 @@
 <?php
 /* @var $this FacultyController */
 /* @var $model Faculty */
-$this->applyThemeToForms();
+//$this->applyThemeToForms();
 
 $this->breadcrumbs=array(
 	'Faculties'=>array('index'),

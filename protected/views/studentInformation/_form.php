@@ -169,7 +169,7 @@ $(document).ready(function() {
 
     // Make the AJAX request to fetch CSS properties
     $.ajax({
-      url: 'index.php?r=formtheme/applyThemeToForms',
+      url: 'index.php?r=formtheme/applyThemeGeneralTheme',
       type: 'GET',
       data: { controller: controllerName, action: actionName },
       dataType: 'text',

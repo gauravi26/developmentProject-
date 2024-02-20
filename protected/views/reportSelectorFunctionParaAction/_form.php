@@ -32,6 +32,7 @@ $actionsList = Chtml::listData($sctions, 'id','action_display_name' );
 	<?php echo $form->errorSummary($model); ?>
 
 	<div class="row">
+          <?php  print_r($actionsList) ?>
 		<?php echo $form->labelEx($model,'report_id'); ?>
             <?php echo $form->dropDownList($model, 'report_id', $reportList, array('prompt' => 'Select Report', 'id' => 'reportIdDropbox')); ?>
 		<?php echo $form->error($model,'report_id'); ?>
@@ -79,11 +80,9 @@ $actionsList = Chtml::listData($sctions, 'id','action_display_name' );
 	</div>-->
 
 	
-<!--	<div class="row buttons">
+	<div class="row buttons">
 		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
-	</div>-->
-<div class="row buttons">
-    <button id="createButton">Create</button>
+	</div>
 
 	</div>
 
@@ -91,8 +90,27 @@ $actionsList = Chtml::listData($sctions, 'id','action_display_name' );
 
 </div><!-- form -->
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ReportSelectorFunctionParaAction_FormScripts.js"></script>
+  
+   <script>
+           var functionOptions; // Define functionOptions in a global scope
+var actionsList ;
+   $(document).ready(function() {
+    var functionOptions = <?php echo json_encode($scriptCodeList); ?>;
+            actionsList = <?php echo json_encode($actionsList); ?>;
+
+
+        console.log(functionOptions);
+              console.log(functionOptions);
+
+
+
     
-       <script>
+</script>
+
+
+    
+    </script>
+<!--       <script>
    $(document).ready(function() {
     $('#createButton').click(function() {
         // Data to send in the POST request
@@ -118,8 +136,9 @@ $actionsList = Chtml::listData($sctions, 'id','action_display_name' );
 });
 
    
-   </script><!--
-<!--    <script>
+   </script>-->
+
+<!--<script>
 $(document).ready(function() {
     // Function to handle form submission
    $('#createButton').click(function() {

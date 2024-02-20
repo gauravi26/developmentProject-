@@ -3,10 +3,16 @@
 /* @var $this DepartmentsController */
 /* @var $model Departments */
 /* @var $form CActiveForm */
+
+$controller = Yii::app()->getController();
+ 
+    $actionId = $controller->getAction()->getId();
+    $controllerId = $controller->getId();
 ?>
 
 <div class="form" id="departmentForm">
-
+    <?php echo CHtml::hiddenField('controllerId',$controllerId); ?>
+<?php echo CHtml::hiddenField('actionId',$actionId); ?>
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'departments-form',
 	// Please note: When you enable ajax validation, make sure the corresponding

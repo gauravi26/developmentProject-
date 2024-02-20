@@ -1,5 +1,5 @@
 $.ajax({
-    url: 'index.php?r=formtheme/applyThemeToForms',
+    url: 'index.php?r=formThemeMapping/applyGeneralTheme',
     type: 'GET',
     success: function(response) {
         // Split the response into individual JSON objects

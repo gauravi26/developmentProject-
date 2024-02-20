@@ -14,6 +14,7 @@ $(document).ready(function(){
             }
         });
     }
+    
 
     // Function to handle response and populate columns
     function handleColumnResponse(response) {
@@ -31,7 +32,11 @@ $(document).ready(function(){
     }
 
     // Function to create input fields for each column
-   function createColumnInputFields(columnName) {
+   function createColumnInputFields(columnName, functionOptions,actionsList) {
+       
+       console.log(functionOptions);
+              console.log(actionsList);
+
     var label = $('<label for="ReportSelectorFunctionParaAction_columns_' + columnName + '">' + "Report Column: " + columnName + '</label>').css({
         'font-size': '16px',
         'margin-bottom': '12px'
@@ -71,14 +76,21 @@ var labelFunction = $('<label>').attr('for', 'ReportSelectorFunctionParaAction[f
     'margin-left': ''
 });
 
-var sciptIdDropdown = $('<select>').attr({
-    id: 'fieldIdDropdown_' + columnName,
-    name: 'ReportSelectorFunctionParaAction[function_library_id][' + columnName + ']',
-}).html($('#fieldIdDropdown').html());
+        var selectInput = $('<select>').attr({
+            id: 'functionIdDropdown_' + columnName,
+            name: '[function_library_id][' + columnName + '][]'
+        });
+
+        // Add options based on the functionOptions
+        $.each(functionOptions, function(id, name) { // Adjusted iteration for functionOptions
+            var option = $('<option>').attr('value', id).text(name); // Adjusted property names
+            selectInput.append(option);
+        });
+
 handleFunctionParameters({}, columnName); // Call handleFunctionParameters here to initialize function parameters
 
 functionDiv.append(labelFunction)
-    .append(sciptIdDropdown)
+    .append(selectInput)
     .append(attachFunctionDropdownChangeEvent(columnName));
 
 functionActionDiv.append(functionDiv);
@@ -93,14 +105,20 @@ var labelAction = $('<label>').attr('for', 'ReportSelectorFunctionParaAction[act
         'margin-top': '12px'
     });
 
-var actionIdDropdown = $('<select>').attr({
-    id: 'actionIdDropdown_' + columnName,
-    name: 'ReportSelectorFunctionParaAction[action_id][' + columnName + ']',
-}).html($('#actionIdDropdown').html())
-    ;
+        var actionSelect = $('<select>').attr({
+          id: 'actionIdDropdown_' + columnName,
+          name: 'ReportSelectorFunctionParaAction[action_id][' + columnName + '][]'
+      });
+
+      // Populate options based on the actionsList
+      $.each(actionsList, function(id, name) {
+          actionSelect.append($('<option>').attr('value', id).text(name));
+      });
+handleFunctionParameters({}, columnName); // Call handleFunctionParameters here to initialize function parameters
+
 
 actionDiv.append(labelAction)
-    .append(actionIdDropdown)
+    .append(actionSelect)
     .append(attachActionParameter(columnName)); // Append attachActionParameter after actionIdDropdown
 
 functionActionDiv.append(actionDiv);

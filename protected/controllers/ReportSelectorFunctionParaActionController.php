@@ -58,40 +58,59 @@ class ReportSelectorFunctionParaActionController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      */
 //*********************Creat functions to multiple records using UI**************//
-  public function actionCreate() {
-      
-      
-         
-    $model = new ReportSelectorFunctionParaAction;
-    
-     
+    public function actionCreate() {
+        $postFields = $_POST;
+//                print_r($postFields);
+//
+//        die();
 
-    // Uncomment the following line if AJAX validation is needed
-    // $this->performAjaxValidation($model);
+// Now $postFields contains an array of all the fields from the POST request
 
-    if (isset($_POST['ReportSelectorFunctionParaAction'])) {
-        print_r($_POST);
-          die();
-         $postData = Yii::app()->request->getPost(); // Get POST data
-         
-        $model->attributes = $_POST['ReportSelectorFunctionParaAction'];
-        // $scriptToCall =  $this->scriptToCall($model);
-        $model->script_to_call = $this->scriptToCall($model);
-        if ($model->save())
-            $this->redirect(array('view', 'id' => $model->id));
+// You can loop through $postFields to access each field and its value
+foreach ($postFields as $fieldName => $fieldValue) {
+    if (is_array($fieldValue)) {
+        // If $fieldValue is an array, print it using print_r or var_dump
+        echo "Field Name: $fieldName, Field Value: <br>";
+        echo "<pre>";
+        print_r($fieldValue);
+        echo "</pre>";
+    } else {
+        // If $fieldValue is not an array, print it normally
+        echo "Field Name: $fieldName, Field Value: $fieldValue <br>";
+    }
+}
+
+//die();
+
+        $model = new ReportSelectorFunctionParaAction;
+
+        if (isset($_POST['yt0'])) {
+            $dynamicallyGeneratedFields = $model->getAttributes();
+
+                    print_r($dynamicallyGeneratedFields);
+
+            $model->attributes = $_POST['ReportSelectorFunctionParaAction'];
+        die();
+            // $scriptToCall =  $this->scriptToCall($model);
+            $model->script_to_call = $this->scriptToCall($model);
+            if ($model->save())
+                $this->redirect(array('view', 'id' => $model->id));
+        }
+
+        $this->render('create', array(
+            'model' => $model,
+        ));
     }
 
-    $this->render('create', array(
-        'model' => $model,
-    ));
-}
- public function actionCustomCreate() {
+    public function actionCustomCreate() {
      
-     var_dump($_POST);
-     print_r("custom create");
+     print_r($_POST);
      die();
-//              $postData = Yii::app()->request->getPost(); // Get POST data
-
+    
+//      if (isset($_POST['postData'])) {
+//            $value = json_decode($_POST['postData']);
+//        }
+//        print_r("hii");
    
 }
 

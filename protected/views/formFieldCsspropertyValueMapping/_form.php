@@ -83,7 +83,7 @@ foreach ($fields as $field) {
                 success: function(response) {
                     console.log(response);
                     var jsonResponse = JSON.parse(response);
-                   console.log(jsonResponse)
+                   console.log(jsonResponse);
                     // Update the options of the existing "field_id" dropdown list with the returned field IDs
                     $('#field_id').empty(); // Clear existing options
                     $.each(jsonResponse.fieldIds, function(index, fieldId) {
