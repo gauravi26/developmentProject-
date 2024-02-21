@@ -306,7 +306,33 @@ public function actionArrayManipulation() {
             $finalTheme = ['finalTheme' => $Theme];
             $finalThemeArray = $finalTheme['finalTheme'];
             $final = $this->convertAssociativeArray($finalThemeArray);
+            // Iterate over the keys of the $general array
+              print_r($general);
+                          echo "<br><br>";
+
+              echo count($general);
+
+            echo "<br><br>";
+//            print_r($formTheme);
+//               echo "<br><br>";
             print_r($final);
+             echo "<br><br>";
+
+              echo count($final);
+               echo "<br><br>";
+foreach ($general as $key => $value) {
+    // Check if the key is present in the $final array
+    if (!isset($final[$key])) {
+        // If the key is not present in $final, append it along with its value
+        $final[$key] = $value;
+    }
+}
+ print_r($final);
+                echo "<br><br>";
+
+ echo count($final);
+          
+         
 
  
 
