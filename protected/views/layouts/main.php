@@ -100,7 +100,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="index.php?r=departments/create">Departments</a></li>
                                 <li><a href="index.php?r=courses/create">Courses</a></li>
-                                <li><a href="index.php?r=courseType/create">Course Type</a></li>
+<!--                                <li><a href="index.php?r=courseType/create">Course Type</a></li>-->
                                 <li><a href="index.php?r=studentInformation/create">Student Information</a></li>
                                 <li><a href="index.php?r=faculty/create">Faculty</a></li>
                             </ul>
