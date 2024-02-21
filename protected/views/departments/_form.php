@@ -1,5 +1,7 @@
-
-<?php
+<style>#field_2{font-style:italic} #field_2{border:3px solid dotted} #field_1{border-radius:5px}</style>
+    
+    
+    <?php
 /* @var $this DepartmentsController */
 /* @var $model Departments */
 /* @var $form CActiveForm */
@@ -26,13 +28,13 @@ $controller = Yii::app()->getController();
 
 	<?php echo $form->errorSummary($model); ?>
 
-	<div class="row">
+	<div class="row" >
             <?php echo $form->labelEx($model,'department_code'); ?>
-            <?php echo $form->textField($model,'department_code',array('size'=>60,'maxlength'=>255, 'id'=>'department_code')); ?>
+            <?php echo $form->textField($model,'department_code',array('size'=>60,'maxlength'=>255, 'id'=>'department_code' ,'id'=>'field_1')); ?>
             <?php echo $form->error($model,'department_code'); ?>
         </div>
 
-        <div class="row">
+        <div class="row" id="field_2">
             <?php echo $form->labelEx($model,'department_name'); ?>
             <?php echo $form->textField($model,'department_name',array('size'=>60,'maxlength'=>255, 'id'=>'department_name')); ?>
             <?php echo $form->error($model,'department_name'); ?>

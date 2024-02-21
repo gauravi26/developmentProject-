@@ -30,7 +30,8 @@ class ReportSelectorFunctionParaActionController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update', 'applyfunctionAction', 'query', 'fetchParametersForFunction', 'fetchParametersForAction','customCreate'),
+                'actions' => array('create', 'update', 'applyfunctionAction', 'query', 'fetchParametersForFunction', 
+                    'fetchParametersForAction','customCreate','save'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -102,17 +103,11 @@ foreach ($postFields as $fieldName => $fieldValue) {
         ));
     }
 
-    public function actionCustomCreate() {
-     
-     print_r($_POST);
-     die();
-    
-//      if (isset($_POST['postData'])) {
-//            $value = json_decode($_POST['postData']);
-//        }
-//        print_r("hii");
-   
-}
+    public function actionSave(){
+        
+        print_r($_POST);
+        
+    }
 
 
     //***************************Building Script to Call Function********************//
@@ -254,7 +249,15 @@ foreach ($postFields as $fieldName => $fieldValue) {
         }
     }
 
-//**************************************UI Functions**********************************//
+//**************************************UI Functions**************************************************//
+    
+    public function actionCustomCreate() {
+     
+        $this->render('customCreate');
+   
+}
+
+
     public function actionQuery() {
         if (Yii::app()->request->isAjaxRequest) {
             $selectedReportId = Yii::app()->request->getPost('reportId');
@@ -281,6 +284,8 @@ foreach ($postFields as $fieldName => $fieldValue) {
             echo "Error in Getting POST From Form ";
         }
     }
+    
+    
 
     public function actionFetchParametersForFunction() {
         // Extracting the value of selectedFunctionId from POST data
@@ -315,7 +320,7 @@ foreach ($postFields as $fieldName => $fieldValue) {
     }
     echo json_encode($actionParameterDisplayNames); // Return the array of display names
 }
-
+//***************************************************************************************************
 
     /**
      * Updates a particular model.
