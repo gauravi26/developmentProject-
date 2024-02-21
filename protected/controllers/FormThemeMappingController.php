@@ -255,94 +255,181 @@ class FormThemeMappingController extends Controller {
         global $pageTheme; // Access the global variable $pageTheme
         return isset($pageTheme[$themeId]) ? $pageTheme[$themeId] : null; // Return the theme styles if found, otherwise return null
     }
+private function convertAssociativeArray($themeArray) {
+    $cssArray = [];
 
-    public function actionArrayManipulation() {
-        $generalTheme = $this->actionApplyGeneralTheme(); // Get the array directly
-        $formTheme = $this->actionApplyThemeToForms();
-        print_r($generalTheme); // Output the array
-        print_r($formTheme);
-
-          $finalTheme = array('finalTheme' => $formTheme);
-        foreach ($generalTheme as $key => $value) {
-            if (!isset($finalTheme[$key])) {
-                $finalArray[$key] = $value;
-            }
+    foreach ($themeArray as $value) {
+        // Split the string by ":"
+        $parts = explode(':', $value, 2);
+        if (count($parts) === 2) {
+            // Trim property and value
+            $property = trim($parts[0]);
+            $value = trim($parts[1]);
+            // Add to the CSS array
+            $cssArray[$property] = $value;
         }
-       print_r(['css' => $finalTheme]);
-        
-        
+    }
+    
+    foreach ($cssArray as $key => $value) {
+//                echo "Key: $key, Value: $value\n";
+                if ($value === '' || trim($value) === '' || is_null($value)) {
+                            unset($cssArray[$key]);
+
+                    //add code to remove remove key that are empty or null or with NO value
+                }
+            }
+
+    return $cssArray;
+}
+
+public function actionArrayManipulation() {
+        $generalTheme = $this->actionApplyGeneralTheme();
+
+        $generalThemeArray = $generalTheme['general'];
+        $general = $this->convertAssociativeArray($generalThemeArray);
+//        print_r($general);
+      
+
+
+        // Get the array directly
+        $formTheme = $this->actionApplyThemeToForms();
+        // Replace semicolons with commas
+        // Check if $formTheme['formTheme'] is an array
+        if (isset($formTheme['formTheme']) && is_array($formTheme['formTheme'])) {
+            // Create the final theme array with formTheme as the base
+            $Theme = [];
+            // Append values from formTheme into finalTheme
+            foreach ($formTheme['formTheme'] as $property) {
+                // Append the property directly to the finalTheme array
+                $Theme[] = $property;
+            }
+            $finalTheme = ['finalTheme' => $Theme];
+            $finalThemeArray = $finalTheme['finalTheme'];
+            $final = $this->convertAssociativeArray($finalThemeArray);
+            print_r($final);
+
+ 
+
+        } else {
+            echo "formTheme['formTheme'] is not an array";
+        }
     }
 
-    // Action to apply the theme to a specific page based on controller and action
     public function actionApplyThemeToForms() {
-        // Get the controller and action from the query parameters
-//    $controllerId = isset($_GET['controller']) ? $_GET['controller'] : null;
-//    $actionId = isset($_GET['action']) ? $_GET['action'] : null;
-        $controllerId = 'departments';
-        $actionId = 'create';
-        // Find the theme mapping for the specified controller and action
-        $mapping = FormThemeMapping::model()->find(
-                'controller = :controller AND action = :action',
-                array(':controller' => $controllerId, ':action' => $actionId)
-        );
+    $controllerId = 'departments';
+    $actionId = 'create';
+    
+    // Find the theme mapping for the specified controller and action
+    $mapping = FormThemeMapping::model()->find(
+        'controller = :controller AND action = :action',
+        array(':controller' => $controllerId, ':action' => $actionId)
+    );
 
-        if ($mapping !== null) { // If mapping found
-            $themeId = $mapping->theme_ID; // Get the theme ID from the mapping
-            // Try to fetch the theme styles from RAM
-            $themeStyles = $this->getPageThemeFromRAM($themeId);
+    if ($mapping !== null) { // If mapping found
+        $themeId = $mapping->theme_ID; // Get the theme ID from the mapping
 
+        // Try to fetch the theme styles from RAM
+        $themeStyles = $this->getPageThemeFromRAM($themeId);
+
+        if ($themeStyles === null) { // If theme styles not found in RAM
             // Fetch the theme details from the database
             $theme = Themes::model()->findByPk($themeId);
 
-            if ($themeStyles === null) { // If theme styles not found in RAM
-                // Generate CSS styles for the theme
-                $elementCssProperties = ElementCssProperties::model()->findAll();
-                $themesColumnName = [];
-                foreach ($elementCssProperties as $elementCssProperty) {
-                    $themesColumnName[] = $elementCssProperty->theme_columns;
-                }
-                $themesColumnName = array_unique($themesColumnName);
-
-                $cssStyles = [];
-                foreach ($themesColumnName as $columnName) {
-                    if ($columnName === 'background_image') {
-                        // Handle background image separately by adding the URL
-                        if (isset($theme->$columnName)) {
-                            $cssStyles[] = "background-image: url('" . $theme->$columnName . "')";
-                        }
-                    }
-                    if ($columnName === 'link_color') {
-                        if (isset($theme->$columnName)) {
-                            $cssStyles[] = ":link { color: " . $theme->$columnName . " }";
-                        }
-                    } else {
-                        if (isset($theme->$columnName)) {
-                            $cssStyle = str_replace('_', '-', $columnName);
-                            $cssValue = $theme->$columnName;
-                            $cssStyles[] = "$cssStyle: $cssValue";
-                        }
-                    }
-                }
-                $response['formTheme'] = $cssStyles;
-
-                return $response;
-                // Convert CSS styles into a string
-                $cssStylesString = implode('; ', $cssStyles);
-
-                // Save the generated theme styles to RAM
-                $this->savePageThemeToRAM($themeId, $cssStylesString);
-//            print_r($cssStyles);
-                // Return the generated CSS styles as an array
-//            return $cssStyles;
-            } else { // If theme styles found in RAM
-                // Return the cached CSS styles as an array
-                return $response;
+            if ($theme !== null) { // If theme found in the database
+                // Generate theme styles
+                $themeStyles = $this->generateThemeStyles($theme);
+                
+                // Save the theme styles to RAM
+                $this->saveThemeToRAM($themeId, $themeStyles);
+            } else {
+                // If theme not found in the database, return an error message
+//                echo json_encode(['error' => "Theme not found for the given theme_ID."]);
+                return;
             }
-        } else { // If mapping not found for the specified controller and action
-            // Return an array with an error message
-            return ['error' => "Mapping not found for the specified controller and action!"];
         }
+                    $response['formTheme'] = $themeStyles;
+
+        // Return the theme styles
+//        echo json_encode(['css' => $themeStyles]);
+        return $response;
+    } else { // If mapping not found for the specified controller and action
+        // Return an error message
+//        echo json_encode(['error' => "Mapping not found for the specified controller and action!"]);
+        return;
     }
+}
+
+    // Action to apply the theme to a specific page based on controller and action
+//    public function actionApplyThemeToForms() {
+//        // Get the controller and action from the query parameters
+////    $controllerId = isset($_GET['controller']) ? $_GET['controller'] : null;
+////    $actionId = isset($_GET['action']) ? $_GET['action'] : null;
+//        $controllerId = 'departments';
+//        $actionId = 'create';
+//        // Find the theme mapping for the specified controller and action
+//        $mapping = FormThemeMapping::model()->find(
+//                'controller = :controller AND action = :action',
+//                array(':controller' => $controllerId, ':action' => $actionId)
+//        );
+//
+//        if ($mapping !== null) { // If mapping found
+//            $themeId = $mapping->theme_ID; // Get the theme ID from the mapping
+//            // Try to fetch the theme styles from RAM
+//            $themeStyles = $this->getPageThemeFromRAM($themeId);
+//
+//            // Fetch the theme details from the database
+//            $theme = Themes::model()->findByPk($themeId);
+//
+//            if ($themeStyles === null) { // If theme styles not found in RAM
+//                // Generate CSS styles for the theme
+//                $elementCssProperties = ElementCssProperties::model()->findAll();
+//                $themesColumnName = [];
+//                foreach ($elementCssProperties as $elementCssProperty) {
+//                    $themesColumnName[] = $elementCssProperty->theme_columns;
+//                }
+//                $themesColumnName = array_unique($themesColumnName);
+//
+//                $cssStyles = [];
+//                foreach ($themesColumnName as $columnName) {
+//                    if ($columnName === 'background_image') {
+//                        // Handle background image separately by adding the URL
+//                        if (isset($theme->$columnName)) {
+//                            $cssStyles[] = "background-image: url('" . $theme->$columnName . "')";
+//                        }
+//                    }
+//                    if ($columnName === 'link_color') {
+//                        if (isset($theme->$columnName)) {
+//                            $cssStyles[] = ":link { color: " . $theme->$columnName . " }";
+//                        }
+//                    } else {
+//                        if (isset($theme->$columnName)) {
+//                            $cssStyle = str_replace('_', '-', $columnName);
+//                            $cssValue = $theme->$columnName;
+//                            $cssStyles[] = "$cssStyle: $cssValue";
+//                        }
+//                    }
+//                }
+////                $response['formTheme'] = $cssStyles;
+//
+//                // Convert CSS styles into a string
+//                $cssStylesString = implode('; ', $cssStyles);
+//                $response['formTheme'] = $cssStyles;
+//                return $response;
+//
+//                // Save the generated theme styles to RAM
+//                $this->savePageThemeToRAM($themeId, $cssStylesString);
+////            print_r($cssStyles);
+//                // Return the generated CSS styles as an array
+////            return $cssStyles;
+//            } else { // If theme styles found in RAM
+//                // Return the cached CSS styles as an array
+////                return $response;
+//            }
+//        } else { // If mapping not found for the specified controller and action
+//            // Return an array with an error message
+////            return ['error' => "Mapping not found for the specified controller and action!"];
+//        }
+//    }
 
     function getThemeFromRAM($themeId) {
         global $themeData;
@@ -429,7 +516,7 @@ class FormThemeMappingController extends Controller {
             }
         }
 
-        return implode('; ', $cssStyles);
+        return $cssStyles;
     }
 
 }
