@@ -1,3 +1,4 @@
+// Define a function to format the CSS string
 const formatCSS = (cssString) => {
     // Replace 'url('url(' with 'url(' and ')' with ')'
     cssString = cssString.replace(/url\('url\('/g, "url('").replace(/'\)'/g, "')");
@@ -11,7 +12,7 @@ $(window).on('load', function() {
     var actionName = $("#actionId").val();
 
     $.ajax({
-        url: 'index.php?r=formthememapping/applyThemeToForms',
+        url: 'index.php?r=formthememapping/arrayManipulation',
         type: 'GET',
         dataType: 'json', // Update the data type to 'json' since the response is JSON
         data: { controller: controllerName, action: actionName },
@@ -23,9 +24,9 @@ $(window).on('load', function() {
             console.log('Response:', response); // Log the response to the console
             
             // Apply styles using the appropriate selector (e.g., .span-19)
-            if (response && response.css) {
-                const formattedCSS = formatCSS(response.css);
-                $('.span-19').css('cssText', formattedCSS);
+            if (response && response.css && response.css.finalTheme && response.css.finalTheme.formTheme) {
+                const formattedCSS = formatCSS(response.css.finalTheme.formTheme.join('; ')); // Join array elements with ';' separator
+                $('.span-19').attr('style', formattedCSS); // Set the 'style' attribute of the element
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
