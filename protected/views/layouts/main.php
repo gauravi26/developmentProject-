@@ -75,7 +75,7 @@
 <!--    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/effectScripts.js"></script>-->
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyReportTheme.js"></script>
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ApplythemeonformId.js"></script><!--
--->    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applytheme.js"></script><!--
+-->   <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applytheme.js"></script><!--
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ApplyCSStoElements.js"></script>-->
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/themeingReport.js"></script>
              <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyStyleToFormElement.js"></script>

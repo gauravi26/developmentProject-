@@ -12,7 +12,7 @@ $(window).on('load', function() {
     var actionName = $("#actionId").val();
 
     $.ajax({
-        url: 'index.php?r=formthememapping/arrayManipulation',
+        url: 'index.php?r=formthememapping/formingFinalTheme',
         type: 'GET',
         dataType: 'json', // Update the data type to 'json' since the response is JSON
         data: { controller: controllerName, action: actionName },
@@ -24,8 +24,13 @@ $(window).on('load', function() {
             console.log('Response:', response); // Log the response to the console
             
             // Apply styles using the appropriate selector (e.g., .span-19)
-            if (response && response.css && response.css.finalTheme && response.css.finalTheme.formTheme) {
-                const formattedCSS = formatCSS(response.css.finalTheme.formTheme.join('; ')); // Join array elements with ';' separator
+            if (response && response.css) {
+                const cssProperties = response.css;
+                let cssString = '';
+                for (const [key, value] of Object.entries(cssProperties)) {
+                    cssString += `${key}: ${value}; `;
+                }
+                const formattedCSS = formatCSS(cssString);
                 $('.span-19').attr('style', formattedCSS); // Set the 'style' attribute of the element
             }
         },

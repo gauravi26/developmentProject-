@@ -32,7 +32,7 @@ class FormThemeMappingController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update', 'applyElementCssProperties', 'applyThemeToPage', 'applyGeneralTheme', 'applyThemeToForms', 'arrayManipulation'),
+                'actions' => array('create', 'update', 'applyElementCssProperties', 'applyThemeToPage', 'applyGeneralTheme', 'applyThemeToForms', 'formingFinalTheme'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -114,16 +114,16 @@ class FormThemeMappingController extends Controller {
 
             if ($model->save()) {
                 // Delete the previous set of FormElementCssPropertiesThemeMapping
-                FormElementCssPropertiesThemeMapping::model()
-                        ->deleteAllByAttributes(array('theme_ID' => $model->theme_ID));
+//                FormElementCssPropertiesThemeMapping::model()
+//                        ->deleteAllByAttributes(array('theme_ID' => $model->theme_ID));
 
                 // Create a new set of FormElementCssPropertiesThemeMapping with the updated theme_ID
-                foreach ($formElementCssPropertiesIDs as $formElementCssPropertyID) {
-                    $mappingModel = new FormElementCssPropertiesThemeMapping;
-                    $mappingModel->theme_ID = $themeID;
-                    $mappingModel->form_element_css_properties_id = $formElementCssPropertyID;
-                    $mappingModel->save();
-                }
+//                foreach ($formElementCssPropertiesIDs as $formElementCssPropertyID) {
+//                    $mappingModel = new FormElementCssPropertiesThemeMapping;
+//                    $mappingModel->theme_ID = $themeID;
+//                    $mappingModel->form_element_css_properties_id = $formElementCssPropertyID;
+//                    $mappingModel->save();
+//                }
 
                 $this->redirect(array('view', 'id' => $model->id));
             }
@@ -255,6 +255,7 @@ class FormThemeMappingController extends Controller {
         global $pageTheme; // Access the global variable $pageTheme
         return isset($pageTheme[$themeId]) ? $pageTheme[$themeId] : null; // Return the theme styles if found, otherwise return null
     }
+    
 private function convertAssociativeArray($themeArray) {
     $cssArray = [];
 
@@ -282,68 +283,56 @@ private function convertAssociativeArray($themeArray) {
     return $cssArray;
 }
 
-public function actionArrayManipulation() {
-        $generalTheme = $this->actionApplyGeneralTheme();
+public function actionFormingFinalTheme() {
+      $controllerId = isset($_GET['controller']) ? $_GET['controller'] : null;
+        $actionId = isset($_GET['action']) ? $_GET['action'] : null;
+    // Apply general theme
+    $generalTheme = $this->actionApplyGeneralTheme();
+    $generalThemeArray = $generalTheme['general'];
+    $general = $this->convertAssociativeArray($generalThemeArray);
 
-        $generalThemeArray = $generalTheme['general'];
-        $general = $this->convertAssociativeArray($generalThemeArray);
-//        print_r($general);
-      
-
-
-        // Get the array directly
-        $formTheme = $this->actionApplyThemeToForms();
-        // Replace semicolons with commas
-        // Check if $formTheme['formTheme'] is an array
-        if (isset($formTheme['formTheme']) && is_array($formTheme['formTheme'])) {
-            // Create the final theme array with formTheme as the base
-            $Theme = [];
-            // Append values from formTheme into finalTheme
-            foreach ($formTheme['formTheme'] as $property) {
-                // Append the property directly to the finalTheme array
-                $Theme[] = $property;
+    // Apply form theme
+    $formTheme = $this->actionApplyThemeToForms($controllerId,$actionId);
+//    print_r($formTheme);
+//    die();
+    if (isset($formTheme['formTheme']) && $formTheme['formTheme'] !== NULL) {
+        $final = [];
+        foreach ($formTheme['formTheme'] as $property) {
+            $final[] = $property;
+        }
+        $final = $this->convertAssociativeArray($final);
+        
+        // Merge general and form themes
+        foreach ($general as $key => $value) {
+            if (!isset($final[$key])) {
+                $final[$key] = $value;
             }
-            $finalTheme = ['finalTheme' => $Theme];
-            $finalThemeArray = $finalTheme['finalTheme'];
-            $final = $this->convertAssociativeArray($finalThemeArray);
-            // Iterate over the keys of the $general array
-              print_r($general);
-                          echo "<br><br>";
+        }
 
-              echo count($general);
-
-            echo "<br><br>";
-//            print_r($formTheme);
-//               echo "<br><br>";
-            print_r($final);
-             echo "<br><br>";
-
-              echo count($final);
-               echo "<br><br>";
-foreach ($general as $key => $value) {
-    // Check if the key is present in the $final array
-    if (!isset($final[$key])) {
-        // If the key is not present in $final, append it along with its value
-        $final[$key] = $value;
+        // Output results
+//        print_r($general);
+//        echo "<br><br>";
+//        echo "Count of general theme: " . count($general) . "<br><br>";
+//        print_r($final);
+//        echo "<br><br>";
+//        echo "Count of final theme: " . count($final) . "<br><br>";
+                echo json_encode(['css' => $final]);
+            return;
+    
+    } else {
+        
+//         print_r($general);
+//         print_r("hi");
+       
+        echo json_encode(['css' => $general]);
+         return ;
     }
 }
- print_r($final);
-                echo "<br><br>";
 
- echo count($final);
-          
-         
 
- 
-
-        } else {
-            echo "formTheme['formTheme'] is not an array";
-        }
-    }
-
-    public function actionApplyThemeToForms() {
-    $controllerId = 'departments';
-    $actionId = 'create';
+    public function actionApplyThemeToForms($controllerId,$actionId) {
+//    $controllerId = 'departments';
+//    $actionId = 'create';
     
     // Find the theme mapping for the specified controller and action
     $mapping = FormThemeMapping::model()->find(
