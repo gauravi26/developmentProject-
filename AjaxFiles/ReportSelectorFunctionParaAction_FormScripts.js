@@ -233,9 +233,10 @@ function handleActionParameters(data, columnName) {
                 type: 'text',
                 id: 'action_parameter_' + key,
                 name:'action_argument_id_'+key,
-                placeholder: 'Action Argument'
+                placeholder: 'Action Argument',
+                style : 'margin :10px; padding: 10px '
             });
-            actionDiv.append(label).append(input);
+            actionDiv.append(label).append(input).append('<br><br>');
         }
     }
 }
