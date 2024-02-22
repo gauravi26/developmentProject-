@@ -105,7 +105,9 @@ foreach ($postFields as $fieldName => $fieldValue) {
 
     public function actionSave(){
         
-        print_r($_POST);
+       foreach ($_POST as $key => $value) {
+        echo $key . ": " . $value . "<br>"; // Echo key-value pair with HTML line break
+    }
         
     }
 
