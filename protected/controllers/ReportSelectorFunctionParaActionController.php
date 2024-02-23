@@ -119,7 +119,9 @@ foreach ($postFields as $fieldName => $fieldValue) {
             $report_id = isset($post['report_id']) ? $post['report_id'] : null;
             $report_column = isset($post["report_column_{$report_id_index}"]) ? $post["report_column_{$report_id_index}"] : null;
             $report_row = isset($post["report_row_{$report_id_index}"]) ? $post["report_row_{$report_id_index}"] : null;
-            $function_library_id = isset($post["function_select_{$function_select_index}_{$report_id_index}"]) ? $post["function_select_{$function_select_index}_{$report_id_index}"] : null;
+//            $function_library_id = isset($post["function_select_{$function_select_index}_{$report_id_index}"]) ? $post["function_select_{$function_select_index}_{$report_id_index}"] : null;
+            $function_library_id = isset($post["function_select_{$report_id_index}_{$function_select_index}"]) ? $post["function_select_{$report_id_index}_{$function_select_index}"] : null;
+
             $function_library_parameter = $value;
 
             // Add the data to the array
