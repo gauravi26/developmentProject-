@@ -4,12 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/reportSelectorFunctionParaAction/customCreate.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/reportSelectorFunctionParaAction/_form.php</file>
+            <file>file:/C:/xampp/htdocs/themebuilder11/protected/models/ReportSelectorFunctionParaAction.php</file>
+            <file>file:/C:/xampp/htdocs/themebuilder11/protected/models/ActionArgumentMap.php</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/protected/controllers/ReportSelectorFunctionParaActionController.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/AjaxFiles/ReportSelectorFunctionParaAction_FormScripts.js</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/themeForReport/createTheme.php</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/themeForReport/reportThemeTab.php</file>
         </group>
     </open-files>
 </project-private>

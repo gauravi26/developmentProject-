@@ -147,7 +147,7 @@ foreach ($postFields as $fieldName => $fieldValue) {
     }
 //    print_r($data);
         $actionArgRecord = $this ->formActionArgumentArr($post);
-
+      
     foreach ($data as $row) {
     $newModel = new ReportSelectorFunctionParaAction; // Create a new model instance
     
@@ -156,13 +156,20 @@ foreach ($postFields as $fieldName => $fieldValue) {
     
     // Attempt to save the model
     if ($newModel->save()) {
+        $actionSaveOut = $this->saveActionParaValues($actionArgRecord);
+print_r($actionSaveOut);
+die();
         echo "Data saved successfully.<br>";
+//        $this->saveActionParaValues($actionArgRecord);
+
     } else {
         echo "Error saving data.<br>";
         print_r($newModel->getErrors()); // Print any validation errors if save fails
     }
 }
-$this->saveActionParaValues($actionArgRecord);
+//print_r($actionArgRecord);
+//die();
+
 }
 private function formActionArgumentArr($post){
     
@@ -193,34 +200,50 @@ private function formActionArgumentArr($post){
     
 }
 private function saveActionParaValues($actionArgRecord) {
-    foreach ($actionArgRecord as $key => &$innerArray) {
-        // Fetch the ID from the ReportSelectorFunctionParaAction model based on the key
-        $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes(['function_library_id' => $key]);
-        
-        if ($reportFunctionMapModel !== null) {
-            $report_function_mapping_id = $reportFunctionMapModel->id; 
+//    print_r($actionArgRecord);
+    
+    foreach ($actionArgRecord as $key => $innerArray) {
+        foreach ($innerArray as $functionId => $value) {
+            // Fetch the ID from the ReportSelectorFunctionParaAction model based on the key
+            $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes(['function_library_id' => $functionId]);
+            
+            if ($reportFunctionMapModel !== null) {
+                $report_function_mapping_id = $reportFunctionMapModel->id; 
 
-            // Append the report_function_mapping_id to each inner array
-            $innerArray['report_function_mapping_id'] = $report_function_mapping_id;
-        } else {
-            $innerArray['report_function_mapping_id'] = null;
+                // Append the report_function_mapping_id to each inner array
+//                $innerArray['report_function_mapping_id'] = $report_function_mapping_id;
+                // Call the function to save action parameters
+               
+                $this->saveActionParameters($innerArray,$report_function_mapping_id);
+            } else {
+                echo "Function ID not found in Report Function Mapping.";
+            }
         }
     }
+}
 
-    // Ensure to unset the reference after the loop
-    unset($innerArray);
-
-    foreach ($actionArgRecord as $row) {
+private function saveActionParameters($innerArray,$report_function_mapping_id) {
+    foreach ($innerArray as $key => $row) {
+    
+        print_r($row);
+        echo '<br>';
+//        die();
         $newModel = new ReportFunctionMappingActionValue; // Create a new model instance
         
         // Assign attributes from the current row to the model
-        $newModel->attributes = $row;
+       $newModel->action_id = $row['action_id'];
+        $newModel->action_argument_id = $row['action_argument_id'];
+        $newModel->action_parameter_value = $row['action_parameter_value'];        $newModel->report_function_mapping_id = $report_function_mapping_id;
+        
+ print_r($newModel->attributes);
+        die();
         
         // Attempt to save the model
         if ($newModel->save()) {
             echo "Data saved successfully.<br>";
         } else {
             echo "Error saving data.<br>";
+            print_r($row); // Print the row causing the error
             print_r($newModel->getErrors()); // Print any validation errors if save fails
         }
     }
