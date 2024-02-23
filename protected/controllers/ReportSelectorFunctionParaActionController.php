@@ -102,14 +102,64 @@ foreach ($postFields as $fieldName => $fieldValue) {
             'model' => $model,
         ));
     }
+    
+  public function actionSave() {
+    $post = $_POST;
+    $data = [];
 
-    public function actionSave(){
-        
-       foreach ($_POST as $key => $value) {
-        echo $key . ": " . $value . "<br>"; // Echo key-value pair with HTML line break
+    // Iterate through $_POST to extract the relevant data
+    foreach ($post as $key => $value) {
+        // Check if the key contains 'function_argument_id_'
+        if (strpos($key, 'function_argument_id_') !== false) {
+            // Extract the indices from the key
+            preg_match('/function_argument_id_(\d+)_(\d+)_(\d+)/', $key, $matches);
+            $report_id_index = $matches[1];
+            $function_select_index = $matches[2];
+
+            // Build the corresponding column names
+            $report_id = isset($post['report_id']) ? $post['report_id'] : null;
+            $report_column = isset($post["report_column_{$report_id_index}"]) ? $post["report_column_{$report_id_index}"] : null;
+            $report_row = isset($post["report_row_{$report_id_index}"]) ? $post["report_row_{$report_id_index}"] : null;
+            $function_select = isset($post["function_select_{$function_select_index}_{$report_id_index}"]) ? $post["function_select_{$function_select_index}_{$report_id_index}"] : null;
+            $function_argument_id = $value;
+
+            // Add the data to the array
+            $data[] = [
+                'report_id' => $report_id,
+                'report_column' => $report_column,
+                'report_row' => $report_row,
+                'function_select' => $function_select,
+                'function_argument_id' => $function_argument_id
+            ];
+        }
     }
-        
+
+    // Check the count of arrays
+    $count = count($data);
+    echo "Count of arrays: $count<br>";
+
+    // Print the arrays
+    foreach ($data as $key => $array) {
+        echo "Array $key: ";
+        print_r($array);
+        echo "<br>";
     }
+}
+ 
+//
+//  public function actionSave() {
+//    $post = $_POST;
+//    $count = 0;
+//
+//    // Count keys containing 'function_argument_id_'
+//    foreach ($post as $key => $value) {
+//        if (strpos($key, 'function_argument_id_') !== false) {
+//            $count++;
+//        }
+//    }
+//
+//    echo "Count of keys containing 'function_argument_id_': $count";
+//}
 
 
     //***************************Building Script to Call Function********************//

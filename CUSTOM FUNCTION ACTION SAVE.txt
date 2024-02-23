@@ -1,0 +1,36 @@
+report_id: 7
+report_column_0: id
+report_row_0: ID
+function_select_0_1: 7
+function_argument_id_0_1_7: ID first function parameter
+action_id_0_1: 2
+action_id_0_1_0: ID first action parameter
+function_select_0_2: 8
+function_argument_id_0_2_8: ID 2nd function parameter1
+function_argument_id_0_2_9: ID 2nd function parameter2
+action_id_0_2: 1
+action_id_0_2_0: ID 2nd action parameter
+report_column_1: course_name
+report_row_1: COURSE NAME
+function_select_1_3: 7
+function_argument_id_1_3_7: coure name function para
+action_id_1_3: 1
+action_id_1_3_0: coure name action PARA
+report_column_2: course_link
+report_row_2:
+submit: Save
+
+example   MAPPING OF TABLE COLUMNS AND POST 
+
+id   report_id     report_column    report_row      function_library_id    function_library_parameter    action_id
+->  report_id      report_column    report_row_         function_select_           function_argument_id_        action_id_
+
+ SAVE RECORDS IN THIS TABLE WITH 
+FOR EACH UNIGUE report_column and function_select_0_1 and function parmeter a record will be save 
+
+id   report_id     report_column     report_row      function_library_id    function_library_parameter         action_id
+->  report_id    report_column      report_row_     function_select_           function_argument_id_           action_id_
+      7                id             ID                 7                     first function parameter            2
+      7                id             ID                 8                     2nd function parameter1             1
+      7               id              ID                 8                     2nd function parameter2             1
+      7        course_name        COURSE NAME            7                     coure name function para            1
