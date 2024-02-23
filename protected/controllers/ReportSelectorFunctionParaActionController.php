@@ -304,13 +304,14 @@ foreach ($postFields as $fieldName => $fieldValue) {
         foreach ($functionModels as $functionModel) {
             $functionParameters[$functionModel->id] = $functionModel->argument_name; // Assuming "argument_name" is the correct attribute name
         }
-
+       
         echo json_encode($functionParameters);
+        
 
     }
 
     public function actionFetchParametersForAction() {
-    $actionId = Yii::app()->request->getPost('selectedActionId');
+    $actionId = Yii::app()->request->getPost('selectActionId');
     
     $actionParameters = ActionArgumentMap::model()->findAll('id=:actionId', array(':actionId' => $actionId));
     $actionParameterDisplayNames = array(); // Create an array to store display names

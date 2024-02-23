@@ -116,8 +116,12 @@
 
         // Function to attach event listener for function dropdown change event
         function attachFunctionDropdownChangeEvent(index, count,$actionDiv) {
+                console.log("Calling handleActionParameters from attachFunctionDropdownChangeEvent");
+
             $(document).on('change', '[name="function_select_' + index + '_' + count + '"]', function () {
-                var selectedFunctionId = $(this).val();
+//$actionDiv.find('[name="function_argument_id_' + index + '_' + count + '_' + key + '"]').remove();
+
+        var selectedFunctionId = $(this).val();
                 //            console.log(selectedFunctionId);
 
                 $.ajax({
@@ -126,7 +130,7 @@
                     data: {selectedFunctionId: selectedFunctionId},
                     success: function (response) {
                         var data = JSON.parse(response);
-
+                         console.log(response);
                         handleFunctionParameters(data, index, count, $actionDiv);
                     },
                     error: function () {
@@ -139,7 +143,7 @@
         // Assuming $actionDiv is the actionDiv_0_1 element
 function handleFunctionParameters(data, index, count, $actionDiv) {
     // Find the parent row
-    console.log($actionDiv);
+//    console.log($actionDiv);
     var selectFunctionField = $actionDiv.closest('.row');
 
    for (var key in data) {
@@ -152,13 +156,15 @@ function handleFunctionParameters(data, index, count, $actionDiv) {
                 placeholder: 'Function Argument',
                 required: 'required'
             });
-              
+              $('<br>').insertBefore($actionDiv);
+
               label.insertBefore($actionDiv);
+              $('<br>').insertBefore($actionDiv);
+
             input.insertBefore($actionDiv);
-            // Append the label and input before the actionDiv
-//            selectFunctionField.append(label, input);
-            // Add a line break after each input field
-//            $('<br>').insertBefore($actionDiv);
+            $('<br>').insertBefore($actionDiv);
+
+          
         }
     }
 }
@@ -167,26 +173,80 @@ function handleFunctionParameters(data, index, count, $actionDiv) {
    //**************************** Action Event Listener ************************
    
     function attachActionSelect(index,count,$actionDiv){
+    console.log("Calling handleActionParameters from attachActionParameter");
 
 
         var $actionLable = $('<label style="font-style:bold;">').text('Action'+count);
-            var $actionSelect = $('<br><select></select>').attr({
+            var $actionSelect = $('<select></select>').attr({
                name : 'action_id_' + index + '_'+count,
                class: 'actionSelect'
            }).append('<br>');
            
-           $actionSelect.append('<option value="">Select Action</option><br>');
+           $actionSelect.append('<option value="">Select Action</option>');
         <?php foreach ($actionsList as $id => $actionName): ?>
-            $actionSelect.append($('<option></option><br>').attr('value','  <?php echo $id ?> ').text(' <?php echo$actionName ?>'));
+        $actionSelect.append($('<option></option>').attr('value', '<?php echo $id ?>').text('<?php echo $actionName ?>'));
                         
         <?php endforeach; ?>
 //            console.log('hii');
             $actionDiv.append('<br><br>');
             $actionDiv.append($actionLable,$actionSelect);
             $actionDiv.append('<br>');
+            attachActionParameter(index,count,$actionDiv,$actionSelect);
+            
 
             }
     
+    function attachActionParameter(index,count,$actionDiv){
+        console.log(index,count,$actionDiv,);
+            $(document).on('change','[name="action_id_' + index + '_' + count + '"]', function (){
+                
+
+//                        $actionDiv.find('.actionParameter').remove();
+
+                var selectActionId = $(this).val(); // Access value directly from $actionSelect
+        
+//        console.log(selectActionId);
+        
+             $.ajax({
+                    url: 'index.php?r=ReportSelectorFunctionParaAction/fetchParametersForAction',
+                    type: 'POST',
+                    data: {selectActionId: selectActionId},
+                    success: function (response) {
+                        var data = JSON.parse(response);
+                        handleActionParameters(data, index, count,$actionDiv);
+                    },
+                    error: function () {
+                        console.log('Error fetching script details');
+                    }
+                });  
+                });
+    }
+   
+   function handleActionParameters(data, index, count,$actionDiv){
+//       console.log(data);
+           var actionParamsCount = 0; // Initialize action parameters count
+
+       for (var value in data) {
+                if (data.hasOwnProperty(value)) {
+                    var label = $('<label>').text(data[value]).attr('for', 'parameter_' + value);
+                    var input = $('<input>').attr({
+                        type: 'text',
+                        id: 'action_parameter_' + value,
+                        name: 'action_id_' + index + '_' + count + '_' + value,
+                        placeholder: 'Action Argument'
+                    });
+
+                    // Append the label and input within the row
+                    $actionDiv.append('<br><br>'); // Double line break before the input field
+                    $actionDiv.append(label, input);
+                    $actionDiv.append('<br>'); // Single line break after the input field
+                           actionParamsCount++; // Increment action parameters count
+
+               }
+            }
+       
+   }
+   
     </script>
 
 </html>
