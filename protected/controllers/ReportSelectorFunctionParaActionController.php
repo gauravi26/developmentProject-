@@ -105,12 +105,14 @@ foreach ($postFields as $fieldName => $fieldValue) {
    public function actionSave() {
     $post = $_POST;
     $data = [];
-foreach ($post as $key => $value) {
-            echo $key . ": " . $value . "<br>"; // Echo key-value pair with HTML line break
-        }
-        die();
+//foreach ($post as $key => $value) {
+//            echo $key . ": " . $value . "<br>"; // Echo key-value pair with HTML line break
+//        }
+//        die();
     // Iterate through $_POST to extract the relevant data
     foreach ($post as $key => $value) {
+          
+//          $newModel = new ReportSelectorFunctionParaAction;
         // Check if the key contains 'function_argument_id_'
         if (strpos($key, 'function_argument_id_') !== false) {
             // Extract the indices from the key
@@ -126,44 +128,107 @@ foreach ($post as $key => $value) {
             $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
 
             $function_library_parameter = $value;
-
+//             preg_match('/action_parameter_(\d+)_(\d+)_(\d+)/',$key,$matches);
+////            $report_column_index = $matches[1];
+////            $function_select_index = $matches[2];
+//            $action_argument_id_match= $matches[3];
+//            $action_id = isset($post["action_id_{$report_column_index}_{$function_select_index}"])? $post["action_id_{$report_column_index}_{$function_select_index}"] : null;
+            
             // Add the data to the array
             $data[] = [
                 'report_id' => $report_id,
                 'report_column' => $report_column,
                 'report_row' => $report_row,
                 'function_library_id' => $function_library_id,
-                'function_library_parameter' => $function_library_parameter
+                'function_library_parameter' => $function_library_parameter,
+//                'action_id'=>$action_id
             ];
         }
     }
+//    print_r($data);
+        $actionArgRecord = $this ->formActionArgumentArr($post);
 
-    // Check the count of arrays
-    $count = count($data);
-    echo "Count of arrays: $count<br>";
-
-    // Print the arrays
-    foreach ($data as $key => $array) {
-        echo "Array $key: ";
-        print_r($array);
-        echo "<br>";
-    }
-     die();
-
-    // Now you can save the data using your model attributes
     foreach ($data as $row) {
-        $model = new ReportSelectorFunctionParaActionController(); // Replace YourModel with your actual model class name
-        $model->attributes = $row;
-       
-        if ($model->save()) {
+    $newModel = new ReportSelectorFunctionParaAction; // Create a new model instance
+    
+    // Assign attributes from the current row to the model
+    $newModel->attributes = $row;
+    
+    // Attempt to save the model
+    if ($newModel->save()) {
+        echo "Data saved successfully.<br>";
+    } else {
+        echo "Error saving data.<br>";
+        print_r($newModel->getErrors()); // Print any validation errors if save fails
+    }
+}
+$this->saveActionParaValues($actionArgRecord);
+}
+private function formActionArgumentArr($post){
+    
+    foreach ($post as $key => $value){
+        if(strpos($key,'action_parameter_') !== false){
+            
+            preg_match('/action_parameter_(\d+)_(\d+)_(\d+)/',$key,$matches);
+            $report_column_index = $matches[1];
+            $function_select_index = $matches[2];
+            $action_argument_id_match= $matches[3];
+            
+            $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
+            $action_id = isset($post["action_id_{$report_column_index}_{$function_select_index}"])? $post["action_id_{$report_column_index}_{$function_select_index}"] : null;
+            $action_argument_id = $action_argument_id_match;
+            $action_parameter_value =isset($post["action_parameter_{$report_column_index}_{$function_select_index}_$action_argument_id_match"])? $post["action_parameter_{$report_column_index}_{$function_select_index}_$action_argument_id_match"] : null;
+            
+            $actionParaValue[] = [
+                $function_library_id=>[
+                 'action_id' => $action_id,
+                'action_argument_id' =>$action_argument_id,
+                'action_parameter_value'=>$action_parameter_value
+                ]
+                  
+            ];   
+        }
+    }
+    return $actionParaValue;
+    
+}
+private function saveActionParaValues($actionArgRecord) {
+    foreach ($actionArgRecord as $key => &$innerArray) {
+        // Fetch the ID from the ReportSelectorFunctionParaAction model based on the key
+        $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes(['function_library_id' => $key]);
+        
+        if ($reportFunctionMapModel !== null) {
+            $report_function_mapping_id = $reportFunctionMapModel->id; 
+
+            // Append the report_function_mapping_id to each inner array
+            $innerArray['report_function_mapping_id'] = $report_function_mapping_id;
+        } else {
+            $innerArray['report_function_mapping_id'] = null;
+        }
+    }
+
+    // Ensure to unset the reference after the loop
+    unset($innerArray);
+
+    foreach ($actionArgRecord as $row) {
+        $newModel = new ReportFunctionMappingActionValue; // Create a new model instance
+        
+        // Assign attributes from the current row to the model
+        $newModel->attributes = $row;
+        
+        // Attempt to save the model
+        if ($newModel->save()) {
             echo "Data saved successfully.<br>";
         } else {
             echo "Error saving data.<br>";
-            print_r($model->getErrors());
+            print_r($newModel->getErrors()); // Print any validation errors if save fails
         }
     }
 }
- 
+
+
+
+
 //  public function actionSave() {
 //    $post = $_POST;
 //    $data = [];

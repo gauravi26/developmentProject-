@@ -7,7 +7,7 @@
  * @property integer $id
  * @property integer $report_id
  * @property string $report_column
- * @property integer $report_row
+ * @property string $report_row
  * @property integer $function_library_id
  * @property string $function_library_parameter
  * @property integer $action_id
@@ -31,9 +31,9 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('report_id, report_column, function_library_id, function_library_parameter, action_id, script_to_call', 'required'),
-			array('report_id, report_row, function_library_id, action_id', 'numerical', 'integerOnly'=>true),
-			array('report_column, function_library_parameter', 'length', 'max'=>255),
+			array('report_id, report_column, report_row, function_library_id, function_library_parameter', 'required'),
+			array('report_id, function_library_id, action_id', 'numerical', 'integerOnly'=>true),
+			array('report_column, report_row, function_library_parameter', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
 			array('id, report_id, report_column, report_row, function_library_id, function_library_parameter, action_id, script_to_call', 'safe', 'on'=>'search'),
@@ -89,7 +89,7 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('report_id',$this->report_id);
 		$criteria->compare('report_column',$this->report_column,true);
-		$criteria->compare('report_row',$this->report_row);
+		$criteria->compare('report_row',$this->report_row,true);
 		$criteria->compare('function_library_id',$this->function_library_id);
 		$criteria->compare('function_library_parameter',$this->function_library_parameter,true);
 		$criteria->compare('action_id',$this->action_id);
