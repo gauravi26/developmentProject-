@@ -156,10 +156,9 @@ foreach ($postFields as $fieldName => $fieldValue) {
     
     // Attempt to save the model
     if ($newModel->save()) {
-        $actionSaveOut = $this->saveActionParaValues($actionArgRecord);
-print_r($actionSaveOut);
-die();
-        echo "Data saved successfully.<br>";
+       
+
+        echo "Report Function Mapping saved successfully.<br>";
 //        $this->saveActionParaValues($actionArgRecord);
 
     } else {
@@ -167,6 +166,8 @@ die();
         print_r($newModel->getErrors()); // Print any validation errors if save fails
     }
 }
+ $actionSaveOut = $this->saveActionParaValues($actionArgRecord);
+print_r($actionSaveOut);
 //print_r($actionArgRecord);
 //die();
 
@@ -235,14 +236,13 @@ private function saveActionParameters($innerArray,$report_function_mapping_id) {
         $newModel->action_argument_id = $row['action_argument_id'];
         $newModel->action_parameter_value = $row['action_parameter_value'];        $newModel->report_function_mapping_id = $report_function_mapping_id;
         
- print_r($newModel->attributes);
-        die();
+
         
         // Attempt to save the model
         if ($newModel->save()) {
-            echo "Data saved successfully.<br>";
+            echo "Action Values saved successfully.<br>";
         } else {
-            echo "Error saving data.<br>";
+            echo "Error saving Action Values.<br>";
             print_r($row); // Print the row causing the error
             print_r($newModel->getErrors()); // Print any validation errors if save fails
         }
