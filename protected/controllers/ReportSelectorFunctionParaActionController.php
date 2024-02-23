@@ -105,22 +105,25 @@ foreach ($postFields as $fieldName => $fieldValue) {
    public function actionSave() {
     $post = $_POST;
     $data = [];
-
+foreach ($post as $key => $value) {
+            echo $key . ": " . $value . "<br>"; // Echo key-value pair with HTML line break
+        }
+        die();
     // Iterate through $_POST to extract the relevant data
     foreach ($post as $key => $value) {
         // Check if the key contains 'function_argument_id_'
         if (strpos($key, 'function_argument_id_') !== false) {
             // Extract the indices from the key
             preg_match('/function_argument_id_(\d+)_(\d+)_(\d+)/', $key, $matches);
-            $report_id_index = $matches[1];
+            $report_column_index = $matches[1];
             $function_select_index = $matches[2];
 
             // Build the corresponding column names
             $report_id = isset($post['report_id']) ? $post['report_id'] : null;
-            $report_column = isset($post["report_column_{$report_id_index}"]) ? $post["report_column_{$report_id_index}"] : null;
-            $report_row = isset($post["report_row_{$report_id_index}"]) ? $post["report_row_{$report_id_index}"] : null;
-//            $function_library_id = isset($post["function_select_{$function_select_index}_{$report_id_index}"]) ? $post["function_select_{$function_select_index}_{$report_id_index}"] : null;
-            $function_library_id = isset($post["function_select_{$report_id_index}_{$function_select_index}"]) ? $post["function_select_{$report_id_index}_{$function_select_index}"] : null;
+            $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
+            $report_row = isset($post["report_row_{$report_column_index}"]) ? $post["report_row_{$report_column_index}"] : null;
+//            $function_library_id = isset($post["function_select_{$function_select_index}_{$report_column_index}"]) ? $post["function_select_{$function_select_index}_{$report_column_index}"] : null;
+            $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
 
             $function_library_parameter = $value;
 
@@ -171,14 +174,14 @@ foreach ($postFields as $fieldName => $fieldValue) {
 //        if (strpos($key, 'function_argument_id_') !== false) {
 //            // Extract the indices from the key
 //            preg_match('/function_argument_id_(\d+)_(\d+)_(\d+)/', $key, $matches);
-//            $report_id_index = $matches[1];
+//            $report_column_index = $matches[1];
 //            $function_select_index = $matches[2];
 //
 //            // Build the corresponding column names
 //            $report_id = isset($post['report_id']) ? $post['report_id'] : null;
-//            $report_column = isset($post["report_column_{$report_id_index}"]) ? $post["report_column_{$report_id_index}"] : null;
-//            $report_row = isset($post["report_row_{$report_id_index}"]) ? $post["report_row_{$report_id_index}"] : null;
-//            $function_select = isset($post["function_select_{$function_select_index}_{$report_id_index}"]) ? $post["function_select_{$function_select_index}_{$report_id_index}"] : null;
+//            $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
+//            $report_row = isset($post["report_row_{$report_column_index}"]) ? $post["report_row_{$report_column_index}"] : null;
+//            $function_select = isset($post["function_select_{$function_select_index}_{$report_column_index}"]) ? $post["function_select_{$function_select_index}_{$report_column_index}"] : null;
 //            $function_argument_id = $value;
 //
 //            // Add the data to the array
@@ -420,14 +423,18 @@ foreach ($postFields as $fieldName => $fieldValue) {
 
     public function actionFetchParametersForAction() {
     $actionId = Yii::app()->request->getPost('selectActionId');
+//    $actionId = 15;
     
-    $actionParameters = ActionArgumentMap::model()->findAll('id=:actionId', array(':actionId' => $actionId));
+    $actionParameters = ActionArgumentMap::model()->findAllByAttributes(array('action_library_id' =>$actionId ));
+//  
     $actionParameterDisplayNames = array(); // Create an array to store display names
+    
 
     foreach ($actionParameters as $actionParameter) {
         $actionParameterDisplayName = $actionParameter->argument_display_name;
+        $actionId = $actionParameter->id;
         // Do something with $actionParameterDisplayName
-        $actionParameterDisplayNames[] = $actionParameterDisplayName; // Store display names in the new array
+        $actionParameterDisplayNames[$actionId] = $actionParameterDisplayName; // Store display names in the new array
     }
     echo json_encode($actionParameterDisplayNames); // Return the array of display names
 }

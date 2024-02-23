@@ -109,14 +109,14 @@
             // Calling function to attach action select
             attachActionSelect(index, count, $actionDiv);
 //           attachActionSelect(index, count);
-            console.log('Function called for index ' + index + ' with count ' + count);
+//            console.log('Function called for index ' + index + ' with count ' + count);
         }
 
         //*************************************Function and Action Parameter functions ***********************************************
 
         // Function to attach event listener for function dropdown change event
         function attachFunctionDropdownChangeEvent(index, count,$actionDiv) {
-                console.log("Calling handleActionParameters from attachFunctionDropdownChangeEvent");
+//                console.log("Calling handleActionParameters from attachFunctionDropdownChangeEvent");
 
             $(document).on('change', '[name="function_select_' + index + '_' + count + '"]', function () {
 //$actionDiv.find('[name="function_argument_id_' + index + '_' + count + '_' + key + '"]').remove();
@@ -130,7 +130,7 @@
                     data: {selectedFunctionId: selectedFunctionId},
                     success: function (response) {
                         var data = JSON.parse(response);
-                         console.log(response);
+                         console.log(data);
                         handleFunctionParameters(data, index, count, $actionDiv);
                     },
                     error: function () {
@@ -173,7 +173,7 @@ function handleFunctionParameters(data, index, count, $actionDiv) {
    //**************************** Action Event Listener ************************
    
     function attachActionSelect(index,count,$actionDiv){
-    console.log("Calling handleActionParameters from attachActionParameter");
+//    console.log("Calling handleActionParameters from attachActionParameter");
 
 
         var $actionLable = $('<label style="font-style:bold;">').text('Action'+count);
@@ -197,7 +197,7 @@ function handleFunctionParameters(data, index, count, $actionDiv) {
             }
     
     function attachActionParameter(index,count,$actionDiv){
-        console.log(index,count,$actionDiv,);
+//        console.log(index,count,$actionDiv,);
             $(document).on('change','[name="action_id_' + index + '_' + count + '"]', function (){
                 
 
@@ -213,6 +213,9 @@ function handleFunctionParameters(data, index, count, $actionDiv) {
                     data: {selectActionId: selectActionId},
                     success: function (response) {
                         var data = JSON.parse(response);
+                        console.log(response);
+                        console.log(data);
+
                         handleActionParameters(data, index, count,$actionDiv);
                     },
                     error: function () {
@@ -227,12 +230,13 @@ function handleFunctionParameters(data, index, count, $actionDiv) {
            var actionParamsCount = 0; // Initialize action parameters count
 
        for (var value in data) {
+           console.log(value);
                 if (data.hasOwnProperty(value)) {
                     var label = $('<label>').text(data[value]).attr('for', 'parameter_' + value);
                     var input = $('<input>').attr({
                         type: 'text',
                         id: 'action_parameter_' + value,
-                        name: 'action_id_' + index + '_' + count + '_' + value,
+                        name: 'action_parameter_' + index + '_' + count + '_' + value,
                         placeholder: 'Action Argument'
                     });
 
