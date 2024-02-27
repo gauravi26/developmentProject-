@@ -5,8 +5,10 @@
         <group>
             <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/reportSelectorFunctionParaAction/customCreate.php</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/protected/models/ReportSelectorFunctionParaAction.php</file>
+            <file>file:/C:/xampp/htdocs/themebuilder11/AjaxFiles/reportScript.js</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/protected/models/ActionArgumentMap.php</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/protected/controllers/ReportSelectorFunctionParaActionController.php</file>
+            <file>file:/C:/xampp/htdocs/themebuilder11/AjaxFiles/applyFunctionActionScript.js</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/</file>
         </group>
     </open-files>

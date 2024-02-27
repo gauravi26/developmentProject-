@@ -32,7 +32,7 @@ class StudentInformationController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update','reportTest'),
+				'actions'=>array('create','update','reportTest','practice'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -178,5 +178,11 @@ class StudentInformationController extends Controller
    $this->render('report', array('studentInformation' => $ReportData ));
 
 }
+
+public function actionPractice(){
+    
+    $this->render('practice');
+}
+
         
 }

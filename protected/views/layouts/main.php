@@ -81,7 +81,7 @@
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/themeingReport.js"></script>
              <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyStyleToFormElement.js"></script>
 
-<!--    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/datatable.js"></script>-->
+    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/datatable.js"></script>
 <!--    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/reportScript.js"></script>-->
 </head>
     

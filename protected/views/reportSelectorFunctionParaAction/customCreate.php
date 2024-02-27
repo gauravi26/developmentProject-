@@ -149,13 +149,21 @@ function handleFunctionParameters(data, index, count, $actionDiv) {
    for (var key in data) {
        if (data.hasOwnProperty(key)) {
            var label = $('<label>').text(data[key]);
-           var input = $('<input>').attr({
+           label.css({
+            'margin-left': '20px',
+            'padding': '5px'
+            // Add more CSS properties as needed
+        });
+                 var input = $('<input>').attr({
                 type: 'text',
                 id: 'parameter_' + key,
                 name: 'function_argument_id_' + index + '_' + count + '_' + key,
                 placeholder: 'Function Argument',
                 required: 'required'
-            });
+            }).css({
+            'margin-left': '20px', // Setting left margin
+            'padding': '1px' // Setting padding
+        });
               $('<br>').insertBefore($actionDiv);
 
               label.insertBefore($actionDiv);
@@ -176,11 +184,19 @@ function handleFunctionParameters(data, index, count, $actionDiv) {
 //    console.log("Calling handleActionParameters from attachActionParameter");
 
 
-        var $actionLable = $('<label style="font-style:bold;">').text('Action'+count);
+        var $actionLable = $('<label style="font-style:bold;">').text('Action'+count).css({
+            'margin-left': '150px',
+            'padding': '1px'
+            // Add more CSS properties as needed
+        });
             var $actionSelect = $('<select></select>').attr({
                name : 'action_id_' + index + '_'+count,
                class: 'actionSelect'
-           }).append('<br>');
+           }).append('<br>').css({
+            'margin-left': '1px',
+            'padding': '1px'
+            // Add more CSS properties as needed
+        });
            
            $actionSelect.append('<option value="">Select Action</option>');
         <?php foreach ($actionsList as $id => $actionName): ?>
@@ -232,7 +248,10 @@ function handleFunctionParameters(data, index, count, $actionDiv) {
        for (var value in data) {
            console.log(value);
                 if (data.hasOwnProperty(value)) {
-                    var label = $('<label>').text(data[value]).attr('for', 'parameter_' + value);
+                    var label = $('<label>').text(data[value]).attr('for', 'parameter_' + value).css({
+                       'margin-left':'150px',
+                       'padding' : '1px'
+                    });
                     var input = $('<input>').attr({
                         type: 'text',
                         id: 'action_parameter_' + value,
