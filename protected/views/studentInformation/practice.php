@@ -63,6 +63,10 @@ echo CHtml::hiddenField('actionId', $actionId);
             return checkStrings.includes(value);
         }
 
+function checkEqualityOfTwo(value1, value2) {
+
+            return value1 === value2;
+        }
         //Action
         function changeTextStyle(element, textDecoration, fontSize) {
             if (element) {
@@ -127,17 +131,17 @@ echo CHtml::hiddenField('actionId', $actionId);
             return result;
         }
 
-        var reportColumnName = ['academic_status'];
-        var targetColumnNames = ['first_name', 'academic_status'];
+        var reportColumnName = ['percentage'];
+        var targetColumnNames = ['percentage', 'marks'];
         var selectorType = 'reportColumn';
-        var conditionfunction = stringCheck;
-        var functionPara = ['Regural'];
+        var conditionfunction = checkEqualityOfTwo;
+        var functionPara = ['@marks'];
         var actionStyle = changeTextStyle;
         var actionPara = ['italic', '18px'];
         var reportColumnData = fetchData({selectorType: selectorType, selectorValue: reportColumnName});
 //******************************************************************************************************************
        
-        function functionArg() {
+        function functionArg(reportElementIndex) {
             const functionValues = [];
 
             if (functionPara.some(element => element.includes('@'))) {
@@ -147,32 +151,39 @@ echo CHtml::hiddenField('actionId', $actionId);
 
                 remainingStrings.forEach(functionParaColumn => {
                     var ColumnForFunctionPara = fetchData({selectorType: selectorType, selectorValue: functionParaColumn});
-
-                    ColumnForFunctionPara[0].values.forEach((value, i) => {
-                        functionValues.push(value);
-                    });
+                   const functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
+                   functionValues.splice(0); // Clear/empty the array
+                   functionValues.push(functionValue);
+                    
                 });
-                return functionValues;
+                    return functionValues;
+
             } else {
                 return functionPara;
             }
         }
 
-        const functionParaValues = functionArg();
-        console.log(functionParaValues);
+        
+       
 
 
 //*****************************************************************************************             
      
+//      console.log(functionParaValues);
+      //
            reportColumnData[0].values.forEach((value, i) => {
             const element = reportColumnData[0].elements[i];
             var reportElementIndex = i;
-            console.log(functionParaValues);
+            //access element value in functionParaValues at reportElementIndex
+//            functionParaValues =functionParaValues[reportElementIndex];
+            var functionParaValues = functionArg(reportElementIndex);
+            
+            console.log(value);
             var functionResult = conditionfunction(value, functionParaValues);
             if (functionResult === true) {
                 applyActionOnTargetColumns(reportElementIndex);
             }
-            console.log(reportElementIndex);
+//            console.log(reportElementIndex);
         });
 
         function applyActionOnTargetColumns(reportElementIndex) {
