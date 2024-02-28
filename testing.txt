@@ -1,0 +1,26 @@
+1.    var reportColumnName = ['percentage'];
+        var targetColumnNames = [];
+        var selectorType = 'reportColumn';
+        var conditionfunction = checkPassFail;
+        var functionPara = ['30'];
+        var actionStyle = changeTextStyle;
+        var actionPara = ['italic', '18px'];
+
+
+2.     var reportColumnName = ['percentage'];
+        var targetColumnNames = ['percentage', 'marks'];
+        var selectorType = 'reportColumn';
+        var conditionfunction = checkEqualityOfTwo;
+        var functionPara = ['@marks'];
+        var actionStyle = changeTextStyle;
+        var actionPara = ['italic', '18px'];
+
+
+3.   var reportColumnName = ['academic_status'];
+        var targetColumnNames = ['first_name', 'marks', 'course_id'];
+        var selectorType = 'reportColumn';
+        var conditionfunction = stringCheck;
+        var functionPara = ['Regural'];
+        var actionStyle = changeTextStyle;
+        var actionPara = ['italic', '18px'];
+       
