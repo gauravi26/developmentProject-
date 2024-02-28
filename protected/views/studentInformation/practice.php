@@ -128,18 +128,47 @@ echo CHtml::hiddenField('actionId', $actionId);
         }
 
         var reportColumnName = ['academic_status'];
-        var targetColumnNames = [];
+        var targetColumnNames = ['first_name', 'academic_status'];
         var selectorType = 'reportColumn';
         var conditionfunction = stringCheck;
         var functionPara = ['Regural'];
         var actionStyle = changeTextStyle;
         var actionPara = ['italic', '18px'];
         var reportColumnData = fetchData({selectorType: selectorType, selectorValue: reportColumnName});
+//******************************************************************************************************************
+       
+        function functionArg() {
+            const functionValues = [];
 
-        reportColumnData[0].values.forEach((value, i) => {
+            if (functionPara.some(element => element.includes('@'))) {
+                var foundElements = functionPara.filter(element => element.includes('@'));
+
+                var remainingStrings = foundElements.map(element => element.replace('@', ''));
+
+                remainingStrings.forEach(functionParaColumn => {
+                    var ColumnForFunctionPara = fetchData({selectorType: selectorType, selectorValue: functionParaColumn});
+
+                    ColumnForFunctionPara[0].values.forEach((value, i) => {
+                        functionValues.push(value);
+                    });
+                });
+                return functionValues;
+            } else {
+                return functionPara;
+            }
+        }
+
+        const functionParaValues = functionArg();
+        console.log(functionParaValues);
+
+
+//*****************************************************************************************             
+     
+           reportColumnData[0].values.forEach((value, i) => {
             const element = reportColumnData[0].elements[i];
             var reportElementIndex = i;
-            var functionResult = conditionfunction(value, functionPara);
+            console.log(functionParaValues);
+            var functionResult = conditionfunction(value, functionParaValues);
             if (functionResult === true) {
                 applyActionOnTargetColumns(reportElementIndex);
             }
