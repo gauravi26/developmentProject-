@@ -162,10 +162,6 @@ function checkEqualityOfTwo(value1, value2) {
             }
         }
 
-        
-       
-
-
 //*****************************************************************************************             
      
 //      console.log(functionParaValues);
@@ -198,7 +194,7 @@ function checkEqualityOfTwo(value1, value2) {
                 var targetColumnData = fetchData({selectorType: selectorType, selectorValue: targetColumnName});
                 targetColumnData.forEach(function (columnData, columnIndex) {
                     const element = targetColumnData[0].elements[reportElementIndex];
-                    actionStyle(element, actionPara[0], actionPara[1]);
+                    actionStyle(element, ...actionPara);
                 });
             });
         }}
