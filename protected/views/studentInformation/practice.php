@@ -142,7 +142,8 @@ function checkEqualityOfTwo(value1, value2) {
 //******************************************************************************************************************
        
         function functionArg(reportElementIndex) {
-            const functionValues = [];
+           const functionValues = []; // Initialize array to store function parameters
+            let functionValue; // Declare functionValue outside the loop
 
             if (functionPara.some(element => element.includes('@'))) {
                 var foundElements = functionPara.filter(element => element.includes('@'));
@@ -151,13 +152,11 @@ function checkEqualityOfTwo(value1, value2) {
 
                 remainingStrings.forEach(functionParaColumn => {
                     var ColumnForFunctionPara = fetchData({selectorType: selectorType, selectorValue: functionParaColumn});
-                   const functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
-                   functionValues.splice(0); // Clear/empty the array
-                   functionValues.push(functionValue);
-                    
+                    functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
+                    functionValues.splice(0); // Clear/empty the array
+                    functionValues.push(functionValue);
                 });
-                    return functionValues;
-
+                return functionValue; // Return functionValue after the loop
             } else {
                 return functionPara;
             }
