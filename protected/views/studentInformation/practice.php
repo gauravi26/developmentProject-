@@ -57,7 +57,7 @@ echo CHtml::hiddenField('actionId', $actionId);
 
 
     <script>
-       // Function 
+        // Function 
         function stringCheck(value, checkStrings) {
 
             return checkStrings.includes(value);
@@ -128,7 +128,7 @@ echo CHtml::hiddenField('actionId', $actionId);
         }
 
         var reportColumnName = ['academic_status'];
-        var targetColumnNames = ['first_name', 'marks','course_id'];
+        var targetColumnNames = ['first_name', 'marks', 'course_id'];
         var selectorType = 'reportColumn';
         var conditionfunction = stringCheck;
         var functionPara = ['Regural'];
@@ -148,10 +148,10 @@ echo CHtml::hiddenField('actionId', $actionId);
 
         function applyActionOnTargetColumns(reportElementIndex) {
             targetColumnNames.forEach(targetColumnName => {
-                var targetColumnData = fetchData({ selectorType: selectorType, selectorValue: targetColumnName });
+                var targetColumnData = fetchData({selectorType: selectorType, selectorValue: targetColumnName});
                 targetColumnData.forEach(function (columnData, columnIndex) {
                     const element = targetColumnData[0].elements[reportElementIndex];
-actionStyle(element, actionPara[0], actionPara[1]);
+                    actionStyle(element, actionPara[0], actionPara[1]);
                 });
             });
         }

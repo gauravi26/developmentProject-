@@ -437,8 +437,7 @@ private function saveActionParameters($innerArray,$report_function_mapping_id) {
                 var element = data.elements[index];
                 " . $actionName . "(element, " . $actionParameter . ");
             } else {
-                var element = data.elements[index];
-                applyColorStyle(element, 'red');
+               
             }
         });
     } else {

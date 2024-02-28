@@ -51,6 +51,157 @@ echo CHtml::hiddenField('actionId', $actionId);
             
         </table>
     </div>
+    <script>function checkPassFail(value, markParameter) {
+    if (value >= markParameter) {
+        return true;
+    } else {
+        return false;
+    }
+}
+function changeBackgroundColor(element, bgcolor) {
+        element.style.backgroundColor = bgcolor;
+    } function fetchData(input) {
+
+    var selectorType = input.selectorType;
+
+    var selectorValue = input.selectorValue;
+
+    var targetElements = [];
+
+    var values = [];
+
+    var columnIndex = -1;
+
+
+
+    function getReportColumnIndex(columnName) {
+
+        return Array.from(document.querySelectorAll('table th')).findIndex(th => th.textContent.trim() === columnName);
+
+    }
+
+
+
+    switch (selectorType) {
+
+        case 'reportColumn':
+
+            if (Array.isArray(selectorValue)) {
+
+                selectorValue.forEach(function(columnName) {
+
+                    var index = getReportColumnIndex(columnName);
+
+                    if (index !== -1) {
+
+                        columnIndex = index;
+
+                        var columnElements = document.querySelectorAll('table td:nth-child(' + (index + 1) + ')');
+
+                        columnElements.forEach(function(element) {
+
+                            var value = parseInt(element.textContent.trim());
+
+                            if (!isNaN(value)) {
+
+                                values.push(value);
+
+                            }
+
+                        });
+
+                        targetElements = targetElements.concat(Array.from(columnElements));
+
+                    }
+
+                });
+
+            } else {
+
+                var index = getReportColumnIndex(selectorValue);
+
+                if (index !== -1) {
+
+                    columnIndex = index;
+
+                    targetElements = document.querySelectorAll('table td:nth-child(' + (index + 1) + ')');
+
+                    targetElements.forEach(function(element) {
+
+                        var value = parseInt(element.textContent.trim());
+
+                        if (!isNaN(value)) {
+
+                            values.push(value);
+
+                        }
+
+                    });
+
+                }
+
+            }
+
+            break;
+
+
+
+        default:
+
+            console.error('Invalid selector type');
+
+    }
+
+
+
+    return { columnIndex: columnIndex, elements: targetElements, values: values };
+
+}
+
+var selectorType = 'reportColumn';
+
+var targetColumnNames = ['percentage']; 
+
+var functionParameter = [30]; 
+
+var conditionFunction = checkPassFail;
+
+  targetColumnNames.forEach(function(columnName) {
+
+    var data = fetchData({ selectorType: selectorType, selectorValue: columnName });
+
+    if (data !== null) {
+
+        data.values.forEach(function(value, index) {
+
+            var functionResult = conditionFunction(value, functionParameter);
+
+            if (functionResult == true) {
+
+                console.log(functionResult);
+
+                var element = data.elements[index];
+
+                changeBackgroundColor(element, 'green');
+
+            } else {
+
+                var element = data.elements[index];
+
+//                applyColorStyle(element, 'red');
+
+            }
+
+        });
+
+    } else {
+
+        console.log("Unable to fetch values for the '" + columnName + "' column or no values in the column.");
+
+    }
+
+});</script>
+    
 <!--    <script>function checkPassFail(value, markParameter) {
     if (value >= markParameter) {
         return true;
