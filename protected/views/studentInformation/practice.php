@@ -128,7 +128,7 @@ echo CHtml::hiddenField('actionId', $actionId);
         }
 
         var reportColumnName = ['academic_status'];
-        var targetColumnNames = ['first_name', 'marks', 'course_id'];
+        var targetColumnNames = [];
         var selectorType = 'reportColumn';
         var conditionfunction = stringCheck;
         var functionPara = ['Regural'];
@@ -147,6 +147,14 @@ echo CHtml::hiddenField('actionId', $actionId);
         });
 
         function applyActionOnTargetColumns(reportElementIndex) {
+           if (targetColumnNames.length === 0) {
+               const element = reportColumnData[0].elements[reportElementIndex];
+                 actionStyle(element, actionPara[0], actionPara[1]);
+               
+           }
+           
+           else{
+
             targetColumnNames.forEach(targetColumnName => {
                 var targetColumnData = fetchData({selectorType: selectorType, selectorValue: targetColumnName});
                 targetColumnData.forEach(function (columnData, columnIndex) {
@@ -154,7 +162,7 @@ echo CHtml::hiddenField('actionId', $actionId);
                     actionStyle(element, actionPara[0], actionPara[1]);
                 });
             });
-        }
+        }}
 
 
 
