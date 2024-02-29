@@ -52,9 +52,168 @@ echo CHtml::hiddenField('actionId', $actionId);
 
         </div>
     </div>
-    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyFunctionActionScript.js"></script>
+<!--    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyFunctionActionScript.js"></script>-->
+
+<!--<script>function stringCheck(value , checkString)
+{
+   return value === checkString;   
+}
+function changeBackgroundColor(element, bgcolor) {
+        element.style.backgroundColor = bgcolor;
+    }
+   function fetchData(input) {
+
+            var selectorType = input.selectorType;
+
+            var selectorValue = input.selectorValue;
+
+            var result = []; 
+
+            function getReportColumnIndex(columnName) {
+
+                return Array.from(document.querySelectorAll('table th')).findIndex(th => th.textContent.trim() === columnName);
+
+            }
 
 
+
+            switch (selectorType) {
+
+                case 'reportColumn':
+
+                    if (Array.isArray(selectorValue)) {
+
+                        selectorValue.forEach(function (columnName) {
+
+                            var columnIndex = getReportColumnIndex(columnName);
+
+                            if (columnIndex !== -1) {
+
+                                var columnElements = document.querySelectorAll('table td:nth-child(' + (columnIndex + 1) + ')');
+
+                                var columnValues = [];
+
+                                columnElements.forEach(function (element) {
+
+                                    var value = element.textContent.trim();
+
+                                    columnValues.push(value);
+
+                                });
+
+                                result.push({
+
+                                    columnIndex: columnIndex,
+
+                                    elements: Array.from(columnElements),
+
+                                    values: columnValues
+
+                                });
+
+                            }
+
+                        });
+
+                    } else {
+
+                        var columnIndex = getReportColumnIndex(selectorValue);
+
+                        if (columnIndex !== -1) {
+
+                            var columnElements = document.querySelectorAll('table td:nth-child(' + (columnIndex + 1) + ')');
+
+                            var columnValues = [];
+
+                            columnElements.forEach(function (element) {
+
+                                var value = element.textContent.trim();
+
+                                columnValues.push(value);
+
+                            });
+
+                            result.push({
+
+                                columnIndex: columnIndex,
+
+                                elements: Array.from(columnElements),
+
+                                values: columnValues
+
+                            });
+
+                        }
+
+                    }
+
+                    break;
+
+
+
+                default:
+
+                    console.error('Invalid selector type');
+
+            }
+
+
+
+            return result;
+
+        }
+var selectorType = 'reportColumn';
+var reportColumnName = ['academic_status'];
+var targetColumnNames = [];
+var conditionfunction = stringCheck;
+var functionPara = ['Regural'];
+var actionStyle = changeBackgroundColor;
+var actionPara = ['green'];
+var reportColumnData = fetchData({selectorType: selectorType, selectorValue: reportColumnName});      
+function functionArg(reportElementIndex) {
+    const functionValues = []; 
+    let functionValue; 
+
+    if (functionPara.some(element => element.includes('@'))) {
+        var foundElements = functionPara.filter(element => element.includes('@'));
+        var remainingStrings = foundElements.map(element => element.replace('@', ''));
+        remainingStrings.forEach(functionParaColumn => {
+            var ColumnForFunctionPara = fetchData({selectorType: selectorType, selectorValue: functionParaColumn});
+            functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
+            functionValues.splice(0); 
+            functionValues.push(functionValue);
+        });
+        return functionValue; 
+    } else {
+        return functionPara;
+    }
+}
+
+reportColumnData[0].values.forEach((value, i) => {
+    const element = reportColumnData[0].elements[i];
+    var reportElementIndex = i;
+    var functionParaValues = functionArg(reportElementIndex);
+    console.log(value);
+    var functionResult = conditionfunction(value, functionParaValues);
+    if (functionResult === true) {
+        applyActionOnTargetColumns(reportElementIndex);
+    }
+});
+
+function applyActionOnTargetColumns(reportElementIndex) {
+    if (targetColumnNames.length === 0) {
+        const element = reportColumnData[0].elements[reportElementIndex];
+        actionStyle(element, actionPara[0], actionPara[1]);
+    } else {
+        targetColumnNames.forEach(targetColumnName => {
+            var targetColumnData = fetchData({selectorType: selectorType, selectorValue: targetColumnName});
+            targetColumnData.forEach(function (columnData, columnIndex) {
+                const element = targetColumnData[0].elements[reportElementIndex];
+                actionStyle(element, ...actionPara);
+            });
+        });
+    }
+}</script>-->
 
     <script>
         // Function 
@@ -62,12 +221,11 @@ echo CHtml::hiddenField('actionId', $actionId);
 
             return checkStrings.includes(value);
         }
+        function changeBackgroundColor(element, bgcolor) {
+        element.style.backgroundColor = bgcolor;
+    }
 
-function checkEqualityOfTwo(value1, value2) {
-
-            return value1 === value2;
-        }
-        //Action
+     
         function changeTextStyle(element, textDecoration, fontSize) {
             if (element) {
                 element.style.textDecoration = textDecoration;
@@ -131,19 +289,18 @@ function checkEqualityOfTwo(value1, value2) {
             return result;
         }
 
-        var reportColumnName = ['percentage'];
-        var targetColumnNames = ['percentage', 'marks'];
-        var selectorType = 'reportColumn';
-        var conditionfunction = checkEqualityOfTwo;
-        var functionPara = ['@marks'];
-        var actionStyle = changeTextStyle;
-        var actionPara = ['italic', '18px'];
-        var reportColumnData = fetchData({selectorType: selectorType, selectorValue: reportColumnName});
-//******************************************************************************************************************
-       
+     var selectorType = 'reportColumn';
+var reportColumnName = ['academic_status'];
+var targetColumnNames = [];
+var conditionfunction = stringCheck;
+var functionPara = ['Regural'];
+var actionStyle = changeBackgroundColor;
+var actionPara = ['green'];
+    
+        var reportColumnData = fetchData({selectorType: selectorType, selectorValue: reportColumnName});      
         function functionArg(reportElementIndex) {
-           const functionValues = []; // Initialize array to store function parameters
-            let functionValue; // Declare functionValue outside the loop
+           const functionValues = []; 
+            let functionValue; 
 
             if (functionPara.some(element => element.includes('@'))) {
                 var foundElements = functionPara.filter(element => element.includes('@'));
@@ -153,38 +310,33 @@ function checkEqualityOfTwo(value1, value2) {
                 remainingStrings.forEach(functionParaColumn => {
                     var ColumnForFunctionPara = fetchData({selectorType: selectorType, selectorValue: functionParaColumn});
                     functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
-                    functionValues.splice(0); // Clear/empty the array
+                    functionValues.splice(0); 
                     functionValues.push(functionValue);
                 });
-                return functionValue; // Return functionValue after the loop
+                return functionValue; 
             } else {
                 return functionPara;
             }
         }
 
-//*****************************************************************************************             
-     
-//      console.log(functionParaValues);
-      //
+
            reportColumnData[0].values.forEach((value, i) => {
             const element = reportColumnData[0].elements[i];
             var reportElementIndex = i;
-            //access element value in functionParaValues at reportElementIndex
-//            functionParaValues =functionParaValues[reportElementIndex];
+           
             var functionParaValues = functionArg(reportElementIndex);
             
             console.log(value);
-            var functionResult = conditionfunction(value, functionParaValues);
+            var functionResult = conditionfunction(value,functionParaValues);
             if (functionResult === true) {
                 applyActionOnTargetColumns(reportElementIndex);
             }
-//            console.log(reportElementIndex);
         });
 
         function applyActionOnTargetColumns(reportElementIndex) {
            if (targetColumnNames.length === 0) {
                const element = reportColumnData[0].elements[reportElementIndex];
-                 actionStyle(element, actionPara[0], actionPara[1]);
+                 actionStyle(element, ...actionPara);
                
            }
            
@@ -198,12 +350,7 @@ function checkEqualityOfTwo(value1, value2) {
                 });
             });
         }}
-
-
-
-
-
-    </script>
+ </script>
 
 
 
