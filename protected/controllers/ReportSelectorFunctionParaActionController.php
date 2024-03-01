@@ -157,6 +157,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
             }
         }
         $actionSaveOut = $this->saveActionParaValues($actionArgRecord);
+        $targetColumnSaveout = $this->saveTargetColumn($targetColumnData);
         print_r($actionSaveOut);
 
     }
@@ -246,7 +247,96 @@ class ReportSelectorFunctionParaActionController extends Controller {
         }
     }
     
-    private function formTargetColumns(){
+    private function formTargetColumns($post){
+        
+         foreach($post as $key => $value){
+             if(strpos($key, 'target_column_')!==false){
+                 
+                 preg_match('/target_column_(\d+)_(\d+)_(\d+)/', $key, $matches);
+                $report_column_index = $matches[1];
+                $function_select_index = $matches[2];
+                $target_column_count = $matches[3];
+                
+                 $report_id = isset($post['report_id']) ? $post['report_id'] : null;
+                 $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
+                 $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
+                 $targetColumnInput = isset($post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}"])? $post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}"]:null;
+                 $rcfm = "{$report_id}_{$report_column}_{$function_library_id}";
+                 
+                 $targetColumsPost[] = [
+                     $rcfm =>[
+                         'target_column'=> $targetColumnInput
+                     ]
+                 ]; 
+             }     
+         }       
+         return $targetColumsPost;    
+    }
+    
+    private function saveTargetColumn($targetColumnData){
+        
+        
+        foreach ($targetColumnData as $key =>$innerArray ){
+            
+            foreach($innerArray as $rcfm => $value ){
+                
+                preg_match('/(\d+)_(\w+)_(\d+)/', $rcfm, $matches);
+                $report_id = $matches[1];
+                $report_column = $matches[2];
+                $function_library_id = $matches[3];
+                
+                $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes([
+                    'report_id' => $report_id,
+                    'report_column' => $report_column,
+                    'function_library_id' => $function_library_id,
+                   
+                ]);
+               
+                if ($reportFunctionMapModel !== null) {
+                    $report_function_mapping_id = $reportFunctionMapModel->id;
+//                    print_r($reportFunctionMapModel);
+//                    echo '<br>';
+//                   print_r($rcfm);
+//
+//                    echo '<br>';
+//                    print_r($report_id);
+//
+//                           die();
+                     
+                    $this->saveTargetColumnModel($innerArray, $report_function_mapping_id);
+                } else {
+                    echo "Function ID not found in Report Function Mapping.";
+                }
+            }
+        }
+        
+        
+    }
+    
+    
+    private function saveTargetColumnModel($innerArray, $report_function_mapping_id){
+        
+        foreach ($innerArray as $key => $row) {
+
+//        print_r($row);
+//        echo '<br>';
+//        die();
+            $newModel = new TargetColumn(); // Create a new model instance
+            // Assign attributes from the current row to the model
+            $newModel->target_column = $row['target_column'];
+             
+            $newModel->report_function_mapping_id = $report_function_mapping_id;
+//           print_r($newModel);
+//            die();
+            // Attempt to save the model
+            if ($newModel->save()) {
+                echo "Target Column saved successfully.<br>";
+            } else {
+                echo "Error saving Target Column Values.<br>";
+                print_r($row); // Print the row causing the error
+                print_r($newModel->getErrors()); // Print any validation errors if save fails
+            }
+        }
         
         
         
