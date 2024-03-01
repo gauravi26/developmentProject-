@@ -31,7 +31,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('create', 'update', 'applyfunctionAction', 'query', 'fetchParametersForFunction',
-                    'fetchParametersForAction', 'customCreate', 'save'),
+                    'fetchParametersForAction', 'customCreate', 'save','fetchReportColumns'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -649,9 +649,23 @@ SCRIPT;
         }
         echo json_encode($actionParameterDisplayNames); // Return the array of display names
     }
+    
+    public function actionFetchReportColumns() {
+        
+     $selectedReportId = Yii::app()->request->getPost('selectReportId');
+//     $selectedReportId = 6;
+     $reportModel = Report::model()->findByPk($selectedReportId);
+     $reportColumnStr = $reportModel->reportColumn;
+     $elements = explode(",",$reportColumnStr);
+     $reportColumn[$selectedReportId] = $elements;
+//     print_r($reportColumn);
+     echo json_encode($reportColumn);
+
+       
+    }
 
 //***************************************************************************************************
-//***********************************************************************************
+//***************************************************************************************************
 
     /**
      * Updates a particular model.
