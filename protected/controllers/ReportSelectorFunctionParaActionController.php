@@ -31,7 +31,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('create', 'update', 'applyfunctionAction', 'query', 'fetchParametersForFunction',
-                    'fetchParametersForAction', 'customCreate', 'save','fetchReportColumns'),
+                    'fetchParametersForAction', 'customCreate', 'save','fetchReportColumns','customDelete','mapping'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -846,5 +846,54 @@ SCRIPT;
         }
     }
 
+    public function actionCustomDelete(){
+        
+        $this->render('customDelete');
+        
+    }
+    public function actionMapping(){
+        
+            $reportId = Yii::app()->request->getPost('reportId');
+             if($reportId!=null){
+        
+        $reportFAMappingModel = ReportSelectorFunctionParaAction::model()->findAllByAttributes(array('report_id'=>$reportId));
+        
+        $id = array();
+        foreach($reportFAMappingModel as $model){
+            $ids[]=$model->id;
+            
+        }
+//        print_r($ids);
+//        die();
+        if(!empty($ids)){
+            
+            $idList = implode(',', $ids);
+            $delete = "
+DELETE FROM target_column
+WHERE report_function_mapping_id IN ($idList);
+
+DELETE FROM report_function_mapping_action_value
+WHERE report_function_mapping_id IN ($idList);
+
+DELETE FROM report_selector_function_para_action
+WHERE id IN ($idList);
+";
+            $command = Yii::app()->db->createCommand($delete);
+            $command->execute();
+                        echo "Records deleted successfully.";
+
+            
+        }
+        else{
+           echo  "No Script for Report Found";
+        }
+    }
+    else{
+        echo "Report Id not found ";
+    }
+
+
+        
+    }
     //****************Applying Script to report ************//
 }

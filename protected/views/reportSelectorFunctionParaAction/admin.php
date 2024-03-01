@@ -55,8 +55,20 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 		'action_id',
 		'script_to_call',
 		*/
-		array(
-			'class'=>'CButtonColumn',
-		),
+		 array(
+            'class'=>'CButtonColumn',
+            'template'=>'{update}{delete}',
+            'buttons'=>array(
+                'update'=>array(
+                    'url'=>'Yii::app()->createUrl("reportSelectorFunctionParaAction/update", array("id"=>$data->id))',
+                ),
+                'delete'=>array(
+                    'url'=>'Yii::app()->createUrl("reportSelectorFunctionParaAction/customDelete")',
+                    'options'=>array(
+                        'class'=>'delete', // You can add custom classes for styling
+                    ),
+                ),
+            ),
+        ),
 	),
 )); ?>
