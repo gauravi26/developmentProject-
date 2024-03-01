@@ -294,7 +294,7 @@ function handleTargetColumn(data, index, count, $actionDiv,Columncount) {
     var label = $('<label style="font-style:bold;"><b>Target Column</b></label>');
     
     var $targetColumn = $('<select></select>').attr({
-        name : 'target_column'+index+'_'+count+'_'+Columncount,
+        name : 'target_column_'+index+'_'+count+'_'+Columncount,
         class:'targetColumn'
     }).append('<br>').css({
                 'margin-left': '1px',
@@ -311,8 +311,9 @@ function handleTargetColumn(data, index, count, $actionDiv,Columncount) {
             $targetColumn.append('<option value="' + columnName + '">' + columnName + '</option>');
         });
     }
-                        $actionDiv.append(label,$targetColumn);
-
+               $actionDiv.append('<br><br>'); 
+               $actionDiv.append(label,$targetColumn);
+               $actionDiv.append('<br>');
 }
 
         

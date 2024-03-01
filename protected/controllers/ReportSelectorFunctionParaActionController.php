@@ -104,7 +104,8 @@ class ReportSelectorFunctionParaActionController extends Controller {
 
     public function actionSave() {
         $post = $_POST;
-
+//        print_r($post);
+//        die();
         $data = [];
 
         // Iterate through $_POST to extract the relevant data
@@ -121,7 +122,6 @@ class ReportSelectorFunctionParaActionController extends Controller {
                 $report_id = isset($post['report_id']) ? $post['report_id'] : null;
                 $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
                 $report_row = isset($post["report_row_{$report_column_index}"]) ? $post["report_row_{$report_column_index}"] : null;
-//            $function_library_id = isset($post["function_select_{$function_select_index}_{$report_column_index}"]) ? $post["function_select_{$function_select_index}_{$report_column_index}"] : null;
                 $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
 
                 $action_id = isset($post["action_id_{$report_column_index}_{$function_select_index}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}"] : null;
@@ -140,20 +140,17 @@ class ReportSelectorFunctionParaActionController extends Controller {
         }
 //    print_r($data);
         $actionArgRecord = $this->formActionArgumentArr($post);
-
+        $targetColumnData = $this->formTargetColumns($post);
         foreach ($data as $row) {
             $newModel = new ReportSelectorFunctionParaAction; // Create a new model instance
             // Assign attributes from the current row to the model
             $newModel->attributes = $row;
-//            $newModel->script_to_call = $this->scriptToCall($newModel);
-//    print_r($newModel);
-//    die();a
+
             // Attempt to save the model
             if ($newModel->save()) {
 
 
                 echo "Report Function Mapping saved successfully.<br>";
-//        $this->saveActionParaValues($actionArgRecord);
             } else {
                 echo "Error saving data.<br>";
                 print_r($newModel->getErrors()); // Print any validation errors if save fails
@@ -161,8 +158,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
         }
         $actionSaveOut = $this->saveActionParaValues($actionArgRecord);
         print_r($actionSaveOut);
-//print_r($actionArgRecord);
-//die();
+
     }
 
     private function formActionArgumentArr($post) {
@@ -207,7 +203,6 @@ class ReportSelectorFunctionParaActionController extends Controller {
                 $function_library_id = $matches[3];
                 $action_id = $matches[4];
                 // Fetch the ID from the ReportSelectorFunctionParaAction model based on the key
-//            $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes(['function_library_id' => $functionId]);
                 $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes([
                     'report_id' => $report_id,
                     'report_column' => $report_column,
@@ -249,6 +244,12 @@ class ReportSelectorFunctionParaActionController extends Controller {
                 print_r($newModel->getErrors()); // Print any validation errors if save fails
             }
         }
+    }
+    
+    private function formTargetColumns(){
+        
+        
+        
     }
 
 //***************************************************************************************************************************************************************
@@ -492,24 +493,28 @@ echo $jsonResponse;
     private function executionCode() {
         $static_code = <<<SCRIPT
 var reportColumnData = fetchData({selectorType: selectorType, selectorValue: reportColumnName});      
-function functionArg(reportElementIndex) {
-    const functionValues = []; 
-    let functionValue; 
-
-    if (functionPara.some(element => element.includes('@'))) {
-        var foundElements = functionPara.filter(element => element.includes('@'));
-        var remainingStrings = foundElements.map(element => element.replace('@', ''));
-        remainingStrings.forEach(functionParaColumn => {
-            var ColumnForFunctionPara = fetchData({selectorType: selectorType, selectorValue: functionParaColumn});
-            functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
-            functionValues.splice(0); 
-            functionValues.push(functionValue);
-        });
-        return functionValue; 
-    } else {
+ function functionArg(reportElementIndex) {
+           const functionValues = []; 
+            let functionValue; 
+            if (functionPara.every(element => typeof element === 'number')) {
         return functionPara;
     }
-}
+
+            else if (functionPara.some(element => element.includes('@'))) {
+                var foundElements = functionPara.filter(element => element.includes('@'));
+
+                var remainingStrings = foundElements.map(element => element.replace('@', ''));
+
+                remainingStrings.forEach(functionParaColumn => {
+                    var ColumnForFunctionPara = fetchData({selectorType: selectorType, selectorValue: functionParaColumn});
+                    functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
+                    functionValues.splice(0); 
+                    functionValues.push(functionValue);
+                });
+                return functionValue; 
+            }
+           
+        }
 
 reportColumnData[0].values.forEach((value, i) => {
     const element = reportColumnData[0].elements[i];

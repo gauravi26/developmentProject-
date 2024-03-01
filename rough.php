@@ -1,276 +1,160 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <?php
-        $report = Report::model()->findAll(array('order' => 'report_name'));
-        $reportList = CHtml::listData($report, 'id', 'report_name');
+<script>function stringCheck(value, checkStrings) {
+    return checkStrings.includes(value);
+}
 
-        $function = FunctionLibrary::model()->findAll(array('order' => 'function_display_name'));
-        $functionList = CHtml::listData($function, 'id', 'function_display_name');
+function changeBackgroundColor(element, bgcolor) {
+        element.style.backgroundColor = bgcolor;
+    }
+   function fetchData(input) {
 
-        $sctions = ActionLibrary::model()->findAll(array('order' => 'action_display_name'));
-        $actionsList = Chtml::listData($sctions, 'id', 'action_display_name');
-        ?>
-        <form class="functionActionForm" id="functionAction" method="post" action="<?php echo Yii::app()->createUrl('ReportSelectorFunctionParaAction/save'); ?>">
+            var selectorType = input.selectorType;
+
+            var selectorValue = input.selectorValue;
+
+            var result = []; 
+
+            function getReportColumnIndex(columnName) {
+
+                return Array.from(document.querySelectorAll('table th')).findIndex(th => th.textContent.trim() === columnName);
+
+            }
 
 
-            <select name="report_id" id="report_id"> <!-- Added name attribute to select -->
 
-                <option value="">Select Report</option> <!-- Added a default option -->
-                <?php foreach ($reportList as $id => $reportName): ?>
-                    <option value="<?php echo $id; ?>"><?php echo $reportName; ?></option>
-                <?php endforeach; ?>
-            </select>
-            <br>
+            switch (selectorType) {
 
-            <input type="submit" name="submit" value="Save">
-        </form>
-    </body>
+                case 'reportColumn':
 
-    <script>
-        $(document).ready(function () {
-            $('#report_id').on('change', function () {
-                var reportId = $(this).val();
-                $.ajax({
-                    url: 'index.php?r=ReportSelectorFunctionParaAction/query',
-                    type: 'POST',
-                    data: {reportId: reportId},
-                    success: function (response) {
-                        handleReportResponse(response.split(","));
-                    },
-                    error: function () {
-                        console.log('Error fetching script details');
+                    if (Array.isArray(selectorValue)) {
+
+                        selectorValue.forEach(function (columnName) {
+
+                            var columnIndex = getReportColumnIndex(columnName);
+
+                            if (columnIndex !== -1) {
+
+                                var columnElements = document.querySelectorAll('table td:nth-child(' + (columnIndex + 1) + ')');
+
+                                var columnValues = [];
+
+                                columnElements.forEach(function (element) {
+
+                                    var value = element.textContent.trim();
+
+                                    columnValues.push(value);
+
+                                });
+
+                                result.push({
+
+                                    columnIndex: columnIndex,
+
+                                    elements: Array.from(columnElements),
+
+                                    values: columnValues
+
+                                });
+
+                            }
+
+                        });
+
+                    } else {
+
+                        var columnIndex = getReportColumnIndex(selectorValue);
+
+                        if (columnIndex !== -1) {
+
+                            var columnElements = document.querySelectorAll('table td:nth-child(' + (columnIndex + 1) + ')');
+
+                            var columnValues = [];
+
+                            columnElements.forEach(function (element) {
+
+                                var value = element.textContent.trim();
+
+                                columnValues.push(value);
+
+                            });
+
+                            result.push({
+
+                                columnIndex: columnIndex,
+
+                                elements: Array.from(columnElements),
+
+                                values: columnValues
+
+                            });
+
+                        }
+
                     }
-                });
+
+                    break;
+
+
+
+                default:
+
+                    console.error('Invalid selector type');
+
+            }
+
+
+
+            return result;
+
+        }
+var selectorType = 'reportColumn';
+var reportColumnName = ['marks'];
+var targetColumnNames = [];
+var conditionfunction = checkPassFail;
+var functionPara = [30];
+var actionStyle = changeBackgroundColor;
+var actionPara = ['blue'];
+var reportColumnData = fetchData({selectorType: selectorType, selectorValue: reportColumnName});      
+function functionArg(reportElementIndex) {
+    const functionValues = []; 
+    let functionValue; 
+
+    if (functionPara.some(element => element.includes('@'))) {
+        var foundElements = functionPara.filter(element => element.includes('@'));
+        var remainingStrings = foundElements.map(element => element.replace('@', ''));
+        remainingStrings.forEach(functionParaColumn => {
+            var ColumnForFunctionPara = fetchData({selectorType: selectorType, selectorValue: functionParaColumn});
+            functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
+            functionValues.splice(0); 
+            functionValues.push(functionValue);
+        });
+        return functionValue; 
+    } else {
+        return functionPara;
+    }
+}
+
+reportColumnData[0].values.forEach((value, i) => {
+    const element = reportColumnData[0].elements[i];
+    var reportElementIndex = i;
+    var functionParaValues = functionArg(reportElementIndex);
+    console.log(value);
+    var functionResult = conditionfunction(value, functionParaValues);
+    if (functionResult === true) {
+        applyActionOnTargetColumns(reportElementIndex);
+    }
+});
+
+function applyActionOnTargetColumns(reportElementIndex) {
+    if (targetColumnNames.length === 0) {
+        const element = reportColumnData[0].elements[reportElementIndex];
+        actionStyle(element, actionPara[0], actionPara[1]);
+    } else {
+        targetColumnNames.forEach(targetColumnName => {
+            var targetColumnData = fetchData({selectorType: selectorType, selectorValue: targetColumnName});
+            targetColumnData.forEach(function (columnData, columnIndex) {
+                const element = targetColumnData[0].elements[reportElementIndex];
+                actionStyle(element, ...actionPara);
             });
         });
-
-        function handleReportResponse(columnIndex) {
-            var $functionAction = $('#functionAction');
-
-            if (columnIndex && columnIndex.length > 0) {
-                var count = 0;
-                $.each(columnIndex, function (index, value) {
-                    var $rowDiv = $('<div class="row"></div>').css({
-                        'border': '1px groove grey',
-                        'padding': '10px', 
-                        'margin': '10px' 
-                    });
-                    var $reportColumn = $('<label><b>Report Column:</b> ' + value + '</label>').css('font-size', '18px');
-                    var $hiddenInput = $('<input type="hidden" name="report_column_' + index + '" value="' + value + '" required>');
-                    var $labelRow = $('<label><b>Row(word)</b></label>');
-                    var $reportRowInput = $('<input type="text" name="report_row_' + index + '">');
-                    var $addButton = $('<button>Add Function </button>'); // Create a button
-                    var $addButton = $('<button>Add Function </button>').click(function (event) {
-                        event.preventDefault();
-                        count++;
-                        functionActionPara(index, count, $rowDiv);
-                    });
-
-                    $rowDiv.append($reportColumn, '<br>', $hiddenInput, '<br>', $labelRow, '<br>', $reportRowInput, '<br>', $addButton, '<br>', '<br>'); // Append button to rowDiv
-                    $rowDiv.insertBefore($functionAction.find('input[type="submit"]'));
-
-                });
-            } else {
-                $functionAction.html('<p>No columns fetched. Please check if the report table has columns.</p>');
-            }
-        }
-
-        function functionActionPara(index, count, $rowDiv) {
-            // Create a new select element
-            var $functionLabel = $('<br><label style="font-weight: bold;"><br>').text('Function ' + count);
-
-            var $select = $('<br><select></select>').attr({
-                name: 'function_select_' + index + '_' + count,
-                class: 'functionSelect',
-                required: 'required'
-            }).append('<br>');
-            // Add options to the select element from the $functionList array
-            $select.append('<option value="">Select function</option><br>');
-<?php foreach ($functionList as $id => $functionName): ?>
-                $select.append($('<option></option><br>').attr('value', '<?php echo $id; ?>').text('<?php echo $functionName; ?>'));
-<?php endforeach; ?>
-            var $actionDiv = $('<div class="actionDiv"></div>').addClass('actionDiv_' + index + '_' + count);
-
-            // Append the select element to the functionActionForm
-            $rowDiv.append($functionLabel, $select);
-            $rowDiv.append($actionDiv);
-
-            //Calling function display parameter input fields based on selected function
-            attachFunctionDropdownChangeEvent(index, count, $actionDiv, $select);
-
-            attachActionSelect(index, count, $actionDiv);
-
-        }
-
-        //*************************************Function and Action Parameter functions ***********************************************
-
-        // Function to attach event listener for function dropdown change event
-        function attachFunctionDropdownChangeEvent(index, count, $actionDiv) {
-
-            $(document).on('change', '[name="function_select_' + index + '_' + count + '"]', function () {
-
-                var selectedFunctionId = $(this).val();
-        
-
-                $.ajax({
-                    url: 'index.php?r=ReportSelectorFunctionParaAction/fetchParametersForFunction',
-                    type: 'POST',
-                    data: {selectedFunctionId: selectedFunctionId},
-                    success: function (response) {
-                        var data = JSON.parse(response);
-                        console.log(data);
-                        handleFunctionParameters(data, index, count, $actionDiv);
-                    },
-                    error: function () {
-                        console.log('Error fetching script details');
-                    }
-                });
-            });
-        }
-
-        function handleFunctionParameters(data, index, count, $actionDiv) {
-
-            var selectFunctionField = $actionDiv.closest('.row');
-
-            for (var key in data) {
-                if (data.hasOwnProperty(key)) {
-                    var label = $('<label>').text(data[key]);
-                    label.css({
-                        'margin-left': '20px',
-                        'padding': '5px'
-                                // Add more CSS properties as needed
-                    });
-                    var input = $('<input>').attr({
-                        type: 'text',
-                        id: 'parameter_' + key,
-                        name: 'function_argument_id_' + index + '_' + count + '_' + key,
-                        placeholder: 'Function Argument',
-                        required: 'required'
-                    }).css({
-                        'margin-left': '20px', // Setting left margin
-                        'padding': '1px' // Setting padding
-                    });
-                    $('<br>').insertBefore($actionDiv);
-
-                    label.insertBefore($actionDiv);
-                    $('<br>').insertBefore($actionDiv);
-
-                    input.insertBefore($actionDiv);
-                    $('<br>').insertBefore($actionDiv);
-
-
-                }
-            }
-        }
-
-
-        //**************************** Action Event Listener ************************
-
-        function attachActionSelect(index, count, $actionDiv) {
-//    console.log("Calling handleActionParameters from attachActionParameter");
-
-
-            var $actionLable = $('<label style="font-style:bold;">').text('Action' + count).css({
-                'margin-left': '150px',
-                'padding': '1px'
-                        
-            });
-            var $actionSelect = $('<select></select>').attr({
-                name: 'action_id_' + index + '_' + count,
-                class: 'actionSelect'
-            }).append('<br>').css({
-                'margin-left': '1px',
-                'padding': '1px'
-                        
-            });
-
-            $actionSelect.append('<option value="">Select Action</option>');
-<?php foreach ($actionsList as $id => $actionName): ?>
-                $actionSelect.append($('<option></option>').attr('value', '<?php echo $id ?>').text('<?php echo $actionName ?>'));
-
-<?php endforeach; ?>
-    
-               var $addTargetBtn = $('<button>Add Target Column </button>').click(function (event) {
-                        event.preventDefault();
-                        count++;
-                        targetColumn(index, count);
-                    });
-//            console.log('hii');
-            $actionDiv.append('<br><br>');
-            $actionDiv.append($actionLable, $actionSelect);
-            $actionDiv.append('<br>');
-            attachActionParameter(index, count, $actionDiv, $actionSelect);
-
-
-        }
-
-        function attachActionParameter(index, count, $actionDiv) {
-            $(document).on('change', '[name="action_id_' + index + '_' + count + '"]', function () {
-
-                var selectActionId = $(this).val(); // Access value directly from $actionSelect
-
-                $.ajax({
-                    url: 'index.php?r=ReportSelectorFunctionParaAction/fetchParametersForAction',
-                    type: 'POST',
-                    data: {selectActionId: selectActionId},
-                    success: function (response) {
-                        var data = JSON.parse(response);
-                        console.log(response);
-                        console.log(data);
-
-                        handleActionParameters(data, index, count, $actionDiv);
-                    },
-                    error: function () {
-                        console.log('Error fetching script details');
-                    }
-                });
-            });
-        }
-
-        function handleActionParameters(data, index, count, $actionDiv) {
-//       console.log(data);
-            var actionParamsCount = 0; // Initialize action parameters count
-
-            for (var value in data) {
-                console.log(value);
-                if (data.hasOwnProperty(value)) {
-                    var label = $('<label>').text(data[value]).attr('for', 'parameter_' + value).css({
-                        'margin-left': '150px',
-                        'padding': '1px'
-                    });
-                    var input = $('<input>').attr({
-                        type: 'text',
-                        id: 'action_parameter_' + value,
-                        name: 'action_parameter_' + index + '_' + count + '_' + value,
-                        placeholder: 'Action Argument'
-                    });
-
-                    // Append the label and input within the row
-                    $actionDiv.append('<br><br>'); 
-                    $actionDiv.append(label, input);
-                    $actionDiv.append('<br>');
-                    actionParamsCount++;
-
-                }
-            }
-
-        }
-        function fetchTargetColumn)(){
-        
-           $ajax({});
-        }
-        function targetColumn(index, count){
-        
-            var lable = $('<label><b>Target Column</b></label>');
-            
-        
-        }
-
-    </script>
-
-</html>
+    }
+}</script>

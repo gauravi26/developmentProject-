@@ -225,6 +225,13 @@ function applyActionOnTargetColumns(reportElementIndex) {
         element.style.backgroundColor = bgcolor;
     }
 
+function checkPassFail(value, markParameter) {
+    if (value >= markParameter) {
+        return true;
+    } else {
+        return false;
+    }
+}
      
         function changeTextStyle(element, textDecoration, fontSize) {
             if (element) {
@@ -290,19 +297,23 @@ function applyActionOnTargetColumns(reportElementIndex) {
         }
 
      var selectorType = 'reportColumn';
-var reportColumnName = ['academic_status'];
+var reportColumnName = ['marks'];
 var targetColumnNames = [];
-var conditionfunction = stringCheck;
-var functionPara = ['Regural'];
+var conditionfunction = checkPassFail;
+var functionPara = [30];
 var actionStyle = changeBackgroundColor;
-var actionPara = ['green'];
+var actionPara = ['blue'];
+
     
         var reportColumnData = fetchData({selectorType: selectorType, selectorValue: reportColumnName});      
         function functionArg(reportElementIndex) {
            const functionValues = []; 
             let functionValue; 
+            if (functionPara.every(element => typeof element === 'number')) {
+        return functionPara;
+    }
 
-            if (functionPara.some(element => element.includes('@'))) {
+            else if (functionPara.some(element => element.includes('@'))) {
                 var foundElements = functionPara.filter(element => element.includes('@'));
 
                 var remainingStrings = foundElements.map(element => element.replace('@', ''));
@@ -314,9 +325,8 @@ var actionPara = ['green'];
                     functionValues.push(functionValue);
                 });
                 return functionValue; 
-            } else {
-                return functionPara;
             }
+           
         }
 
 
