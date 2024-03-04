@@ -1,779 +1,407 @@
-<?php
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <?php
+        $report = Report::model()->findAll(array('order' => 'report_name'));
+        $reportList = CHtml::listData($report, 'id', 'report_name');
 
-class ReportSelectorFunctionParaActionController extends Controller {
+        $function = FunctionLibrary::model()->findAll(array('order' => 'function_display_name'));
+        $functionList = CHtml::listData($function, 'id', 'function_display_name');
 
-    /**
-     * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
-     * using two-column layout. See 'protected/views/layouts/column2.php'.
-     */
-    public $layout = '//layouts/column2';
+        $sctions = ActionLibrary::model()->findAll(array('order' => 'action_display_name'));
+        $actionsList = Chtml::listData($sctions, 'id', 'action_display_name');
+        ?>
+        <form class="functionActionForm" id="functionAction" method="post" action="<?php echo Yii::app()->createUrl('ReportSelectorFunctionParaAction/save'); ?>">
 
-    /**
-     * @return array action filters
-     */
-    public function filters() {
-        return array(
-            'accessControl', // perform access control for CRUD operations
-            'postOnly + delete', // we only allow deletion via POST request
-        );
-    }
 
-    /**
-     * Specifies the access control rules.
-     * This method is used by the 'accessControl' filter.
-     * @return array access control rules
-     */
-    public function accessRules() {
-        return array(
-            array('allow', // allow all users to perform 'index' and 'view' actions
-                'actions' => array('index', 'view'),
-                'users' => array('*'),
-            ),
-            array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update', 'applyfunctionAction', 'query', 'fetchParametersForFunction',
-                    'fetchParametersForAction', 'customCreate', 'save', 'fetchReportColumns'),
-                'users' => array('@'),
-            ),
-            array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('admin', 'delete'),
-                'users' => array('admin'),
-            ),
-            array('deny', // deny all users
-                'users' => array('*'),
-            ),
-        );
-    }
+            <select name="report_id" id="report_id"> <!-- Added name attribute to select -->
 
-    /**
-     * Displays a particular model.
-     * @param integer $id the ID of the model to be displayed
-     */
-    public function actionView($id) {
-        $this->render('view', array(
-            'model' => $this->loadModel($id),
-        ));
-    }
+                <option value="">Select Report</option> <!-- Added a default option -->
+                <?php foreach ($reportList as $id => $reportName): ?>
+                    <option value="<?php echo $id; ?>"><?php echo $reportName; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <br>
 
-    /**
-     * Creates a new model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     */
-//*********************Creat functions to multiple records using UI**************//
-    public function actionCreate() {
-        $postFields = $_POST;
+            <input type="submit" name="submit" value="Save">
+        </form>
+    </body>
 
-        foreach ($postFields as $fieldName => $fieldValue) {
-            if (is_array($fieldValue)) {
-                // If $fieldValue is an array, print it using print_r or var_dump
-                echo "Field Name: $fieldName, Field Value: <br>";
-                echo "<pre>";
-                print_r($fieldValue);
-                echo "</pre>";
+    <script>
+        $(document).ready(function () {
+            $('#report_id').on('change', function () {
+                var reportId = $(this).val();
+                $.ajax({
+                    url: 'index.php?r=ReportSelectorFunctionParaAction/query',
+                    type: 'POST',
+                    data: {reportId: reportId},
+                    success: function (response) {
+                        handleReportResponse(response.split(","));
+                    },
+                    error: function () {
+                        console.log('Error fetching script details');
+                    }
+                });
+            });
+        });
+
+        function handleReportResponse(columnIndex) {
+            var $functionAction = $('#functionAction');
+
+            if (columnIndex && columnIndex.length > 0) {
+                var count = 0;
+                $.each(columnIndex, function (index, value) {
+                    var $rowDiv = $('<div class="row"></div>').css({
+                        'border': '1px groove grey',
+                        'padding': '10px', 
+                        'margin': '10px' 
+                    });
+                    var $reportColumn = $('<label><b>Report Column:</b> ' + value + '</label>').css('font-size', '18px');
+                    var $hiddenInput = $('<input type="hidden" name="report_column_' + index + '" value="' + value + '" required>');
+                    var $labelRow = $('<label><b>Row(word)</b></label>');
+                    var $reportRowInput = $('<input type="text" name="report_row_' + index + '">');
+                    var $addButton = $('<button>Add Function </button>'); // Create a button
+                    var $addButton = $('<button>Add Function </button>').click(function (event) {
+                        event.preventDefault();
+                        count++;
+                        functionActionPara(index, count, $rowDiv);
+                    });
+
+                    $rowDiv.append($reportColumn, '<br>', $hiddenInput, '<br>', $labelRow, '<br>', $reportRowInput, '<br>', $addButton, '<br>', '<br>'); // Append button to rowDiv
+                    $rowDiv.insertBefore($functionAction.find('input[type="submit"]'));
+
+                });
             } else {
-                // If $fieldValue is not an array, print it normally
-                echo "Field Name: $fieldName, Field Value: $fieldValue <br>";
+                $functionAction.html('<p>No columns fetched. Please check if the report table has columns.</p>');
             }
         }
 
+        function functionActionPara(index, count, $rowDiv) {
+            // Create a new select element
+            var $functionLabel = $('<br><label style="font-weight: bold;"><br>').text('Function ' + count);
 
-        $model = new ReportSelectorFunctionParaAction;
+            var $select = $('<br><select></select>').attr({
+                name: 'function_select_' + index + '_' + count,
+                class: 'functionSelect',
+                required: 'required'
+            }).append('<br>');
+            // Add options to the select element from the $functionList array
+            $select.append('<option value="">Select function</option><br>');
+<?php foreach ($functionList as $id => $functionName): ?>
+                $select.append($('<option></option><br>').attr('value', '<?php echo $id; ?>').text('<?php echo $functionName; ?>'));
+<?php endforeach; ?>
+          
+    var $typeOfFunctionPara = ('<select></select>').attr({
+                name: 'function_type_select',
+                class: 'functionTypeSelect',
+                required: 'required'
+            }).append('<br>');
+    
+    $typeOfFunctionPara.append('<option value = "">Select Argument Type</option>');
+    $typeOfFunctionPara.append('<option value = "0">Static Parameter</option>');
+    $typeOfFunctionPara.append('<option value = "1">Report Column</option>');
+    
+    var selectFunctionType = $('[name =function_type_select]').val();
+    
+   
+    
+    var $actionDiv = $('<div class="actionDiv"></div>').addClass('actionDiv_' + index + '_' + count);
 
-        if (isset($_POST['yt0'])) {
-            $dynamicallyGeneratedFields = $model->getAttributes();
+            // Append the select element to the functionActionForm
+            $rowDiv.append($functionLabel, $select);
+            $rowDiv.append($actionDiv);
 
-            print_r($dynamicallyGeneratedFields);
+            //Calling function display parameter input fields based on selected function
 
-            $model->attributes = $_POST['ReportSelectorFunctionParaAction'];
-            die();
-            // $scriptToCall =  $this->scriptToCall($model);
-            $model->script_to_call = $this->scriptToCall($model);
-            if ($model->save())
-                $this->redirect(array('view', 'id' => $model->id));
+            attachActionSelect(index, count, $actionDiv);
+
         }
 
-        $this->render('create', array(
-            'model' => $model,
-        ));
-    }
+        //*************************************Function and Action Parameter functions ***********************************************
 
-//********************************Saving Using Custom UI**************************
-    public function actionCustomCreate() {
+        // Function to attach event listener for function dropdown change event
+        function attachFunctionDropdownChangeEvent(index, count, $actionDiv) {
 
-        $this->render('customCreate');
-    }
+            $(document).on('change', '[name="function_select_' + index + '_' + count + '"]', function () {
 
-    public function actionSave() {
-        $post = $_POST;
-//        print_r($post);
-//        die();
-        $data = [];
+                var selectedFunctionId = $(this).val();
+        
 
-        // Iterate through $_POST to extract the relevant data
-        foreach ($post as $key => $value) {
-
-            // Check if the key contains 'function_argument_id_'
-            if (strpos($key, 'function_argument_id_') !== false) {
-                // Extract the indices from the key
-                preg_match('/function_argument_id_(\d+)_(\d+)_(\d+)/', $key, $matches);
-                $report_column_index = $matches[1];
-                $function_select_index = $matches[2];
-
-                // Build the corresponding column names
-                $report_id = isset($post['report_id']) ? $post['report_id'] : null;
-                $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
-                $report_row = isset($post["report_row_{$report_column_index}"]) ? $post["report_row_{$report_column_index}"] : null;
-                $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
-
-                $action_id = isset($post["action_id_{$report_column_index}_{$function_select_index}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}"] : null;
-
-                $function_library_parameter = $value;
-
-                $data[] = [
-                    'report_id' => $report_id,
-                    'report_column' => $report_column,
-                    'report_row' => $report_row,
-                    'function_library_id' => $function_library_id,
-                    'function_library_parameter' => $function_library_parameter,
-                    'action_id' => $action_id
-                ];
-            }
-        }
-//    print_r($data);
-        $actionArgRecord = $this->formActionArgumentArr($post);
-        $targetColumnData = $this->formTargetColumns($post);
-        foreach ($data as $row) {
-            $newModel = new ReportSelectorFunctionParaAction; // Create a new model instance
-            // Assign attributes from the current row to the model
-            $newModel->attributes = $row;
-
-            // Attempt to save the model
-            if ($newModel->save()) {
-
-
-                echo "Report Function Mapping saved successfully.<br>";
-            } else {
-                echo "Error saving data.<br>";
-                print_r($newModel->getErrors()); // Print any validation errors if save fails
-            }
-        }
-        $actionSaveOut = $this->saveActionParaValues($actionArgRecord);
-        print_r($actionSaveOut);
-    }
-
-    private function formActionArgumentArr($post) {
-
-        foreach ($post as $key => $value) {
-            if (strpos($key, 'action_parameter_') !== false) {
-
-                preg_match('/action_parameter_(\d+)_(\d+)_(\d+)/', $key, $matches);
-                $report_column_index = $matches[1];
-                $function_select_index = $matches[2];
-                $action_argument_id_match = $matches[3];
-
-                $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
-                $action_id = isset($post["action_id_{$report_column_index}_{$function_select_index}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}"] : null;
-                $action_argument_id = $action_argument_id_match;
-                $action_parameter_value = isset($post["action_parameter_{$report_column_index}_{$function_select_index}_$action_argument_id_match"]) ? $post["action_parameter_{$report_column_index}_{$function_select_index}_$action_argument_id_match"] : null;
-                $report_id = isset($post['report_id']) ? $post['report_id'] : null;
-                $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
-                $rcfam = "{$report_id}_{$report_column}_{$function_library_id}_{$action_id}";
-
-                $actionParaValue[] = [
-                    $rcfam => [
-                        'action_id' => $action_id,
-                        'action_argument_id' => $action_argument_id,
-                        'action_parameter_value' => $action_parameter_value
-                    ]
-                ];
-            }
+                $.ajax({
+                    url: 'index.php?r=ReportSelectorFunctionParaAction/fetchParametersForFunction',
+                    type: 'POST',
+                    data: {selectedFunctionId: selectedFunctionId},
+                    success: function (response) {
+                        var data = JSON.parse(response);
+                        console.log(data);
+                        handleFunctionParameters(data, index, count, $actionDiv);
+                    },
+                    error: function () {
+                        console.log('Error fetching script details');
+                    }
+                });
+            });
         }
 
-        return $actionParaValue;
-    }
+        function handleFunctionParameters(data, index, count, $actionDiv) {
 
-    private function saveActionParaValues($actionArgRecord) {
+            var selectFunctionField = $actionDiv.closest('.row');
 
-        foreach ($actionArgRecord as $key => $innerArray) {
-            foreach ($innerArray as $rcfam => $value) {
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    var label = $('<label>').text(data[key]);
+                    label.css({
+                        'margin-left': '20px',
+                        'padding': '5px'
+                                // Add more CSS properties as needed
+                    });
+                    var input = $('<input>').attr({
+                        type: 'text',
+                        id: 'parameter_' + key,
+                        name: 'function_argument_id_' + index + '_' + count + '_' + key,
+                        placeholder: 'Function Argument',
+                        required: 'required'
+                    }).css({
+                        'margin-left': '20px', // Setting left margin
+                        'padding': '1px' // Setting padding
+                    });
+                    $('<br>').insertBefore($actionDiv);
 
-                preg_match('/(\d+)_(\w+)_(\d+)_(\d+)/', $rcfam, $matches);
-                $report_id = $matches[1];
-                $report_column = $matches[2];
-                $function_library_id = $matches[3];
-                $action_id = $matches[4];
-                // Fetch the ID from the ReportSelectorFunctionParaAction model based on the key
-                $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes([
-                    'report_id' => $report_id,
-                    'report_column' => $report_column,
-                    'function_library_id' => $function_library_id,
-                    'action_id' => $action_id
-                ]);
-//                print_r($reportFunctionMapModel);
-//                die();
-                if ($reportFunctionMapModel !== null) {
-                    $report_function_mapping_id = $reportFunctionMapModel->id;
+                    label.insertBefore($actionDiv);
+                    $('<br>').insertBefore($actionDiv);
 
-                    $this->saveActionParameters($innerArray, $report_function_mapping_id);
-                } else {
-                    echo "Function ID not found in Report Function Mapping.";
+                    input.insertBefore($actionDiv);
+                    $('<br>').insertBefore($actionDiv);
+
+
                 }
             }
         }
-    }
 
-    private function saveActionParameters($innerArray, $report_function_mapping_id) {
-        foreach ($innerArray as $key => $row) {
 
-//        print_r($row);
-//        echo '<br>';
-//        die();
-            $newModel = new ReportFunctionMappingActionValue; // Create a new model instance
-            // Assign attributes from the current row to the model
-            $newModel->action_id = $row['action_id'];
-            $newModel->action_argument_id = $row['action_argument_id'];
-            $newModel->action_parameter_value = $row['action_parameter_value'];
-            $newModel->report_function_mapping_id = $report_function_mapping_id;
+        //**************************** Action Event Listener ************************
 
-            // Attempt to save the model
-            if ($newModel->save()) {
-                echo "Action Values saved successfully.<br>";
-            } else {
-                echo "Error saving Action Values.<br>";
-                print_r($row); // Print the row causing the error
-                print_r($newModel->getErrors()); // Print any validation errors if save fails
-            }
-        }
-    }
-
-    private function formTargetColumns($post) {
-
-        foreach ($post as $key => $value) {
-            if (strpos($key, 'target_column_') !== false) {
-
-                preg_match('/target_column_(\d+)_(\d+)_(\d+)/', $key, $matches);
-                $report_column_index = $matches[1];
-                $function_select_index = $matches[2];
-                $target_column_count = $matches[3];
-
-                $report_id = isset($post['report_id']) ? $post['report_id'] : null;
-                $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
-                $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
-                $targetColumnInput = isset($post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}"]) ? $post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}"] : null;
-                $rcfm = "{$report_id}_{$report_column}_{$function_library_id}";
-
-                $targetColumsPost[] = [
-                    $rcfm => [
-                        'target_column' => '@' . $targetColumnInput
-                    ]
-                ];
-            }
-            return $targetColumsPost;
-        }
-        
-       
-    }
-
-     private function SaveTargetColumn(){
+        function attachActionSelect(index, count, $actionDiv) {
+//    console.log("Calling handleActionParameters from attachActionParameter");
+               var Columncount =0;
             
-           
-         
-        }
-//***************************************************************************************************************************************************************
-    //***************************Building Script to Call Function********************//
+            var $actionLable = $('<label style="font-style:bold;">').text('Action' + count).css({
+                'margin-left': '150px',
+                'padding': '1px'
+                        
+            });
+            var $actionSelect = $('<select></select>').attr({
+                name: 'action_id_' + index + '_' + count,
+                class: 'actionSelect'
+            }).append('<br>').css({
+                'margin-left': '1px',
+                'padding': '1px'
+                        
+            });
 
-    private function fetchFunctionAction($model) {
+            $actionSelect.append('<option value="">Select Action</option>');
+<?php foreach ($actionsList as $id => $actionName): ?>
+                $actionSelect.append($('<option></option>').attr('value', '<?php echo $id ?>').text('<?php echo $actionName ?>'));
 
-        $reportColumn = $model->report_column;
-        $functionId = $model->function_library_id;
-//   Handling multiple parameters of function
-        $functionPara = explode(',', $model->function_library_parameter);
-        $formattedParams = [];
-
-        foreach ($functionPara as $param) {
-            // Check if it's numeric
-            if (is_numeric($param)) {
-                $formattedParams[] = $param;
-            } else {
-                // If it's a string, wrap it in single quotes
-                $formattedParams[] = "'" . $param . "'";
-            }
-        }
-
-        $functionPara = '[' . implode(',', $formattedParams) . ']';
-
-        $actionId = $model->action_id;
-
-        $functionName = FunctionLibrary::model()->findByPk($functionId)->function_name;
-        $functionSyntax = FunctionLibrary::model()->findByPk($functionId)->syntax;
-        $actionName = ActionLibrary::model()->findByPk($actionId)->action_name;
-        $actionSyntax = ActionLibrary::model()->findByPk($actionId)->syntax;
-
-        $functionActionSyntax = $functionSyntax . "\n" . $actionSyntax;
-
-        return [
-            'reportColumn' => $reportColumn,
-            'functionPara' => $functionPara,
-            'functionName' => $functionName,
-            'functionActionSyntax' => $functionActionSyntax,
-            'actionName' => $actionName,
-            'actionId' => $actionId,
-        ];
-    }
-
-    private function scriptToCall($newModel) {
-
-        // Call fetchFunctionAction
-        $functionActionDetails = $this->fetchFunctionAction($newModel);
-
-        // Extract values from the returned array
-        $reportColumn = $functionActionDetails['reportColumn'];
-        $functionPara = $functionActionDetails['functionPara'];
-        $functionName = $functionActionDetails['functionName'];
-        $functionActionSyntax = $functionActionDetails['functionActionSyntax'];
-        $actionName = $functionActionDetails['actionName'];
-
-        $actionParameter = []; // Initialize the array
-// Append the string element to the array
-        $actionParameter[] = '$actionParameter';
-
-        foreach ($actionParameter as $param) {
-            // Check if it's numeric
-            if (is_numeric($param)) {
-                $actionParameterStr[] = $param;
-            } else {
-                // If it's a string, wrap it in single quotes
-                $actionParameterStr[] = "'" . $param . "'";
-            }
-        }
-
-        $actionParameter = implode(',', $actionParameterStr); // Implode the array
-
-        $selector = $this->fetchSelector($newModel);
-        if ($selector != null) {
-
-
-
-            $selector = str_replace('column_Name', $reportColumn, $selector);
-            $selector = str_replace('functionParameterValue', $functionPara, $selector);
-//     print_r($selector);
-//
-//    die();
-            $selector = str_replace('function_Name', $functionName, $selector);
-
-            $selector = $functionActionSyntax . " " . $selector;
-
-            $executionCode = "targetColumnNames.forEach(function(columnName) {
-    var data = fetchData({ selectorType: selectorType, selectorValue: columnName });
-    if (data !== null) {
-        data.values.forEach(function(value, index) {
-            var functionResult = conditionFunction(value, functionParameter);
-            if (functionResult == true) {
-                console.log(functionResult);
-                var element = data.elements[index];
-                " . $actionName . "(element, " . $actionParameter . ");
-            } else {
-               
-            }
-        });
-    } else {
-        console.log(\"Unable to fetch values for the '\" + columnName + \"' column or no values in the column.\");
-    }
-});";
-
-            $executionCode = nl2br($executionCode);
-
-            $scriptToCall = $selector . "  " . $executionCode;
-
-            return $scriptToCall;
-        } else {
-
-            echo "Selector not found";
-        }
-    }
-
-    private function fetchSelector($model) {
-
-        // Check if report_column is not empty/null
-        if (!empty($model->report_column)) {
-            // Fetch selector with id 1 from Selector model
-            $selectorModel = Selector::model()->findByPk(1);
-            $syntaxFromDB = $selectorModel->syntax;
-            $selector = nl2br($syntaxFromDB);
-
-            return $selector;
-            // Do something with the selector
-        }
-// Check if both report_column and report_row have values
-        elseif (!empty($model->report_column) && !empty($model->report_row)) {
-
-            return false;
-        }
-    }
-
-    //***************
-    private function fetchTargetColumn($mappingId) {
-        $targetParaModels = TargetColumn::model()->findAllByAttributes(['report_function_mapping_id' => $mappingId]);
-        $targetColumns = [];
-
-        foreach ($targetParaModels as $targetParaModel) {
-            $targeColumn = $targetParaModel->target_column;
-            $targetColumns[] = is_numeric($targeColumn) ? $targeColumn : "'" . $targeColumn . "'";
-        }
-        if (!empty($targetColumns)) {
-            return implode(',', $targetColumns); // Implode the array
-        } else {
-//            echo "action parameters not found";
-            return null; // Or handle the error as per your requirement
-        }
-    }
-
-    private function fetchActionArg($mappingId) {
-        $actionParaModels = ReportFunctionMappingActionValue::model()->findAllByAttributes(['report_function_mapping_id' => $mappingId]);
-        $actionParameter = []; // Initialize the array
-
-        foreach ($actionParaModels as $actionParaModel) {
-            $actionParaValue = $actionParaModel->action_parameter_value;
-
-            // Append the parameter value to the array
-            $actionParameter[] = is_numeric($actionParaValue) ? $actionParaValue : "'" . $actionParaValue . "'";
-//       print_r($actionParameter);
-//               die();
-        }
-
-        if (!empty($actionParameter)) {
-            return implode(',', $actionParameter); // Implode the array
-        } else {
-            echo "action parameters not found";
-            return null; // Or handle the error as per your requirement
-        }
-    }
-
-    private function getUniqueModels($objectsArray) {
-        $uniqueObjects = [];
-        foreach ($objectsArray as $object) {
-            $key = $object->function_library_id . '_' . $object->report_column;
-            if (!isset($uniqueObjects[$key])) {
-                $uniqueObjects[$key] = $object;
-            }
-        }
-        return array_values($uniqueObjects);
-    }
-
-    function actionApplyfunctionAction($reportId) {
-        $fetchReportModels = ReportSelectorFunctionParaAction::model()->findAllByAttributes(['report_id' => $reportId]);
-        $uniqueModels = $this->getUniqueModels($fetchReportModels);
-
-        $appliedScripts = []; // Initialize an empty array to hold the JavaScript scripts
-
-        foreach ($uniqueModels as $uniqueModel) {
-            $mappingId = $uniqueModel->id;
-            $functionActionDetails = $this->fetchFunctionAction($uniqueModel);
-            $reportColumn = $functionActionDetails['reportColumn'];
-            $functionPara = $functionActionDetails['functionPara'];
-            $functionName = $functionActionDetails['functionName'];
-            $functionActionSyntax = $functionActionDetails['functionActionSyntax'];
-            $actionName = $functionActionDetails['actionName'];
-            $actionParameter = $this->fetchActionArg($mappingId);
-
-            $target_Column = $this->fetchTargetColumn($mappingId);
-
-            $selector = $this->fetchSelector($uniqueModel);
-
-            $staticCode = $this->executionCode();
-
-            $dynamicCode = <<<SCRIPT
-var selectorType = 'reportColumn';
-var reportColumnName = ['$reportColumn'];
-var targetColumnNames = [$target_Column];
-var conditionfunction = $functionName;
-var functionPara = $functionPara;
-var actionStyle = $actionName;
-var actionPara = [$actionParameter];
-SCRIPT;
-            $dynamicCode = trim($dynamicCode);
-
-            $scriptToApply = <<<SCRIPT
-$functionActionSyntax
-$selector
-$dynamicCode
-$staticCode
-SCRIPT;
-            $scriptToApply = trim($scriptToApply);
-
-            $appliedScripts[] = $scriptToApply; // Add the script to the array
-        }
-        // Convert the output into an array
-// Encode the array into JSON format
-        $jsonResponse = json_encode($appliedScripts, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
-// Output the JSON response
-        echo $jsonResponse;
-    }
-
-    private function executionCode() {
-        $static_code = <<<SCRIPT
-var reportColumnData = fetchData({selectorType: selectorType, selectorValue: reportColumnName});      
- function functionArg(reportElementIndex) {
-           const functionValues = []; 
-            let functionValue; 
-            if (functionPara.every(element => typeof element === 'number')) {
-        return functionPara;
-    }
-
-            else if (functionPara.some(element => element.includes('@'))) {
-                var foundElements = functionPara.filter(element => element.includes('@'));
-
-                var remainingStrings = foundElements.map(element => element.replace('@', ''));
-
-                remainingStrings.forEach(functionParaColumn => {
-                    var ColumnForFunctionPara = fetchData({selectorType: selectorType, selectorValue: functionParaColumn});
-                    functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
-                    functionValues.splice(0); 
-                    functionValues.push(functionValue);
+<?php endforeach; ?>
+    
+               var $addTargetBtn = $('<button>Add Target Column </button>')
+                .attr('id', 'fetch_columns_button') // Set the ID attribute to 'fetch_columns_button'
+                .click(function(event) {
+                    event.preventDefault();
+                    Columncount++;
+                    fetchTargetColumns(index, count,Columncount,$actionDiv);
                 });
-                return functionValue; 
-            }
-           
+
+//            console.log('hii');
+            $actionDiv.append('<br><br>');
+            $actionDiv.append($actionLable, $actionSelect);
+            $actionDiv.append('<br>');
+            attachActionParameter(index, count, $actionDiv, $actionSelect);
+            $actionDiv.append($addTargetBtn);
+
+
         }
 
-reportColumnData[0].values.forEach((value, i) => {
-    const element = reportColumnData[0].elements[i];
-    var reportElementIndex = i;
-    var functionParaValues = functionArg(reportElementIndex);
-    console.log(value);
-    var functionResult = conditionfunction(value, functionParaValues);
-    if (functionResult === true) {
-        applyActionOnTargetColumns(reportElementIndex);
-    }
+        function attachActionParameter(index, count, $actionDiv) {
+            $(document).on('change', '[name="action_id_' + index + '_' + count + '"]', function () {
+
+                var selectActionId = $(this).val(); // Access value directly from $actionSelect
+
+                $.ajax({
+                    url: 'index.php?r=ReportSelectorFunctionParaAction/fetchParametersForAction',
+                    type: 'POST',
+                    data: {selectActionId: selectActionId},
+                    success: function (response) {
+                        var data = JSON.parse(response);
+                        console.log(response);
+                        console.log(data);
+
+                        handleActionParameters(data, index, count, $actionDiv);
+                    },
+                    error: function () {
+                        console.log('Error fetching script details');
+                    }
+                });
+            });
+        }
+
+        function handleActionParameters(data, index, count, $actionDiv) {
+//       console.log(data);
+            var actionParamsCount = 0; // Initialize action parameters count
+
+            for (var value in data) {
+                console.log(value);
+                if (data.hasOwnProperty(value)) {
+                    var label = $('<label>').text(data[value]).attr('for', 'parameter_' + value).css({
+                        'margin-left': '150px',
+                        'padding': '1px'
+                    });
+                    var input = $('<input>').attr({
+                        type: 'text',
+                        id: 'action_parameter_' + value,
+                        name: 'action_parameter_' + index + '_' + count + '_' + value,
+                        placeholder: 'Action Argument'
+                    });
+
+                    // Append the label and input within the row
+                    $actionDiv.append('<br><br>'); 
+                    $actionDiv.append(label, input);
+                    $actionDiv.append('<br>');
+                    actionParamsCount++;
+
+                }
+            }
+
+        }
+      function fetchTargetColumns(index, count,Columncount,$actionDiv) {
+    var selectReportId = $('[name="report_id"]').val(); 
+
+    $.ajax({
+        url: 'index.php?r=reportSelectorFunctionParaAction/fetchReportColumns',
+        type: 'POST',
+        data: { selectReportId: selectReportId },
+        success: function(response) {
+            var data = JSON.parse(response);
+//            console.log(response);
+//            console.log(data);
+//           console.log(count,Columncount);
+            
+            handleTargetColumn(data, index, count, $actionDiv,Columncount);
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+}
+
+$('#fetch_columns_button').on('click', function() {
+    fetchTargetColumns(); 
 });
 
-function applyActionOnTargetColumns(reportElementIndex) {
-    if (targetColumnNames.length === 0) {
-        const element = reportColumnData[0].elements[reportElementIndex];
-        actionStyle(element, actionPara[0], actionPara[1]);
-    } else {
-        targetColumnNames.forEach(targetColumnName => {
-            var targetColumnData = fetchData({selectorType: selectorType, selectorValue: targetColumnName});
-            targetColumnData.forEach(function (columnData, columnIndex) {
-                const element = targetColumnData[0].elements[reportElementIndex];
-                actionStyle(element, ...actionPara);
+
+function handleTargetColumn(data, index, count, $actionDiv,Columncount) {
+    var label = $('<label style="font-style:bold;"><b>Target Column</b></label>');
+    
+    var $targetColumn = $('<select></select>').attr({
+        name : 'target_column_'+index+'_'+count+'_'+Columncount,
+        class:'targetColumn'
+    }).append('<br>').css({
+                'margin-left': '1px',
+                'padding': '1px'
+                        
             });
+     console.log(data);     
+  $targetColumn.append('<option value="">Select Target Columns</option><br>'); 
+    // Iterate over the keys of the data object
+    for (var key in data) {
+        // Iterate over the values associated with each key
+        data[key].forEach(function(columnName) {
+            // Create an option element and append it to the select element
+            $targetColumn.append('<option value="' + columnName + '">' + columnName + '</option>');
         });
     }
+               $actionDiv.append('<br><br>'); 
+               $actionDiv.append(label,$targetColumn);
+               $actionDiv.append('<br>');
 }
-SCRIPT;
-        $static_code = trim($static_code); // Remove leading/trailing whitespace
-//        $static_code = str_replace(["\r\n", "\r"], "\n", $static_code); // Normalize line endings
-        return $static_code;
-    }
 
-//    function actionApplyfunctionAction($reportId) {
-//        // Fetch function action models for the given report ID
-//        $functionActionModels = ReportSelectorFunctionParaAction::model()->findAllByAttributes(['report_id' => $reportId]);
-//        $modelCount = count($functionActionModels);
-// 
-//
-//        $appliedScripts = []; // Initialize array to store modified scriptToCall values
-//
-//        foreach ($functionActionModels as $model) {
-//            
-//            $scriptToCall = $model->script_to_call;
-//
-//            $mappingId = $model->id;
-////            print_r($mappingId);
-//            $actionParaModel = ReportFunctionMappingActionValue::model()->findByAttributes(['report_function_mapping_id' => $mappingId]);
-//
-//            if ($actionParaModel !== null) {
-//                // Replace the action parameter in the script with its value
-//                $actionParaValue = $actionParaModel->action_parameter_value;
-//                $scriptToCall = str_replace('$actionParameter', $actionParaValue, $scriptToCall);
-//
-//                // Add the modified scriptToCall to the array
-//                $appliedScripts[] = $scriptToCall;
-//            } else {
-//                // Handle the case where the action parameter model is not found
-//                // For example, you could log an error, skip this iteration, or take other appropriate action.
-//                // Here, we'll simply continue to the next iteration.
-//                continue;
-//            }
-//        }
-////           print_r($appliedScripts);
-////    die();
-//        $jsonResponse = json_encode($appliedScripts);
-//
-//        // Output the JSON response
-//        echo $jsonResponse;
-////    var_dump($appliedScripts);
-////    die();
-//    }
-//**************************************UI Functions**************************************************//
+        
+ //******************************************
+ function fetchTargetColumns(index, count,Columncount,$actionDiv) {
+    var selectReportId = $('[name="report_id"]').val(); 
 
-
-
-
-    public function actionQuery() {
-        if (Yii::app()->request->isAjaxRequest) {
-            $selectedReportId = Yii::app()->request->getPost('reportId');
-
-            $fetchQuery = Report::model()->findByPk($selectedReportId);
-            $reportColumns = $fetchQuery->reportColumn;
-            $db = Yii::app()->db;
-
-            if ($fetchQuery !== null) {
-                $sql = $fetchQuery->query;
-                // Execute the query
-                $command = $db->createCommand($sql);
-                $result = $command->queryAll();
-                $columnNames = array_keys($result[0]);
-
-                // Print column names
-                echo $reportColumns;
-            } else {
-                echo "Report not found";
-                echo "Error in running the query";
-                return; // Exit the function if the report is not found
-            }
-        } else {
-            echo "Error in Getting POST From Form ";
+    $.ajax({
+        url: 'index.php?r=reportSelectorFunctionParaAction/fetchReportColumns',
+        type: 'POST',
+        data: { selectReportId: selectReportId },
+        success: function(response) {
+            var data = JSON.parse(response);
+//            console.log(response);
+//            console.log(data);
+//           console.log(count,Columncount);
+            
+            handleTargetColumn(data, index, count, $actionDiv,Columncount);
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
         }
-    }
-
-    public function actionFetchParametersForFunction() {
-        // Extracting the value of selectedFunctionId from POST data
-        $selectedFunctionId = Yii::app()->request->getPost('selectedFunctionId');
-        // Find all records with the given function_library_id
-        $functionModels = FunctionArgumentMap::model()->findAllByAttributes(array('function_library_id' => $selectedFunctionId));
-        $functionParameters = array();
-
-        // Initialize arrays to store parameter IDs and names
-        $functionParameterIds = array();
-        $functionParameterNames = array();
-
-        // Iterate over each record to collect IDs and names
-        foreach ($functionModels as $functionModel) {
-            $functionParameters[$functionModel->id] = $functionModel->argument_name; // Assuming "argument_name" is the correct attribute name
-        }
-
-        echo json_encode($functionParameters);
-    }
-
-    public function actionFetchParametersForAction() {
-        $actionId = Yii::app()->request->getPost('selectActionId');
-//    $actionId = 15;
-
-        $actionParameters = ActionArgumentMap::model()->findAllByAttributes(array('action_library_id' => $actionId));
-//  
-        $actionParameterDisplayNames = array(); // Create an array to store display names
-
-
-        foreach ($actionParameters as $actionParameter) {
-            $actionParameterDisplayName = $actionParameter->argument_display_name;
-            $actionId = $actionParameter->id;
-            // Do something with $actionParameterDisplayName
-            $actionParameterDisplayNames[$actionId] = $actionParameterDisplayName; // Store display names in the new array
-        }
-        echo json_encode($actionParameterDisplayNames); // Return the array of display names
-    }
-
-    public function actionFetchReportColumns() {
-
-        $selectedReportId = Yii::app()->request->getPost('selectReportId');
-//     $selectedReportId = 6;
-        $reportModel = Report::model()->findByPk($selectedReportId);
-        $reportColumnStr = $reportModel->reportColumn;
-        $elements = explode(",", $reportColumnStr);
-        $reportColumn[$selectedReportId] = $elements;
-//     print_r($reportColumn);
-        echo json_encode($reportColumn);
-    }
-
-//***************************************************************************************************
-//***************************************************************************************************
-
-    /**
-     * Updates a particular model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id the ID of the model to be updated
-     */
-    public function actionUpdate($id) {
-        $model = $this->loadModel($id);
-
-        // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
-
-        if (isset($_POST['ReportSelectorFunctionParaAction'])) {
-            $model->attributes = $_POST['ReportSelectorFunctionParaAction'];
-            if ($model->save())
-                $this->redirect(array('view', 'id' => $model->id));
-        }
-
-        $this->render('update', array(
-            'model' => $model,
-        ));
-    }
-
-    /**
-     * Deletes a particular model.
-     * If deletion is successful, the browser will be redirected to the 'admin' page.
-     * @param integer $id the ID of the model to be deleted
-     */
-    public function actionDelete($id) {
-        $this->loadModel($id)->delete();
-
-        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-        if (!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-    }
-
-    /**
-     * Lists all models.
-     */
-    public function actionIndex() {
-        $dataProvider = new CActiveDataProvider('ReportSelectorFunctionParaAction');
-        $this->render('index', array(
-            'dataProvider' => $dataProvider,
-        ));
-    }
-
-    /**
-     * Manages all models.
-     */
-    public function actionAdmin() {
-        $model = new ReportSelectorFunctionParaAction('search');
-        $model->unsetAttributes();  // clear any default values
-        if (isset($_GET['ReportSelectorFunctionParaAction']))
-            $model->attributes = $_GET['ReportSelectorFunctionParaAction'];
-
-        $this->render('admin', array(
-            'model' => $model,
-        ));
-    }
-
-    /**
-     * Returns the data model based on the primary key given in the GET variable.
-     * If the data model is not found, an HTTP exception will be raised.
-     * @param integer $id the ID of the model to be loaded
-     * @return ReportSelectorFunctionParaAction the loaded model
-     * @throws CHttpException
-     */
-    public function loadModel($id) {
-        $model = ReportSelectorFunctionParaAction::model()->findByPk($id);
-        if ($model === null)
-            throw new CHttpException(404, 'The requested page does not exist.');
-        return $model;
-    }
-
-    /**
-     * Performs the AJAX validation.
-     * @param ReportSelectorFunctionParaAction $model the model to be validated
-     */
-    protected function performAjaxValidation($model) {
-        if (isset($_POST['ajax']) && $_POST['ajax'] === 'report-selector-function-para-action-form') {
-            echo CActiveForm::validate($model);
-            Yii::app()->end();
-        }
-    }
-
-    //****************Applying Script to report ************//
+    });
 }
-  
+    
+
+
+function handleTargetColumn(data, index, count, $actionDiv,Columncount) {
+    var label = $('<label style="font-style:bold;"><b>Target Column</b></label>');
+    
+    var $targetColumn = $('<select></select>').attr({
+        name : 'target_column_'+index+'_'+count+'_'+Columncount,
+        class:'targetColumn'
+    }).append('<br>').css({
+                'margin-left': '1px',
+                'padding': '1px'
+                        
+            });
+     console.log(data);     
+  $targetColumn.append('<option value="">Select Target Columns</option><br>'); 
+    // Iterate over the keys of the data object
+    for (var key in data) {
+        // Iterate over the values associated with each key
+        data[key].forEach(function(columnName) {
+            // Create an option element and append it to the select element
+            $targetColumn.append('<option value="' + columnName + '">' + columnName + '</option>');
+        });
+    }
+               $actionDiv.append('<br><br>'); 
+               $actionDiv.append(label,$targetColumn);
+               $actionDiv.append('<br>');
+}
+
+    </script>
+
+</html>
+
+
+ var $typeOfFunctionPara = ('<select></select>').attr({
+                name: 'function_type_select',
+                class: 'functionTypeSelect',
+                required: 'required'
+            }).append('<br>');
+    
+    $typeOfFunctionPara.append('<option value = "">Select Argument Type</option>');
+    $typeOfFunctionPara.append('<option value = "0">Static Parameter</option>');
+    $typeOfFunctionPara.append('<option value = "1">Report Column</option>');
+    
+    var selectFunctionType = $('[name =function_type_select]').val();
+    
+    if (selectFunctionType === 0){
+        
+                    attachFunctionDropdownChangeEvent(index, count, $actionDiv, $select);  
+    }
+    else{
+        
+    }
