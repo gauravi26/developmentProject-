@@ -387,6 +387,8 @@
 
 
         function handleReportColumn(data, Columndata, index, count, $actionDiv, selectedFunctionType) {
+            $('.row').find('.reportColumnList').remove();
+
             var label = $('<label>').text(data[key]).addClass('funParaLable' + index + '_' + count);
             label.css({
                 'margin-left': '20px',
@@ -394,15 +396,19 @@
             });
 
             console.log(data);
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    var $reportColumn = $('<select></select>').attr({
+                        name: 'function_argument_id_' + index + '_' + count + '_' + key,
 
-            var $reportColumn = $('<select></select>').attr({
-                name: 'report_column_' + index + '_' + count + '_' + key,
-                class: 'targetColumn'
-            }).append('<br>').css({
-                'margin-left': '1px',
-                'padding': '1px'
+                        required: 'required'
+                    }).append('<br>').addClass('reportColumnList').css({
+                        'margin-left': '1px',
+                        'padding': '1px'
 
-            });
+                    });
+                }
+            }
             $reportColumn.append('<option value="">Select Report Columns</option><br>');
             // Iterate over the keys of the data object
             for (var key in Columndata) {
