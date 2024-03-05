@@ -3,11 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/reportSelectorFunctionParaAction/admin.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/controllers/ReportSelectorFunctionParaActionController.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/reportSelectorFunctionParaAction/customDelete.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/formFieldCsspropertyValueMapping/admin.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/controllers/FormFieldCsspropertyValueMappingController.php</file>
+            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/reportSelectorFunctionParaAction/customCreate.php</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/rough.php</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/</file>
         </group>

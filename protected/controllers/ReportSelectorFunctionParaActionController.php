@@ -582,45 +582,47 @@ echo $jsonResponse;
 
     private function executionCode() {
         $static_code = <<<SCRIPT
-var reportColumnData = fetchData({selectorType: selectorType, selectorValue: reportColumnName});      
- function functionArg(reportElementIndex) {
-           const functionValues = []; 
-            let functionValue; 
-            if (functionPara.every(element => typeof element === 'number')) {
+var reportColumnData = fetchData({selectorType: selectorType, selectorValue: reportColumnName});
+
+function functionArg(reportElementIndex) {
+    const functionValues = [];
+    let functionValue;
+    if (functionPara.every(element => typeof element === 'number')) {
         return functionPara;
+    } else if (functionPara.some(element => element.includes('@'))) {
+        var foundElements = functionPara.filter(element => element.includes('@'));
+        var remainingStrings = foundElements.map(element => element.replace('@', ''));
+        remainingStrings.forEach(functionParaColumn => {
+            var ColumnForFunctionPara = fetchData({selectorType: selectorType, selectorValue: functionParaColumn});
+            functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
+            functionValues.splice(0);
+            functionValues.push(functionValue);
+        });
+        return [functionValue];
+    } else { 
+        
+return [functionPara];
     }
 
-            else if (functionPara.some(element => element.includes('@'))) {
-                var foundElements = functionPara.filter(element => element.includes('@'));
-
-                var remainingStrings = foundElements.map(element => element.replace('@', ''));
-
-                remainingStrings.forEach(functionParaColumn => {
-                    var ColumnForFunctionPara = fetchData({selectorType: selectorType, selectorValue: functionParaColumn});
-                    functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
-                    functionValues.splice(0); 
-                    functionValues.push(functionValue);
-                });
-                return functionValue; 
-            }
-           
-        }
+}
 
 reportColumnData[0].values.forEach((value, i) => {
     const element = reportColumnData[0].elements[i];
     var reportElementIndex = i;
     var functionParaValues = functionArg(reportElementIndex);
-    console.log(value);
-    var functionResult = conditionfunction(value, functionParaValues);
+   
+    console.log(functionParaValues);
+    var functionResult = conditionfunction(value, ...functionParaValues);
     if (functionResult === true) {
         applyActionOnTargetColumns(reportElementIndex);
     }
 });
 
+
 function applyActionOnTargetColumns(reportElementIndex) {
     if (targetColumnNames.length === 0) {
         const element = reportColumnData[0].elements[reportElementIndex];
-        actionStyle(element, actionPara[0], actionPara[1]);
+        actionStyle(element, ...actionPara);
     } else {
         targetColumnNames.forEach(targetColumnName => {
             var targetColumnData = fetchData({selectorType: selectorType, selectorValue: targetColumnName});

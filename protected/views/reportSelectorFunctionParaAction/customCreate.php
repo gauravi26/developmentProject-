@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title></title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
     <body>
         <?php
@@ -58,7 +59,9 @@
                     var $rowDiv = $('<div class="row"></div>').css({
                         'border': '1px groove grey',
                         'padding': '10px',
+                        'width': '880px',
                         'margin': '10px'
+                        
                     });
                     var $reportColumn = $('<label><b>Report Column:</b> ' + value + '</label>').css('font-size', '18px');
                     var $hiddenInput = $('<input type="hidden" name="report_column_' + index + '" value="' + value + '" required>');
@@ -81,29 +84,48 @@
         }
 
         function functionActionPara(index, count, $rowDiv) {
+        
+        var actioncount = 0;
             // Create a new select element
-            var $functionLabel = $('<br><label style="font-weight: bold;"><br>').text('Function ' + count);
-
-            var $select = $('<br><select></select>').attr({
+            var $functionLabel = $('<br><label style="font-weight: bold;"><br>').text('Function ' + count).addClass('_' + index + '_' + count);
+            var $select = $('<select></select>').attr({
                 name: 'function_select_' + index + '_' + count,
-                class: 'functionSelect',
+                class: 'functionSelect' + index + '_' + count,
                 required: 'required'
-            }).append('<br>');
-            // Add options to the select element from the $functionList array
-            $select.append('<option value="">Select function</option><br>');
-<?php foreach ($functionList as $id => $functionName): ?>
-                $select.append($('<option></option><br>').attr('value', '<?php echo $id; ?>').text('<?php echo $functionName; ?>'));
-<?php endforeach; ?>
-            var $actionDiv = $('<div class="actionDiv"></div>').addClass('actionDiv_' + index + '_' + count);
+            });
 
+            $select.append('<option value="">Select function</option>');
+            <?php foreach ($functionList as $id => $functionName): ?>
+                $select.append($('<option></option>').attr('value', '<?php echo $id; ?>').text('<?php echo $functionName; ?>'));
+            <?php endforeach; ?>
+
+            var $deleteButton = $('<i class="fa fa-trash-o" style="font-size:20px"></i>')
+                    .click(function(event) {
+                        event.preventDefault();
+                        functionDelete(index, count, $rowDiv);
+                    }).addClass('_' + index + '_' + count);
+
+                    //Action Div 
+            var $actionDiv = $('<div class="actionDiv"></div>').addClass('actionDiv_' + index + '_' + count);
+            var $addActionBtn = $('<button>Add Action</button>')
+        .click(function(event) {
+            actioncount++;
+            attachActionSelect(index, count, $actionDiv, actioncount);
+        })
+        .css({
+            'margin-left': '200px',
+            'padding': '3px'
+        });
             // Append the select element to the functionActionForm
             $rowDiv.append($functionLabel, $select);
             $rowDiv.append($actionDiv);
-
+            $deleteButton.insertAfter($select);
             // Calling function to attach event listener for function dropdown change event
             attachFunctionDropdownChangeEvent(index, count, $actionDiv);
             // Attach action select
-            attachActionSelect(index, count, $actionDiv);
+            var actioncount = 0;
+            $addActionBtn.insertAfter($actionDiv);
+//            attachActionSelect(index, count, $actionDiv,actioncount);
         }
 
 // Function to attach event listener for function dropdown change event
@@ -205,19 +227,21 @@
         }
 
 
+
         //**************************** Action Event Listener ************************
 
-        function attachActionSelect(index, count, $actionDiv) {
+        function attachActionSelect(index, count, $actionDiv,actioncount) {
 //    console.log("Calling handleActionParameters from attachActionParameter");
             var Columncount = 0;
-
+          
+            console.log("Action count in Select : "+actioncount);
             var $actionLable = $('<label style="font-style:bold;">').text('Action' + count).css({
                 'margin-left': '150px',
                 'padding': '1px'
 
             });
             var $actionSelect = $('<select></select>').attr({
-                name: 'action_id_' + index + '_' + count,
+                name: 'action_id_' + index + '_' + count+ '_'+actioncount,
                 class: 'actionSelect'
             }).append('<br>').css({
                 'margin-left': '1px',
@@ -230,30 +254,42 @@
                 $actionSelect.append($('<option></option>').attr('value', '<?php echo $id ?>').text('<?php echo $actionName ?>'));
 
 <?php endforeach; ?>
+           
 
-            var $addTargetBtn = $('<button>Add Target Column </button>')
+             var $addTargetBtn = $('<button>Add Target Column </button>')
                     .attr('id', 'fetch_columns_button') // Set the ID attribute to 'fetch_columns_button'
                     .click(function (event) {
                         event.preventDefault();
                         Columncount++;
+                      
                         fetchTargetColumns(index, count, Columncount, $actionDiv);
                     });
+               
 
 //            console.log('hii');
             $actionDiv.append('<br><br>');
             $actionDiv.append($actionLable, $actionSelect);
             $actionDiv.append('<br>');
-            attachActionParameter(index, count, $actionDiv, $actionSelect);
+            console.log("Action count just before passing : "+actioncount);
+            attachActionParameter(index, count, $actionDiv,actioncount);
             $actionDiv.append($addTargetBtn);
+//            $addActionBtn.insertAfter($actionSelect);
+            
 
 
         }
 
-        function attachActionParameter(index, count, $actionDiv) {
-            $(document).on('change', '[name="action_id_' + index + '_' + count + '"]', function () {
+        function attachActionParameter(index, count, $actionDiv,actioncount) {
+            console.log("action id count : "+actioncount);
+            console.log(JSON.stringify(actioncount));
+            
+
+            
+$(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + actioncount + '"]', function () {
 
                 var selectActionId = $(this).val(); // Access value directly from $actionSelect
-
+//                console.log("Action ID : "+actioncount),
+//                console.log("Action ID : "+count),
                 $.ajax({
                     url: 'index.php?r=ReportSelectorFunctionParaAction/fetchParametersForAction',
                     type: 'POST',
@@ -274,12 +310,13 @@
 
         function handleActionParameters(data, index, count, $actionDiv) {
             var selectFunctionField = $actionDiv.closest('.row');
-
+           
             // Remove previous action parameters labels and input fields
-            selectFunctionField.find('.actionParaLable').remove();
-            selectFunctionField.find('.actionPara').remove();
-            selectFunctionField.find('.br').remove(); // Remove only the created <br> elements
+//            selectFunctionField.find('.actionParaLable').remove();
+//            selectFunctionField.find('.actionPara').remove();
+//            selectFunctionField.find('.br').remove(); // Remove only the created <br> elements
 
+            selectFunctionField.find('.br').remove();
             var actionParamsCount = 0; // Initialize action parameters count
 
             for (var value in data) {
@@ -287,7 +324,7 @@
                     var label = $('<label>').text(data[value]).attr('for', 'parameter_' + value).css({
                         'margin-left': '150px',
                         'padding': '1px'
-                    }).addClass('actionParaLable');
+                    }).addClass('actionParaLable_' + index + '_' + count);
 
                     var input = $('<input>').attr({
                         type: 'text',
@@ -296,20 +333,25 @@
                         placeholder: 'Action Argument',
                         class: 'actionPara'
                     });
+                    
+                   
 
                     // Append the label and input within the actionDiv
                     $actionDiv.append('<br><br>');
                     $actionDiv.append(label, input);
                     $actionDiv.append('<br>');
                     actionParamsCount++;
+
+
+                    
                 }
             }
         }
 
-
+//*******************************************************************************************************
         function fetchTargetColumns(index, count, Columncount, $actionDiv) {
             var selectReportId = $('[name="report_id"]').val();
-
+             console.log("Columncount : "+Columncount);
             $.ajax({
                 url: 'index.php?r=reportSelectorFunctionParaAction/fetchReportColumns',
                 type: 'POST',
@@ -334,13 +376,17 @@
 
 
         function handleTargetColumn(data, index, count, $actionDiv, Columncount) {
-            var label = $('<label style="font-style:bold;"><b>Target Column</b></label>');
+            var label = $('<label style="font-style:bold;"><b>Target Column</b></label>').css({
+                'margin-left': '250px',
+                'padding': '1px'
+
+            });
 
             var $targetColumn = $('<select></select>').attr({
                 name: 'target_column_' + index + '_' + count + '_' + Columncount,
                 class: 'targetColumn'
             }).append('<br>').css({
-                'margin-left': '1px',
+                'margin-left': '250px',
                 'padding': '1px'
 
             });
@@ -389,7 +435,7 @@
         function handleReportColumn(data, Columndata, index, count, $actionDiv, selectedFunctionType) {
             $('.row').find('.reportColumnList').remove();
 
-            var label = $('<label>').text(data[key]).addClass('funParaLable' + index + '_' + count);
+            var label = $('<label>').text(data[key]).addClass('funParaLable_' + index + '_' + count);
             label.css({
                 'margin-left': '20px',
                 'padding': '5px'
@@ -427,7 +473,15 @@
             $('<br>').addClass('created-br').insertBefore($actionDiv); // Add class to the created <br>
 
         }
-
+//Funtion Delete 
+function functionDelete(index, count, $rowDiv) {
+  
+  //Delete all elements with _index_count
+  $rowDiv.find('[name*="_' + index + '_' + count + '"]').remove();
+    $rowDiv.find('[class*="' + index + '_' + count + '"]').remove();
+  
+  
+}
 
     </script>
 
