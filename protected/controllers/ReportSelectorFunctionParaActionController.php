@@ -579,26 +579,26 @@ private function formTargetColumns($post){
         $staticCode = $this->executionCode();
 
         $dynamicCode = <<<SCRIPT
-var selectorType = 'reportColumn';
-var reportColumnName = ['$reportColumn'];
-var targetColumnNames = [$target_Column];
-var conditionfunction = $functionName;
-var functionPara = $functionPara;
-var actionStyle = $actionName;
-var actionPara = [$actionParameter];
-SCRIPT;
-        $dynamicCode = trim($dynamicCode);
+        var selectorType = 'reportColumn';
+        var reportColumnName = ['$reportColumn'];
+        var targetColumnNames = [$target_Column];
+        var conditionfunction = $functionName;
+        var functionPara = $functionPara;
+        var actionStyle = $actionName;
+        var actionPara = [$actionParameter];
+        SCRIPT;
+                $dynamicCode = trim($dynamicCode);
 
-        $scriptToApply = <<<SCRIPT
-$functionActionSyntax
-$selector
-$dynamicCode
-$staticCode
-SCRIPT;
-        $scriptToApply = trim($scriptToApply);
+                $scriptToApply = <<<SCRIPT
+        $functionActionSyntax
+        $selector
+        $dynamicCode
+        $staticCode
+        SCRIPT;
+                $scriptToApply = trim($scriptToApply);
 
-        $appliedScripts[] = $scriptToApply; // Add the script to the array
-    }
+                $appliedScripts[] = $scriptToApply; // Add the script to the array
+            }
    // Convert the output into an array
 // Encode the array into JSON format
 $jsonResponse = json_encode($appliedScripts, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
