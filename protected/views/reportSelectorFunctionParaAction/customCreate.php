@@ -109,6 +109,7 @@
             var $actionDiv = $('<div class="actionDiv"></div>').addClass('actionDiv_' + index + '_' + count);
             var $addActionBtn = $('<button>Add Action</button>')
         .click(function(event) {
+            event.preventDefault();
             actioncount++;
             attachActionSelect(index, count, $actionDiv, actioncount);
         })
@@ -258,6 +259,7 @@
 
              var $addTargetBtn = $('<button>Add Target Column </button>')
                     .attr('id', 'fetch_columns_button') // Set the ID attribute to 'fetch_columns_button'
+            
                     .click(function (event) {
                         event.preventDefault();
                         Columncount++;
@@ -299,7 +301,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
                         console.log(response);
                         console.log(data);
 
-                        handleActionParameters(data, index, count, $actionDiv);
+                        handleActionParameters(data, index, count, $actionDiv,actioncount);
                     },
                     error: function () {
                         console.log('Error fetching script details');
@@ -308,7 +310,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
             });
         }
 
-        function handleActionParameters(data, index, count, $actionDiv) {
+        function handleActionParameters(data, index, count, $actionDiv,actioncount) {
             var selectFunctionField = $actionDiv.closest('.row');
            
             // Remove previous action parameters labels and input fields
@@ -329,7 +331,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
                     var input = $('<input>').attr({
                         type: 'text',
                         id: 'action_parameter_' + value,
-                        name: 'action_parameter_' + index + '_' + count + '_' + value,
+                        name: 'action_parameter_' + index + '_' + count + '_' + value+'_'+actioncount,
                         placeholder: 'Action Argument',
                         class: 'actionPara'
                     });
