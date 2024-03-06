@@ -101,11 +101,25 @@ class ReportSelectorFunctionParaActionController extends Controller {
 
         $this->render('customCreate');
     }
+private function fetchActionIds($post, $report_column_index, $function_select_index){
+    foreach ($post as $action_key => $action_value) {
+        if (strpos($action_key, 'action_id_') !== false) {
+            preg_match('/action_id_(\d+)_(\d+)_(\d+)/', $action_key, $action_matches);
+            $action_count = isset($action_matches[3]) ? $action_matches[3] : null;
+//            if ($action_count !== null) {
+//                $action_id = isset($post["action_id_{$report_column_index}_{$function_select_index}_{$action_count}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}_{$action_count}"] : null;
+//                
+//                return $action_id;
+//            }
+                            return $action_count;
 
+        }
+    }
+}
     public function actionSave() {
         $post = $_POST;
-//        print_r($post);
-//        die();
+       
+
         $data = [];
 
         // Iterate through $_POST to extract the relevant data
@@ -123,9 +137,13 @@ class ReportSelectorFunctionParaActionController extends Controller {
                 $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
                 $report_row = isset($post["report_row_{$report_column_index}"]) ? $post["report_row_{$report_column_index}"] : null;
                 $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
+               
+                $action_id = $this->fetchActionIds($post, $report_column_index, $function_select_index);
+                echo "Action : {$action_id}<br>";
+//                die();
 
-                $action_id = isset($post["action_id_{$report_column_index}_{$function_select_index}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}"] : null;
 
+              
                 $function_library_parameter = $value;
 
                 $data[] = [
@@ -163,9 +181,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
     }
 
     private function formActionArgumentArr($post) {
-        
-         
-
+       
         foreach ($post as $key => $value) {
             if (strpos($key, 'action_parameter_') !== false) {
 
@@ -244,8 +260,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
     }
 
     private function saveActionParameters($value, $report_function_mapping_id,$count) {
-           echo 'count: ' . $count . '<br>'; // Output the count
-          print_r($value);
+          
 //          die();
            
         foreach ($value as $key => $row) {
@@ -272,35 +287,37 @@ class ReportSelectorFunctionParaActionController extends Controller {
         
     }}
     
-    private function formTargetColumns($post){
-        
-         foreach($post as $key => $value){
-             if(strpos($key, 'target_column_')!==false){
-                 
-                 preg_match('/target_column_(\d+)_(\d+)_(\d+)/', $key, $matches);
-                $report_column_index = $matches[1];
-                $function_select_index = $matches[2];
-                $target_column_count = $matches[3];
-                
-                 $report_id = isset($post['report_id']) ? $post['report_id'] : null;
-                 $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
-                 $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
-                 $targetColumnInput = isset($post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}"])? $post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}"]:null;
-                 $rcfm = "{$report_id}_{$report_column}_{$function_library_id}";
-                 
-                 $targetColumsPost[] = [
-                     $rcfm =>[
-                         'target_column'=> $targetColumnInput
-                     ]
-                 ]; 
-             }     
-         }       
-         return $targetColumsPost;    
+private function formTargetColumns($post){
+    $targetColumsPost = []; // Initialize the array
+    foreach($post as $key => $value) {
+        if(strpos($key, 'target_column_') !== false) {
+            preg_match('/target_column_(\d+)_(\d+)_(\d+)_(\d+)/', $key, $matches);
+            $report_column_index = $matches[1];
+            $function_select_index = $matches[2];
+            $target_column_count = $matches[3];
+            $action_id = $matches[4];
+
+            $report_id = isset($post['report_id']) ? $post['report_id'] : null;
+            $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
+            $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
+            $targetColumnInput = isset($post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}_{$action_id}"]) ? $post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}_{$action_id}"] : null;
+
+            $rcfma = "{$report_id}_{$report_column}_{$function_library_id}";
+
+            $targetColumsPost[] = [
+                $rcfma => [
+                    'target_column' => $targetColumnInput
+                ]
+            ];
+        }
     }
+    return $targetColumsPost;
+}
     
     private function saveTargetColumn($targetColumnData){
         
-        
+//        print_r($targetColumnData);
+//        die();
         foreach ($targetColumnData as $key =>$innerArray ){
             
             foreach($innerArray as $rcfm => $value ){

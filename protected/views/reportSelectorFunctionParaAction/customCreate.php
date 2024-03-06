@@ -51,7 +51,8 @@
         });
 
         function handleReportResponse(columnIndex) {
-            var $functionAction = $('#functionAction');
+                $('.row').remove();
+        var $functionAction = $('#functionAction');
 
             if (columnIndex && columnIndex.length > 0) {
                 var count = 0;
@@ -264,7 +265,7 @@
                         event.preventDefault();
                         Columncount++;
                       
-                        fetchTargetColumns(index, count, Columncount, $actionDiv);
+                        fetchTargetColumns(index, count, Columncount, $actionDiv,actioncount);
                     });
                
 
@@ -351,7 +352,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
         }
 
 //*******************************************************************************************************
-        function fetchTargetColumns(index, count, Columncount, $actionDiv) {
+        function fetchTargetColumns(index, count, Columncount, $actionDiv,actioncount) {
             var selectReportId = $('[name="report_id"]').val();
              console.log("Columncount : "+Columncount);
             $.ajax({
@@ -364,7 +365,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
 //            console.log(data);
 //           console.log(count,Columncount);
 
-                    handleTargetColumn(data, index, count, $actionDiv, Columncount);
+                    handleTargetColumn(data, index, count, $actionDiv, Columncount,actioncount);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
@@ -377,7 +378,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
         });
 
 
-        function handleTargetColumn(data, index, count, $actionDiv, Columncount) {
+        function handleTargetColumn(data, index, count, $actionDiv, Columncount,actioncount) {
             var label = $('<label style="font-style:bold;"><b>Target Column</b></label>').css({
                 'margin-left': '250px',
                 'padding': '1px'
@@ -385,7 +386,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
             });
 
             var $targetColumn = $('<select></select>').attr({
-                name: 'target_column_' + index + '_' + count + '_' + Columncount,
+                name: 'target_column_' + index + '_' + count + '_' + Columncount+ '_' + actioncount,
                 class: 'targetColumn'
             }).append('<br>').css({
                 'margin-left': '250px',
@@ -399,7 +400,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
                 // Iterate over the values associated with each key
                 data[key].forEach(function (columnName) {
                     // Create an option element and append it to the select element
-                    $targetColumn.append('<option value="' + columnName + '">' + columnName + '</option>');
+                    $targetColumn.append('<option value="'+ columnName + '">' + columnName + '</option>');
                 });
             }
             $actionDiv.append('<br><br>');
@@ -463,7 +464,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
                 // Iterate over the values associated with each key
                 Columndata[key].forEach(function (columnName) {
                     // Create an option element and append it to the select element
-                    $reportColumn.append('<option value="' + columnName + '">' + columnName + '</option>');
+                    $reportColumn.append('<option value="' +'@' + columnName + '">' + columnName + '</option>');
                 });
             }
             $('<br>').addClass('created-br').insertBefore($actionDiv); // Add class to the created <br>
