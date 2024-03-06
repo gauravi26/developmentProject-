@@ -102,24 +102,22 @@ class ReportSelectorFunctionParaActionController extends Controller {
         $this->render('customCreate');
     }
 private function fetchActionIds($post, $report_column_index, $function_select_index){
+    $action_ids = []; // Initialize an array to store unique action IDs
     foreach ($post as $action_key => $action_value) {
-        if (strpos($action_key, 'action_id_') !== false) {
-            preg_match('/action_id_(\d+)_(\d+)_(\d+)/', $action_key, $action_matches);
-            $action_count = isset($action_matches[3]) ? $action_matches[3] : null;
-//            if ($action_count !== null) {
-//                $action_id = isset($post["action_id_{$report_column_index}_{$function_select_index}_{$action_count}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}_{$action_count}"] : null;
-//                
-//                return $action_id;
-//            }
-                            return $action_count;
-
+        if (strpos($action_key, "action_id_{$report_column_index}_{$function_select_index}_") === 0) {
+            preg_match('/action_id_' . $report_column_index . '_' . $function_select_index . '_(\d+)/', $action_key, $action_matches);
+            $action_count = $action_matches[1];
+            $action_ids[] = isset($post["action_id_{$report_column_index}_{$function_select_index}_{$action_count}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}_{$action_count}"] : null;
         }
     }
+    return $action_ids;
 }
-    public function actionSave() {
-        $post = $_POST;
-       
 
+
+public function actionSave() {
+        $post = $_POST;
+        print_r($post);
+//        die();
         $data = [];
 
         // Iterate through $_POST to extract the relevant data
@@ -137,15 +135,13 @@ private function fetchActionIds($post, $report_column_index, $function_select_in
                 $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
                 $report_row = isset($post["report_row_{$report_column_index}"]) ? $post["report_row_{$report_column_index}"] : null;
                 $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
-               
-                $action_id = $this->fetchActionIds($post, $report_column_index, $function_select_index);
-                echo "Action : {$action_id}<br>";
+
+                $action_ids = $this->fetchActionIds($post, $report_column_index, $function_select_index);
+//                print_r($action_ids);
 //                die();
 
-
-              
                 $function_library_parameter = $value;
-
+                 foreach ($action_ids as $action_id) {
                 $data[] = [
                     'report_id' => $report_id,
                     'report_column' => $report_column,
@@ -154,6 +150,8 @@ private function fetchActionIds($post, $report_column_index, $function_select_in
                     'function_library_parameter' => $function_library_parameter,
                     'action_id' => $action_id
                 ];
+            }
+               
             }
         }
 //    print_r($data);
