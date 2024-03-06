@@ -336,15 +336,7 @@ private function formTargetColumns($post){
                
                 if ($reportFunctionMapModel !== null) {
                     $report_function_mapping_id = $reportFunctionMapModel->id;
-//                    print_r($reportFunctionMapModel);
-//                    echo '<br>';
-//                   print_r($rcfm);
-//
-//                    echo '<br>';
-//                    print_r($report_id);
-//
-//                           die();
-                     
+
                     $this->saveTargetColumnModel($innerArray, $report_function_mapping_id);
                 } else {
                     echo "Function ID not found in Report Function Mapping.";
@@ -426,76 +418,76 @@ private function formTargetColumns($post){
         ];
     }
 
-    private function scriptToCall($newModel) {
-
-        // Call fetchFunctionAction
-        $functionActionDetails = $this->fetchFunctionAction($newModel);
-
-        // Extract values from the returned array
-        $reportColumn = $functionActionDetails['reportColumn'];
-        $functionPara = $functionActionDetails['functionPara'];
-        $functionName = $functionActionDetails['functionName'];
-        $functionActionSyntax = $functionActionDetails['functionActionSyntax'];
-        $actionName = $functionActionDetails['actionName'];
-
-        $actionParameter = []; // Initialize the array
-// Append the string element to the array
-        $actionParameter[] = '$actionParameter';
-
-        foreach ($actionParameter as $param) {
-            // Check if it's numeric
-            if (is_numeric($param)) {
-                $actionParameterStr[] = $param;
-            } else {
-                // If it's a string, wrap it in single quotes
-                $actionParameterStr[] = "'" . $param . "'";
-            }
-        }
-
-        $actionParameter = implode(',', $actionParameterStr); // Implode the array
-
-        $selector = $this->fetchSelector($newModel);
-        if ($selector != null) {
-
-
-
-            $selector = str_replace('column_Name', $reportColumn, $selector);
-            $selector = str_replace('functionParameterValue', $functionPara, $selector);
-//     print_r($selector);
+//    private function scriptToCall($newModel) {
 //
-//    die();
-            $selector = str_replace('function_Name', $functionName, $selector);
-
-            $selector = $functionActionSyntax . " " . $selector;
-
-            $executionCode = "targetColumnNames.forEach(function(columnName) {
-    var data = fetchData({ selectorType: selectorType, selectorValue: columnName });
-    if (data !== null) {
-        data.values.forEach(function(value, index) {
-            var functionResult = conditionFunction(value, functionParameter);
-            if (functionResult == true) {
-                console.log(functionResult);
-                var element = data.elements[index];
-                " . $actionName . "(element, " . $actionParameter . ");
-            } else {
-               
-            }
-        });
-    } else {
-        console.log(\"Unable to fetch values for the '\" + columnName + \"' column or no values in the column.\");
-    }
-});";
-
-            $executionCode = nl2br($executionCode);
-
-            $scriptToCall = $selector . "  " . $executionCode;
-
-            return $scriptToCall;
-        } else {
-
-            echo "Selector not found";
-        }
-    }
+//        // Call fetchFunctionAction
+//        $functionActionDetails = $this->fetchFunctionAction($newModel);
+//
+//        // Extract values from the returned array
+//        $reportColumn = $functionActionDetails['reportColumn'];
+//        $functionPara = $functionActionDetails['functionPara'];
+//        $functionName = $functionActionDetails['functionName'];
+//        $functionActionSyntax = $functionActionDetails['functionActionSyntax'];
+//        $actionName = $functionActionDetails['actionName'];
+//
+//        $actionParameter = []; // Initialize the array
+//// Append the string element to the array
+//        $actionParameter[] = '$actionParameter';
+//
+//        foreach ($actionParameter as $param) {
+//            // Check if it's numeric
+//            if (is_numeric($param)) {
+//                $actionParameterStr[] = $param;
+//            } else {
+//                // If it's a string, wrap it in single quotes
+//                $actionParameterStr[] = "'" . $param . "'";
+//            }
+//        }
+//
+//        $actionParameter = implode(',', $actionParameterStr); // Implode the array
+//
+//        $selector = $this->fetchSelector($newModel);
+//        if ($selector != null) {
+//
+//
+//
+//            $selector = str_replace('column_Name', $reportColumn, $selector);
+//            $selector = str_replace('functionParameterValue', $functionPara, $selector);
+////     print_r($selector);
+////
+////    die();
+//            $selector = str_replace('function_Name', $functionName, $selector);
+//
+//            $selector = $functionActionSyntax . " " . $selector;
+//
+//            $executionCode = "targetColumnNames.forEach(function(columnName) {
+//    var data = fetchData({ selectorType: selectorType, selectorValue: columnName });
+//    if (data !== null) {
+//        data.values.forEach(function(value, index) {
+//            var functionResult = conditionFunction(value, functionParameter);
+//            if (functionResult == true) {
+//                console.log(functionResult);
+//                var element = data.elements[index];
+//                " . $actionName . "(element, " . $actionParameter . ");
+//            } else {
+//               
+//            }
+//        });
+//    } else {
+//        console.log(\"Unable to fetch values for the '\" + columnName + \"' column or no values in the column.\");
+//    }
+//});";
+//
+//            $executionCode = nl2br($executionCode);
+//
+//            $scriptToCall = $selector . "  " . $executionCode;
+//
+//            return $scriptToCall;
+//        } else {
+//
+//            echo "Selector not found";
+//        }
+//    }
 
     private function fetchSelector($model) {
 
@@ -558,14 +550,14 @@ private function formTargetColumns($post){
     private function getUniqueModels($objectsArray) {
         $uniqueObjects = [];
         foreach ($objectsArray as $object) {
-            $key = $object->function_library_id . '_' . $object->report_column;
+            $key = $object->function_library_id . '_' . $object->report_column. '_' . $object->action_id;
             if (!isset($uniqueObjects[$key])) {
                 $uniqueObjects[$key] = $object;
             }
         }
         return array_values($uniqueObjects);
     }
-
+//**********************************************************************************************
     function actionApplyfunctionAction($reportId) {
     $fetchReportModels = ReportSelectorFunctionParaAction::model()->findAllByAttributes(['report_id' => $reportId]);
     $uniqueModels = $this->getUniqueModels($fetchReportModels);
