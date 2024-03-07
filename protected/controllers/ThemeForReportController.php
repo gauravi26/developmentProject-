@@ -189,7 +189,7 @@ class ThemeForReportController extends Controller
 //                                'theme_name' => $model->theme_name,  // Use $model->theme_name here instead of $themeName
 //                                'element_id' => $reportElementCssSet->element_id,
 //                                'css_property_id' => $reportElementCssSet->css_property_id,
-//                                // You may need to set other attributes or modify as per your needs
+//                                // may need to set other attributes or modify as per  needs
 //                            );
 //                            
 //
@@ -406,7 +406,6 @@ public function actionReportTestTheme(){
 //            }
 //        }
 //
-//        // Continue with the rest of your logic or redirect as needed
 //    }
 //}
 

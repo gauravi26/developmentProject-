@@ -209,7 +209,7 @@ class ReportThemeMappingController extends Controller
                     // Check if the element is "report-container" or "report-table" and add the dot accordingly
                     $elementSelector = in_array($element, ['report-container', 'report-table']) ? ".$element" : $element;
 
-                    // Apply the CSS rule to your report
+                    // Apply the CSS rule to report
                     echo "$elementSelector { $cssProperty: $value !important; }\n";
                 }
             } else {

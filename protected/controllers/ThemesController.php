@@ -702,7 +702,7 @@ echo json_encode($imageList);
          
         private function uploadImage($file)
 {
-    $uploadPath = 'images/'; // Your upload folder path
+    $uploadPath = 'images/'; //  upload folder path
     $destination = $uploadPath . $file['name'];
 
     if (move_uploaded_file($file['tmp_name'], $destination)) {

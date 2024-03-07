@@ -425,7 +425,7 @@ private function renderJson($data)
 		}
 	}
         
-        // In your controller (e.g., EffectsController.php)
+        // In controller (e.g., EffectsController.php)
 public function actionGetFieldIds()
 {
     if (Yii::app()->request->isAjaxRequest) {
