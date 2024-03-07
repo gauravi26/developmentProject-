@@ -84,7 +84,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
             print_r($dynamicallyGeneratedFields);
 
             $model->attributes = $_POST['ReportSelectorFunctionParaAction'];
-            die();
+           die();
             // $scriptToCall =  $this->scriptToCall($model);
             $model->script_to_call = $this->scriptToCall($model);
             if ($model->save())
@@ -117,6 +117,7 @@ private function fetchActionIds($post, $report_column_index, $function_select_in
 public function actionSave() {
         $post = $_POST;
         print_r($post);
+        echo '<br>';
 //        die();
         $data = [];
 
@@ -213,10 +214,11 @@ public function actionSave() {
 
     private function saveActionParaValues($actionArgRecord) {
         $count=0;
-//        print_r($actionArgRecord);
-//        die();
+        
         foreach ($actionArgRecord as $key => $innerArray) {
             foreach ($innerArray as $rcfam => $value) {
+//                print_r($value);
+//        die();
                 foreach ($value as $key =>$record)
 //                 echo'<br>';
 //                print_r($key);
@@ -242,7 +244,7 @@ public function actionSave() {
                     'report_id' => $report_id,
                     'report_column' => $report_column,
                     'function_library_id' => $function_library_id,
-//                    'action_id' => $action_id
+                    'action_id' => $action_id
                 ]);
 //                print_r($reportFunctionMapModel);
 //                die();
@@ -260,7 +262,8 @@ public function actionSave() {
     private function saveActionParameters($value, $report_function_mapping_id,$count) {
           
 //          die();
-           
+//        print_r($report_function_mapping_id);
+        
         foreach ($value as $key => $row) {
 
       
@@ -294,13 +297,15 @@ private function formTargetColumns($post){
             $function_select_index = $matches[2];
             $target_column_count = $matches[3];
             $action_id = $matches[4];
-
+//              echo "<br>";
+//              print_r($action_id);
+//                echo "<br>";
             $report_id = isset($post['report_id']) ? $post['report_id'] : null;
             $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
             $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
             $targetColumnInput = isset($post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}_{$action_id}"]) ? $post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}_{$action_id}"] : null;
 
-            $rcfma = "{$report_id}_{$report_column}_{$function_library_id}";
+            $rcfma = "{$report_id}_{$report_column}_{$function_library_id}_{$action_id}";
 
             $targetColumsPost[] = [
                 $rcfma => [
@@ -314,6 +319,7 @@ private function formTargetColumns($post){
     
     private function saveTargetColumn($targetColumnData){
         
+//        echo "<br>";
 //        print_r($targetColumnData);
 //        die();
         foreach ($targetColumnData as $key =>$innerArray ){
@@ -559,7 +565,9 @@ private function formTargetColumns($post){
     function actionApplyfunctionAction($reportId) {
     $fetchReportModels = ReportSelectorFunctionParaAction::model()->findAllByAttributes(['report_id' => $reportId]);
     $uniqueModels = $this->getUniqueModels($fetchReportModels);
-
+//   print_r($uniqueModels);
+//   die();
+   
     $appliedScripts = []; // Initialize an empty array to hold the JavaScript scripts
 
     foreach ($uniqueModels as $uniqueModel) {
