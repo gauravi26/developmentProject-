@@ -175,7 +175,7 @@ public function actionSave() {
         }
         $actionSaveOut = $this->saveActionParaValues($actionArgRecord);
         $targetColumnSaveout = $this->saveTargetColumn($targetColumnData);
-        print_r($actionSaveOut);
+//        print_r($actionSaveOut);
 
     }
 
@@ -296,15 +296,26 @@ private function formTargetColumns($post){
             $report_column_index = $matches[1];
             $function_select_index = $matches[2];
             $target_column_count = $matches[3];
-            $action_id = $matches[4];
-//              echo "<br>";
-//              print_r($action_id);
-//                echo "<br>";
+            $action_id_count = $matches[4];
+//            echo "<br>";
+//            print_r($report_column_index); 
+//                 echo "<br>";
+//            print_r($function_select_index);
+//                      echo "<br>";
+//                               print_r($target_column_count);
+//   
+//            echo "<br>";
+//            print_r($action_id_count);
+////                echo "<br>";
+//                die();
             $report_id = isset($post['report_id']) ? $post['report_id'] : null;
             $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
             $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
-            $targetColumnInput = isset($post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}_{$action_id}"]) ? $post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}_{$action_id}"] : null;
-
+            $action_id = isset($post["action_id_{$report_column_index}_{$function_select_index}_{$action_id_count}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}_{$action_id_count}"] : null;
+            $targetColumnInput = isset($post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}_{$action_id_count}"]) ? $post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}_{$action_id_count}"] : null;
+//             print_r($targetColumnInput);
+//             die();
+            
             $rcfma = "{$report_id}_{$report_column}_{$function_library_id}_{$action_id}";
 
             $targetColumsPost[] = [
@@ -315,27 +326,33 @@ private function formTargetColumns($post){
         }
     }
     return $targetColumsPost;
+    
 }
     
     private function saveTargetColumn($targetColumnData){
         
 //        echo "<br>";
-//        print_r($targetColumnData);
+//        print_r("Passing Target Column :");
+//                echo "<br>";
+//
+//                print_r($targetColumnData);
+//
 //        die();
         foreach ($targetColumnData as $key =>$innerArray ){
             
             foreach($innerArray as $rcfm => $value ){
                 
-                preg_match('/(\d+)_(\w+)_(\d+)/', $rcfm, $matches);
+                preg_match('/(\d+)_(\w+)_(\d+)_(\d+)/', $rcfm, $matches);
                 $report_id = $matches[1];
                 $report_column = $matches[2];
                 $function_library_id = $matches[3];
-                
+                $action_id = $matches[4];
                 $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes([
                     'report_id' => $report_id,
                     'report_column' => $report_column,
                     'function_library_id' => $function_library_id,
-                   
+                    'action_id' => $action_id
+
                 ]);
                
                 if ($reportFunctionMapModel !== null) {
@@ -353,6 +370,12 @@ private function formTargetColumns($post){
     
     
     private function saveTargetColumnModel($innerArray, $report_function_mapping_id){
+        
+        print_r($innerArray);
+        echo '<br>';
+//                print_r($report_function_mapping_id);
+//                die();
+
         
         foreach ($innerArray as $key => $row) {
 
@@ -523,9 +546,11 @@ private function formTargetColumns($post){
         }
         if (!empty($targetColumns)) {
             return implode(',', $targetColumns); // Implode the array
+            print_r($targetColumns);
+            die();
         } else {
 //            echo "action parameters not found";
-            return null; // Or handle the error as per your requirement
+            return null; 
         }
     }
 
@@ -546,8 +571,8 @@ private function formTargetColumns($post){
             return implode(',', $actionParameter); // Implode the array
                
         } else {
-            echo "action parameters not found";
-            return null; // Or handle the error as per your requirement
+            echo "action parameters not found for ".$mappingId;
+            return null; 
         }
     }
 
@@ -579,7 +604,7 @@ private function formTargetColumns($post){
         $functionActionSyntax = $functionActionDetails['functionActionSyntax'];
         $actionName = $functionActionDetails['actionName'];
         $actionParameter = $this->fetchActionArg($mappingId);
-
+        
         $target_Column = $this->fetchTargetColumn($mappingId);
 
         $selector = $this->fetchSelector($uniqueModel);
@@ -595,6 +620,7 @@ var functionPara = $functionPara;
 var actionStyle = $actionName;
 var actionPara = [$actionParameter];
 SCRIPT;
+       
         $dynamicCode = trim($dynamicCode);
 
         $scriptToApply = <<<SCRIPT
@@ -603,17 +629,20 @@ $selector
 $dynamicCode
 $staticCode
 SCRIPT;
+        
+
         $scriptToApply = trim($scriptToApply);
 
         $appliedScripts[] = $scriptToApply; // Add the script to the array
+  
     }
-   // Convert the output into an array
+
 // Encode the array into JSON format
 $jsonResponse = json_encode($appliedScripts, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
-// Output the JSON response
 echo $jsonResponse;
-
+// print_r($jsonResponse);
+// die();
 
 
     

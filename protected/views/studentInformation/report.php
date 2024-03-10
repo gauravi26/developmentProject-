@@ -51,6 +51,9 @@ echo CHtml::hiddenField('actionId', $actionId);
             
         </table>
     </div>
+    <script>
+        
+    </script>
 <!--    <script>
         function checkEqualityOfTwo(value1, value2) {
             return value1 === value2;
