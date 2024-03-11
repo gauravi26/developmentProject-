@@ -1,5 +1,12 @@
 <style>
 
+   
+  
+ 
+  .span-19
+  {
+/*background-image: url("images/college.jpg");*/
+  }
 </style>
 
 <?php
@@ -163,7 +170,7 @@ $(document).ready(function() {
 
 
 
-<script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ApplythemeonformId.js"></script>
+<!--<script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ApplythemeonformId.js"></script>-->
 
 
   <script src="http://localhost/testproject/AjaxFiles/ApplyCSStoElements.js"></script>

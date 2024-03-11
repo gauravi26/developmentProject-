@@ -75,7 +75,7 @@
                         functionActionPara(index, count, $rowDiv);
                     });
 
-                    $rowDiv.append($reportColumn, '<br>', $hiddenInput, '<br>', $labelRow, '<br>', $reportRowInput, '<br>', $addButton, '<br>', '<br>'); // Append button to rowDiv
+                    $rowDiv.append($reportColumn, '<br>', $hiddenInput, '<br>', $labelRow, '<br>', $reportRowInput, '<br>', '<br>', $addButton, '<br>', '<br>'); // Append button to rowDiv
                     $rowDiv.insertBefore($functionAction.find('input[type="submit"]'));
 
                 });
@@ -104,7 +104,9 @@
                     .click(function(event) {
                         event.preventDefault();
                         functionDelete(index, count, $rowDiv);
-                    }).addClass('_' + index + '_' + count);
+                    }).addClass('_' + index + '_' + count).css({
+                        'margin-left': '10px'                       
+                    });
 
                     //Action Div 
             var $actionDiv = $('<div class="actionDiv"></div>').addClass('actionDiv_' + index + '_' + count);
@@ -115,13 +117,15 @@
             attachActionSelect(index, count, $actionDiv, actioncount);
         })
         .css({
-            'margin-left': '200px',
+            'margin-left': '300px',
+            'margin-top': '10px',
             'padding': '3px'
-        });
+        }).addClass('actionBtn_' + index + '_' + count);
             // Append the select element to the functionActionForm
             $rowDiv.append($functionLabel, $select);
             $rowDiv.append($actionDiv);
             $deleteButton.insertAfter($select);
+             
             // Calling function to attach event listener for function dropdown change event
             attachFunctionDropdownChangeEvent(index, count, $actionDiv);
             // Attach action select
@@ -188,14 +192,16 @@
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
                     // Create and append new labels
-                    var label = $('<label>').text(data[key]).addClass('funParaLable' + index + '_' + count);
+                   var label = $('<label>').text('Function Parameter: ' + data[key]).addClass('funParaLable' + index + '_' + count);
                     label.css({
-                        'margin-left': '20px',
-                        'padding': '5px'
-                                // Add more CSS properties as needed
+                        
+                        'padding-top': '6px',
+                        'padding-bottom': '6px',
+                       'font-weight': 'bold'
                     });
 
-                    // Append the label
+
+                 
                     label.insertBefore($actionDiv);
 
                     // Check if selectedFunctionType is 1 (Report Column)
@@ -212,17 +218,17 @@
                             placeholder: 'Function Argument',
                             required: 'required'
                         }).css({
-                            'margin-left': '20px', // Setting left margin
+                            'margin-left': '50px', // Setting left margin
                             'padding': '1px' // Setting padding
                         });
 
-                        $('<br>').addClass('created-br').insertBefore($actionDiv); // Add class to the created <br>
+                        $('<br>').addClass('br').insertBefore($actionDiv); // Add class to the created <br>
 
                         label.insertBefore($actionDiv);
-                        $('<br>').addClass('created-br').insertBefore($actionDiv); // Add class to the created <br>
+                        $('<br>').addClass('br').insertBefore($actionDiv); // Add class to the created <br>
 
                         input.insertBefore($actionDiv);
-                        $('<br>').addClass('created-br').insertBefore($actionDiv); // Add class to the created <br>
+                        $('<br>').addClass('br').insertBefore($actionDiv); // Add class to the created <br>
                     }
                 }
             }
@@ -266,13 +272,17 @@
                         Columncount++;
                       
                         fetchTargetColumns(index, count, Columncount, $actionDiv,actioncount);
-                    });
+                    }).css({
+                'margin-left': '200px',
+                'padding': '1px'
+
+            });
                
 
 //            console.log('hii');
             $actionDiv.append('<br><br>');
             $actionDiv.append($actionLable, $actionSelect);
-            $actionDiv.append('<br>');
+            $actionDiv.append('<br><br>');
             console.log("Action count just before passing : "+actioncount);
             attachActionParameter(index, count, $actionDiv,actioncount);
             $actionDiv.append($addTargetBtn);
@@ -324,8 +334,9 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
 
             for (var value in data) {
                 if (data.hasOwnProperty(value)) {
-                    var label = $('<label>').text(data[value]).attr('for', 'parameter_' + value).css({
-                        'margin-left': '150px',
+                    var label = $('<label>').text('Action Parameter: ' +  data[value]).attr('for', 'parameter_' + value).css({
+                        'margin-left': '200px',
+                        'font-weight':'bold',
                         'padding': '1px'
                     }).addClass('actionParaLable_' + index + '_' + count);
 
@@ -335,13 +346,18 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
                         name: 'action_parameter_' + index + '_' + count + '_' + value+'_'+actioncount,
                         placeholder: 'Action Argument',
                         class: 'actionPara'
+                    }).css({
+                        'margin-left': '200px',
+                        'padding': '1px'
                     });
                     
                    
 
                     // Append the label and input within the actionDiv
                     $actionDiv.append('<br><br>');
-                    $actionDiv.append(label, input);
+                    $actionDiv.append(label);
+                    $actionDiv.append('<br>');
+                    $actionDiv.append(input);
                     $actionDiv.append('<br>');
                     actionParamsCount++;
 
@@ -380,8 +396,8 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
 
         function handleTargetColumn(data, index, count, $actionDiv, Columncount,actioncount) {
             var label = $('<label style="font-style:bold;"><b>Target Column</b></label>').css({
-                'margin-left': '250px',
-                'padding': '1px'
+                'margin-left': '194px',
+                'padding': '5px'
 
             });
 
@@ -389,7 +405,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
                 name: 'target_column_' + index + '_' + count + '_' + Columncount+ '_' + actioncount,
                 class: 'targetColumn'
             }).append('<br>').css({
-                'margin-left': '250px',
+                'margin-left': '30px',
                 'padding': '1px'
 
             });
@@ -403,7 +419,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
                     $targetColumn.append('<option value="'+ columnName + '">' + columnName + '</option>');
                 });
             }
-            $actionDiv.append('<br><br>');
+            $actionDiv.append('<br>');
             $actionDiv.append(label, $targetColumn);
             $actionDiv.append('<br>');
         }
@@ -437,6 +453,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
 
         function handleReportColumn(data, Columndata, index, count, $actionDiv, selectedFunctionType) {
             $('.row').find('.reportColumnList').remove();
+            $('.row').find('.br').remove();
 
             var label = $('<label>').text(data[key]).addClass('funParaLable_' + index + '_' + count);
             label.css({

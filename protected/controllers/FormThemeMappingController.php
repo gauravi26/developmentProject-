@@ -331,7 +331,7 @@ public function actionFormingFinalTheme() {
 
 
     public function actionApplyThemeToForms($controllerId,$actionId) {
-//    $controllerId = 'departments';
+//    $controllerId = 'course';
 //    $actionId = 'create';
     
     // Find the theme mapping for the specified controller and action

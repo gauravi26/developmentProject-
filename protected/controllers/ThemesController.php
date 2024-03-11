@@ -222,6 +222,11 @@ class ThemesController extends Controller
         // Upload and rename the image
         if (move_uploaded_file($_FILES["file"]["tmp_name"], $newFilename)) {
             // Save the link to the background image in the themes table
+            $newFilename = 'url("'.$newFilename.'")';
+//            print_r($newFilename);
+//            die();
+            
+            
             $theme->background_image = $newFilename;
             
            }
@@ -230,7 +235,7 @@ class ThemesController extends Controller
     $selectedImage = $_POST['background_image_dropdown'];
     
     // You may need to adjust this based on how your images are stored
-    $theme->background_image = 'images/' . $selectedImage;
+    $theme->background_image = 'url("images/' . $selectedImage.'")';
 //    var_dump($theme);
 //    die();
 }

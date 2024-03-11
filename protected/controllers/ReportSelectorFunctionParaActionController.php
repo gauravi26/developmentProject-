@@ -66,9 +66,9 @@ class ReportSelectorFunctionParaActionController extends Controller {
             if (is_array($fieldValue)) {
                 // If $fieldValue is an array, print it using print_r or var_dump
                 echo "Field Name: $fieldName, Field Value: <br>";
-                echo "<pre>";
-                print_r($fieldValue);
-                echo "</pre>";
+//                echo "<pre>";
+//                print_r($fieldValue);
+//                echo "</pre>";
             } else {
                 // If $fieldValue is not an array, print it normally
                 echo "Field Name: $fieldName, Field Value: $fieldValue <br>";
@@ -81,7 +81,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
         if (isset($_POST['yt0'])) {
             $dynamicallyGeneratedFields = $model->getAttributes();
 
-            print_r($dynamicallyGeneratedFields);
+//            print_r($dynamicallyGeneratedFields);
 
             $model->attributes = $_POST['ReportSelectorFunctionParaAction'];
            die();
