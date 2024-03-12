@@ -7,9 +7,6 @@
  * @property integer $id
  * @property string $type
  * @property string $description
- *
- * The followings are the available model relations:
- * @property FunctionLibrary[] $functionLibraries
  */
 class FunctionType extends CActiveRecord
 {
@@ -46,7 +43,6 @@ class FunctionType extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'functionLibraries' => array(self::HAS_MANY, 'FunctionLibrary', 'function_type'),
 		);
 	}
 

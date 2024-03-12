@@ -15,6 +15,7 @@
  * The followings are the available model relations:
  * @property ActionArgumentMap[] $actionArgumentMaps
  * @property ActionType $actionType
+ * @property ReportSelectorFunctionParaAction[] $reportSelectorFunctionParaActions
  */
 class ActionLibrary extends CActiveRecord
 {
@@ -53,6 +54,7 @@ class ActionLibrary extends CActiveRecord
 		return array(
 			'actionArgumentMaps' => array(self::HAS_MANY, 'ActionArgumentMap', 'action_library_id'),
 			'actionType' => array(self::BELONGS_TO, 'ActionType', 'action_type'),
+			'reportSelectorFunctionParaActions' => array(self::HAS_MANY, 'ReportSelectorFunctionParaAction', 'action_id'),
 		);
 	}
 

@@ -116,6 +116,9 @@
                                 <li><a href="index.php?r=report/testReport">Testing</a></li>
                                 <li><a href="index.php?r=studentinformation/reportTest">Student Report</a></li>
                                 <li><a href="index.php?r=courses/reportTest">Course Report</a></li>
+                                <li><a href="index.php?r=actionLibrary/create">Add Action</a></li>
+                                <li><a href="index.php?r=functionLibrary/create">Add Function</a></li>
+
                             </ul>
                         </li>
                         <li><a href="index.php?r=themes/cssinput">Create Theme</a></li>

@@ -5,6 +5,7 @@
  *
  * The followings are the available columns in table 'function_library':
  * @property integer $id
+ * @property string $function_display_name
  * @property string $function_name
  * @property string $function_description
  * @property string $syntax
@@ -15,8 +16,7 @@
  * @property integer $button_function
  *
  * The followings are the available model relations:
- * @property FunctionArgumentMap[] $functionArgumentMaps
- * @property FunctionType $functionType
+ * @property ReportSelectorFunctionParaAction[] $reportSelectorFunctionParaActions
  */
 class FunctionLibrary extends CActiveRecord
 {
@@ -36,13 +36,14 @@ class FunctionLibrary extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('function_name, function_description, syntax, class_name, parameter_description, return_type, function_type, button_function', 'required'),
+			array('function_display_name, function_name, function_description, syntax, class_name, parameter_description, return_type, function_type', 'required'),
 			array('return_type, function_type, button_function', 'numerical', 'integerOnly'=>true),
+			array('function_display_name', 'length', 'max'=>255),
 			array('function_name', 'length', 'max'=>500),
 			array('class_name', 'length', 'max'=>200),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, function_name, function_description, syntax, class_name, parameter_description, return_type, function_type, button_function', 'safe', 'on'=>'search'),
+			array('id, function_display_name, function_name, function_description, syntax, class_name, parameter_description, return_type, function_type, button_function', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -54,8 +55,7 @@ class FunctionLibrary extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'functionArgumentMaps' => array(self::HAS_MANY, 'FunctionArgumentMap', 'function_library_id'),
-			'functionType' => array(self::BELONGS_TO, 'FunctionType', 'function_type'),
+			'reportSelectorFunctionParaActions' => array(self::HAS_MANY, 'ReportSelectorFunctionParaAction', 'function_library_id'),
 		);
 	}
 
@@ -66,6 +66,7 @@ class FunctionLibrary extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
+			'function_display_name' => 'Function Display Name',
 			'function_name' => 'Function Name',
 			'function_description' => 'Function Description',
 			'syntax' => 'Syntax',
@@ -96,6 +97,7 @@ class FunctionLibrary extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
+		$criteria->compare('function_display_name',$this->function_display_name,true);
 		$criteria->compare('function_name',$this->function_name,true);
 		$criteria->compare('function_description',$this->function_description,true);
 		$criteria->compare('syntax',$this->syntax,true);
