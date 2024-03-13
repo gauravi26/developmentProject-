@@ -290,7 +290,10 @@ public function actionFormingFinalTheme() {
     $generalTheme = $this->actionApplyGeneralTheme();
     $generalThemeArray = $generalTheme['general'];
     $general = $this->convertAssociativeArray($generalThemeArray);
-
+   print_r($generalThemeArray);
+   echo '<br><br>';
+    print_r($general);
+    echo '<br><br>';
     // Apply form theme
     $formTheme = $this->actionApplyThemeToForms($controllerId,$actionId);
 //    print_r($formTheme);
@@ -309,13 +312,6 @@ public function actionFormingFinalTheme() {
             }
         }
 
-        // Output results
-//        print_r($general);
-//        echo "<br><br>";
-//        echo "Count of general theme: " . count($general) . "<br><br>";
-//        print_r($final);
-//        echo "<br><br>";
-//        echo "Count of final theme: " . count($final) . "<br><br>";
                 echo json_encode(['css' => $final]);
             return;
     
@@ -340,7 +336,7 @@ public function actionFormingFinalTheme() {
         array(':controller' => $controllerId, ':action' => $actionId)
     );
 
-    if ($mapping !== null) { // If mapping found
+    if ($mapping !== null) { 
         $themeId = $mapping->theme_ID; // Get the theme ID from the mapping
 
         // Try to fetch the theme styles from RAM

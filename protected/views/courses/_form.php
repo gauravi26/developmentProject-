@@ -2,11 +2,7 @@
 
    
   
- 
-  .span-19
-  {
-/*background-image: url("images/college.jpg");*/
-  }
+/* h1 {font-size: 30px; color: #f5f5f5 !important} body {font-size: 18px; color: #497cf3; font-family: Courier New, Courier, monospace}*/
 </style>
 
 <?php

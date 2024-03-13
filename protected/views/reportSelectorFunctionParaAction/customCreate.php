@@ -36,11 +36,16 @@
         $(document).ready(function () {
             $('#report_id').on('change', function () {
                 var reportId = $(this).val();
+                console.log(reportId);
                 $.ajax({
                     url: 'index.php?r=ReportSelectorFunctionParaAction/query',
                     type: 'POST',
                     data: {reportId: reportId},
                     success: function (response) {
+                        console.log(response);
+                        
+                        
+                        
                         handleReportResponse(response.split(","));
                     },
                     error: function () {

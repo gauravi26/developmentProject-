@@ -270,14 +270,11 @@ input {
             <div id="h1" class="nested-tabcontent">
                 <label>Text Color :</label>
                 <button class="color-btn">Change Color</button>
-            <!--                                                   <input type="color" id="h1_color"  name="h1_color" data-text-type="h1"><br>-->
 
                 <label>Font Size :</label>
                 <input type="text" id="h1_font_size" name="h1_font_size" data-text-type="h1" > px<br> 
                 <input type="range" id="fontSizeSlider" >
 
-<!--                <input type="number" id="fontSizeInput" name="font_size" min="1" max="100" value="16">px<br>
-               <input type="range" id="fontSizeSlider" min="10" max="100" value="12">-->
 
                 <label for="h1_font_family">Font Family:</label>
                 <select name="h1_font_family" id="h1_font_family" data-text-type="h1">
@@ -318,7 +315,7 @@ input {
 
             <div id="h2" class="nested-tabcontent">
                 <p><label>Text Color:</label>
-                    <input type="color" id="h2_color"  name="h2_color" data-text-type="h2"><br>
+<!--                    <input type="color" id="h2_color"  name="h2_color" data-text-type="h2"><br>-->
                     <button class="color-btn">Change Color</button>
 
                     <label>Font Size :</label>
@@ -912,6 +909,7 @@ input {
 
                 colorButtons.forEach(function (button) {
                     button.addEventListener('click', function () {
+                        event.preventDefault();
                         var parentDiv = this.parentNode;
                         var divId = parentDiv.getAttribute('id');
 

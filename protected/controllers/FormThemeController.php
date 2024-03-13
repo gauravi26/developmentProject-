@@ -1,4 +1,4 @@
-$themeData = [];
+<!--$themeData = [];-->
 
 <?php
 
@@ -30,7 +30,7 @@ class FormThemeController extends Controller {
         return array(
             array('allow', // allow all users to perform 'index' and 'view' actions
                 'actions' => array('index', 'view', 'applyTheme', 'getThemes', 'apply_theme', 'inspectTheme', 'applyThemeForms', 'elementCssProperties', 'applyGeneralTheme',
-                    'textCSSProperties', 'customProperties', 'applyEffect', 'applyScript', 'generateScript', 'reportTheme', 'applyReportTheme'),
+                    'textCSSProperties', 'customProperties', 'applyEffect', 'applyScript', 'generateScript', 'reportTheme', 'applyReportTheme','specificTextProperties','finalTextStyles'),
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
@@ -326,6 +326,7 @@ class FormThemeController extends Controller {
 
         return $result;
     }
+    
 
     public function actionTextCSSProperties() {
         // Retrieve the current theme ID
@@ -367,16 +368,145 @@ class FormThemeController extends Controller {
 
                 $cssStyles[$textTypeName][$cssStyle] = $cssValue;
             }
-
-            // Convert CSS styles to a custom string format
-            $customCssString = $this->customFormatCss($cssStyles);
-
+              $response['generalStyle']=$cssStyles;
+            return $response;
+//            // Convert CSS styles to a custom string format
+//            $customCssString = $this->customFormatCss($cssStyles);
+//            $styleArray = $this->createTextStyleArray($cssStyles);
+//
+//            print_r($styleArray);
+//            die();
+            
             // Convert the custom CSS string to JSON and echo it
-            echo $customCssString;
+//            echo $customCssString;
         } else {
             echo "Current theme not found.";
         }
     }
+    
+    public function actionSpecificTextProperties($controllerId,$actionId){
+        
+       
+         $mapping = FormThemeMapping::model()->find(
+        'controller = :controller AND action = :action',
+        array(':controller' => $controllerId, ':action' => $actionId)
+    );
+
+    if ($mapping !== null) { 
+        $themeId = $mapping->theme_ID; // Get the theme ID from the mapping
+//        print_r($themeId);
+        $textCssProperties = ThemeTextCssPropertiesValue::model()->findAll(
+                    'theme_id = :themeId',
+                    array(':themeId' => $themeId)
+            );
+
+            // Fetch text types from the TextType model
+            $textTypes = TextType::model()->findAll(array('select' => 'id, text_type'));
+
+            // Create an associative array of text types for easy access
+            $textTypesMap = array();
+            foreach ($textTypes as $textType) {
+                $textTypesMap[$textType->id] = $textType->text_type;
+            }
+
+            // Group CSS properties by text type using the text type names
+            $cssStyles = array();
+
+            foreach ($textCssProperties as $cssProperty) {
+                $textTypeId = $cssProperty->text_type_id;
+                $textTypeName = isset($textTypesMap[$textTypeId]) ? $textTypesMap[$textTypeId] : "Unknown";
+
+                // Replace underscores with dashes in the CSS property name
+                $cssStyle = str_replace('_', '-', $cssProperty->text_CSS_Property);
+                $cssValue = $cssProperty->value;
+
+                // Add CSS property for the text type
+                if (!isset($cssStyles[$textTypeName])) {
+                    $cssStyles[$textTypeName] = array();
+                }
+
+                $cssStyles[$textTypeName][$cssStyle] = $cssValue;
+            }
+          $response['specificStyle']=$cssStyles;
+            return $response;
+
+
+        
+    }  
+        
+    }
+    
+      public function actionFinalTextStyles() {
+        $controllerId = isset($_GET['controller']) ? $_GET['controller'] : null;
+        $actionId = isset($_GET['action']) ? $_GET['action'] : null;
+        $specficTextStyle = $this->actionSpecificTextProperties($controllerId,$actionId);
+        $generalTextStyle = $this->actionTextCSSProperties();
+        $general= $this->convertAssociativeArray($generalTextStyle);
+        
+        
+        if (isset($specficTextStyle['specificStyle']) && $specficTextStyle['specificStyle'] !== NULL) {
+        $final = [];
+        foreach ($specficTextStyle['specificStyle'] as $property) {
+            $final[] = $property;
+        }
+        $final = $this->convertAssociativeArray($final);
+        print_r($final);
+        
+        // Merge general and form themes
+        foreach ($general as $key => $value) {
+            if (!isset($final[$key])) {
+                $final[$key] = $value;
+            }
+        }
+
+                echo json_encode(['css' => $final]);
+            return;
+    
+    } else {
+        
+//         print_r($general);
+//         print_r("hi");
+       
+        echo json_encode(['css' => $general]);
+         return ;
+    }
+        print_r($generalTextStyle);
+        echo "<br>";
+        print_r($specficTextStyle);
+        
+        
+        
+        
+    }
+    private function convertAssociativeArray($themeArray) {
+    $cssArray = [];
+
+    foreach ($themeArray as $value) {
+        // Split the string by ":"
+        
+        print_r($themeArray);
+        die();
+        $parts = explode(':', $value, 2);
+        if (count($parts) === 2) {
+            // Trim property and value
+            $property = trim($parts[0]);
+            $value = trim($parts[1]);
+            // Add to the CSS array
+            $cssArray[$property] = $value;
+        }
+    }
+    
+    foreach ($cssArray as $key => $value) {
+//                echo "Key: $key, Value: $value\n";
+                if ($value === '' || trim($value) === '' || is_null($value)) {
+                            unset($cssArray[$key]);
+
+                    //add code to remove remove key that are empty or null or with NO value
+                }
+            }
+
+    return $cssArray;
+}
 
     public function actionCustomProperties($controllerId, $actionId) {
         $form = ApplicationForms::model()->findByAttributes(array(

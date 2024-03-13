@@ -1,9 +1,15 @@
 $(document).ready(function() {
   $(window).on('load', function() {
+      
+    var controllerName = $("#controllerId").val();
+    var actionName = $("#actionId").val();
+    
     $.ajax({
-      url: 'index.php?r=formtheme/textCSSProperties',
+      url: 'index.php?r=formtheme/finalTextStyles',
       type: 'GET',
       dataType: 'text',
+              data: { controller: controllerName, action: actionName },
+
       success: function(response) {
         // Split the response into individual CSS rules
         var cssRules = response.split('}');

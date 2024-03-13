@@ -221,24 +221,19 @@ public function actionSave() {
 //        die();
                 foreach ($value as $key =>$record)
 //                 echo'<br>';
-//                print_r($key);
-                
-                  
-
-                preg_match('/(\d+)_(\w+)_(\d+)_(\d+)/', $key, $matches);
-//                 
-               
-                $report_id = $matches[1];
-              
-                                
-                $report_column = $matches[2];
-                
-                $function_library_id = $matches[3];
-           
-                $action_id = $matches[4];
-
-                
-//                die();
+//                print_r($value);
+//                
+//                 die(); 
+                    
+                    $arrKey= explode("_", $key);
+                     $report_id=$arrKey[0];
+                   
+                    $report_column=$arrKey[1];
+                    
+                    $function_library_id=$arrKey[2];
+                   
+                    $action_id=$arrKey[3];
+          
                 // Fetch the ID from the ReportSelectorFunctionParaAction model based on the key
                 $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes([
                     'report_id' => $report_id,
@@ -292,22 +287,31 @@ private function formTargetColumns($post){
     $targetColumsPost = []; // Initialize the array
     foreach($post as $key => $value) {
         if(strpos($key, 'target_column_') !== false) {
-            preg_match('/target_column_(\d+)_(\d+)_(\d+)_(\d+)/', $key, $matches);
-            $report_column_index = $matches[1];
-            $function_select_index = $matches[2];
-            $target_column_count = $matches[3];
-            $action_id_count = $matches[4];
+//            preg_match('/target_column_(\d+)_(\d+)_(\d+)_(\d+)/', $key, $matches);
+//            $report_column_index = $matches[1];
+//            $function_select_index = $matches[2];
+//            $target_column_count = $matches[3];
+//            $action_id_count = $matches[4];
+            
+            $arrKey= explode("_", $key);
+                     $report_column_index=$arrKey[2];                   
+                    $function_select_index=$arrKey[3];                    
+                    $target_column_count=$arrKey[4];                
+                    $action_id_count=$arrKey[5];
+                    
+//                print_r($key);
 //            echo "<br>";
 //            print_r($report_column_index); 
 //                 echo "<br>";
 //            print_r($function_select_index);
 //                      echo "<br>";
 //                               print_r($target_column_count);
-//   
+//  
 //            echo "<br>";
 //            print_r($action_id_count);
-////                echo "<br>";
-//                die();
+//                echo "<br>";
+//                  die();
+               
             $report_id = isset($post['report_id']) ? $post['report_id'] : null;
             $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
             $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
@@ -341,12 +345,12 @@ private function formTargetColumns($post){
         foreach ($targetColumnData as $key =>$innerArray ){
             
             foreach($innerArray as $rcfm => $value ){
-                
-                preg_match('/(\d+)_(\w+)_(\d+)_(\d+)/', $rcfm, $matches);
-                $report_id = $matches[1];
-                $report_column = $matches[2];
-                $function_library_id = $matches[3];
-                $action_id = $matches[4];
+                                
+                $arrKey= explode("_", $rcfm);
+                $report_id = $arrKey[0];
+                $report_column = $arrKey[1];
+                $function_library_id = $arrKey[2];
+                $action_id = $arrKey[3];
                 $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes([
                     'report_id' => $report_id,
                     'report_column' => $report_column,
@@ -753,30 +757,26 @@ SCRIPT;
 
 
     public function actionQuery() {
-        if (Yii::app()->request->isAjaxRequest) {
-            $selectedReportId = Yii::app()->request->getPost('reportId');
 
+            $selectedReportId = Yii::app()->request->getPost('reportId');
+           
+            
+            if ($selectedReportId!=null){
             $fetchQuery = Report::model()->findByPk($selectedReportId);
+//             print_r($selectedReportId);
+//            die();
             $reportColumns = $fetchQuery->reportColumn;
-            $db = Yii::app()->db;
 
             if ($fetchQuery !== null) {
-                $sql = $fetchQuery->query;
-                // Execute the query
-                $command = $db->createCommand($sql);
-                $result = $command->queryAll();
-                $columnNames = array_keys($result[0]);
-
-                // Print column names
                 echo $reportColumns;
             } else {
                 echo "Report not found";
                 echo "Error in running the query";
                 return; // Exit the function if the report is not found
-            }
-        } else {
-            echo "Error in Getting POST From Form ";
-        }
+            }}
+ 
+           
+
     }
 
     public function actionFetchParametersForFunction() {
