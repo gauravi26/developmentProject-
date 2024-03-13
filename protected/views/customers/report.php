@@ -52,9 +52,9 @@ echo CHtml::hiddenField('actionId', $actionId);
         </table>
     </div>
 </body>
-<!--                                 <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyFunctionActionScript.js"></script>
+                                 <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyFunctionActionScript.js"></script>
 
-<script>
+<!--<script>
 function stringCheck(value, checkStrings) {
     return checkStrings.includes(value);
 }

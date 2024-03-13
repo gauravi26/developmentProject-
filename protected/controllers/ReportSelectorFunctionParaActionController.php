@@ -105,11 +105,19 @@ private function fetchActionIds($post, $report_column_index, $function_select_in
     $action_ids = []; // Initialize an array to store unique action IDs
     foreach ($post as $action_key => $action_value) {
         if (strpos($action_key, "action_id_{$report_column_index}_{$function_select_index}_") === 0) {
+           
             preg_match('/action_id_' . $report_column_index . '_' . $function_select_index . '_(\d+)/', $action_key, $action_matches);
-            $action_count = $action_matches[1];
+           $arrKey= explode("_", $action_key);
+            $action_count = $arrKey[4];
+           
             $action_ids[] = isset($post["action_id_{$report_column_index}_{$function_select_index}_{$action_count}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}_{$action_count}"] : null;
         }
     }
+//    echo '<br>';
+//           echo 'Check : ';
+//            print_r($action_ids);
+//            echo '<br>';
+//            die();
     return $action_ids;
 }
 
@@ -127,14 +135,19 @@ public function actionSave() {
             // Check if the key contains 'function_argument_id_'
             if (strpos($key, 'function_argument_id_') !== false) {
                 // Extract the indices from the key
-                preg_match('/function_argument_id_(\d+)_(\d+)_(\d+)/', $key, $matches);
-                $report_column_index = $matches[1];
-                $function_select_index = $matches[2];
-
+                $arrKey= explode("_", $key);
+                $report_column_index = $arrKey[3];
+                $function_select_index = $arrKey[4];
+//                print_r($report_column_index );
+//                echo "<br>";
+//                
+//                print_r($function_select_index );
+//echo "<br>";
+//die();
                 // Build the corresponding column names
                 $report_id = isset($post['report_id']) ? $post['report_id'] : null;
-                $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
-                $report_row = isset($post["report_row_{$report_column_index}"]) ? $post["report_row_{$report_column_index}"] : null;
+    $report_column = isset($post["report_column_{$report_column_index}"]) ? trim($post["report_column_{$report_column_index}"]) : null;
+           $report_row = isset($post["report_row_{$report_column_index}"]) ? $post["report_row_{$report_column_index}"] : null;
                 $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
 
                 $action_ids = $this->fetchActionIds($post, $report_column_index, $function_select_index);
@@ -184,13 +197,22 @@ public function actionSave() {
         foreach ($post as $key => $value) {
             if (strpos($key, 'action_parameter_') !== false) {
 
-                preg_match('/action_parameter_(\d+)_(\d+)_(\d+)_(\d+)/', $key, $matches);
-                $report_column_index = $matches[1];
-                $function_select_index = $matches[2];
-                $action_argument_id_match = $matches[3];
-                $action_id_count= $matches[4];
-                
-
+                $arrKey= explode("_", $key);
+                $report_column_index = $arrKey[2];
+               
+                $function_select_index = $arrKey[3];
+                $action_argument_id_match = $arrKey[4];
+                $action_id_count= $arrKey[5];
+//                 echo "<br>";
+//                 print_r($report_column_index);
+//                echo "<br>";
+//                print_r($function_select_index);
+//                
+//                echo "<br>";
+//                print_r($action_argument_id_match);
+//                echo "<br>";
+//print_r($action_id_count);
+//die();
                 $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
                 $action_id = isset($post["action_id_{$report_column_index}_{$function_select_index}_{$action_id_count}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}_{$action_id_count}"] : null;
                 $action_argument_id = $action_argument_id_match;
@@ -209,6 +231,7 @@ public function actionSave() {
             }
         }
 //        print_r($actionParaValue);
+//        die();
         return [$actionParaValue];
     }
 
@@ -217,23 +240,34 @@ public function actionSave() {
         
         foreach ($actionArgRecord as $key => $innerArray) {
             foreach ($innerArray as $rcfam => $value) {
-//                print_r($value);
-//        die();
+              
                 foreach ($value as $key =>$record)
-//                 echo'<br>';
-//                print_r($value);
-//                
-//                 die(); 
+                    print_r($key);
+//                die();
+                 echo'<br>';
+ 
                     
                     $arrKey= explode("_", $key);
+                    $arrKey = array_map('trim', $arrKey);
+
                      $report_id=$arrKey[0];
-                   
+                      print_r($report_id);
+                      echo '<br>';
+                      
                     $report_column=$arrKey[1];
-                    
+                     print_r($report_column);
+                      echo '<br>';
+                      
+                     echo '<br>';
                     $function_library_id=$arrKey[2];
-                   
+                    print_r($function_library_id);
+                    echo '<br>';
+                      echo '<br>';
                     $action_id=$arrKey[3];
-          
+                    echo 'action id in action para';
+          print_r($action_id);
+
+//                die();
                 // Fetch the ID from the ReportSelectorFunctionParaAction model based on the key
                 $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes([
                     'report_id' => $report_id,
@@ -241,14 +275,14 @@ public function actionSave() {
                     'function_library_id' => $function_library_id,
                     'action_id' => $action_id
                 ]);
-//                print_r($reportFunctionMapModel);
+//               print_r($reportFunctionMapModel);
 //                die();
                 if ($reportFunctionMapModel !== null) {
                     $report_function_mapping_id = $reportFunctionMapModel->id;
                      $count++; 
                     $this->saveActionParameters($value, $report_function_mapping_id,$count);
                 } else {
-                    echo "Function ID not found in Report Function Mapping.";
+                    echo "Function ID not found in Report Function Action Mapping.";
                 }
             }
         }
@@ -287,11 +321,7 @@ private function formTargetColumns($post){
     $targetColumsPost = []; // Initialize the array
     foreach($post as $key => $value) {
         if(strpos($key, 'target_column_') !== false) {
-//            preg_match('/target_column_(\d+)_(\d+)_(\d+)_(\d+)/', $key, $matches);
-//            $report_column_index = $matches[1];
-//            $function_select_index = $matches[2];
-//            $target_column_count = $matches[3];
-//            $action_id_count = $matches[4];
+
             
             $arrKey= explode("_", $key);
                      $report_column_index=$arrKey[2];                   
@@ -550,8 +580,8 @@ private function formTargetColumns($post){
         }
         if (!empty($targetColumns)) {
             return implode(',', $targetColumns); // Implode the array
-            print_r($targetColumns);
-            die();
+//            print_r($targetColumns);
+//            die();
         } else {
 //            echo "action parameters not found";
             return null; 

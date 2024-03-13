@@ -3,7 +3,7 @@ $controller = Yii::app()->getController();
 $actionId = $controller->getAction()->getId();
 $controllerId = $controller->getId();
 
-$columns = array('student_id', 'first_name', 'last_name', 'percentage', 'marks', 'course_id', 'academic_status');
+$columns = array('student_id', 'firstName', 'lastName', 'percentage', 'marks', 'courseId', 'academicStatus');
 $StudentInformation = StudentInformation::model()->findAll(); // Assuming StudentInformation is your model
 
 echo CHtml::hiddenField('controllerId', $controllerId);
