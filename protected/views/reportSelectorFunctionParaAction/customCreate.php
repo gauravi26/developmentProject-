@@ -157,6 +157,7 @@
                 $typeOfFunctionPara.append('<option value="">Select Argument Type</option>');
                 $typeOfFunctionPara.append('<option value="0">Static Parameter</option>');
                 $typeOfFunctionPara.append('<option value="1">Report Column</option>');
+                $typeOfFunctionPara.append('<option value="2">Null Parameters</option>');
 
                 // Append the function type dropdown after the function select dropdown
                 $(this).after($typeOfFunctionPara);
@@ -214,7 +215,30 @@
                         // Call fetchReportColumns and handle report columns
                         fetchReportColumns(data, index, count, $actionDiv, selectedFunctionType, key);
 
-                    } else {
+                    }  else if (selectedFunctionType === '2'){
+                         var input = $('<input>').attr({
+                            type: 'text',
+                            id: 'parameter_' + key,
+                            name: 'function_argument_id_' + index + '_' + count + '_' + key,
+                            placeholder: 'NULL',
+                            value: 'NULL'
+//                          disabled: 'disabled'
+                        }).css({
+                            'margin-left': '50px', // Setting left margin
+                            'padding': '1px' // Setting padding
+                        });
+
+                        $('<br>').addClass('br').insertBefore($actionDiv); // Add class to the created <br>
+
+                        label.insertBefore($actionDiv);
+                        $('<br>').addClass('br').insertBefore($actionDiv); // Add class to the created <br>
+
+                        input.insertBefore($actionDiv);
+                        $('<br>').addClass('br').insertBefore($actionDiv); // Add class to the created <br>
+                         
+                        
+                    }
+                    else {
                         // Create and append input fields
                         var input = $('<input>').attr({
                             type: 'text',

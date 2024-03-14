@@ -31,7 +31,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('create', 'update', 'applyfunctionAction', 'query', 'fetchParametersForFunction',
-                    'fetchParametersForAction', 'customCreate', 'save','fetchReportColumns','customDelete','mapping'),
+                    'fetchParametersForAction', 'customCreate', 'save', 'fetchReportColumns', 'customDelete', 'mapping'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -84,7 +84,7 @@ class ReportSelectorFunctionParaActionController extends Controller {
 //            print_r($dynamicallyGeneratedFields);
 
             $model->attributes = $_POST['ReportSelectorFunctionParaAction'];
-           die();
+            die();
             // $scriptToCall =  $this->scriptToCall($model);
             $model->script_to_call = $this->scriptToCall($model);
             if ($model->save())
@@ -101,28 +101,28 @@ class ReportSelectorFunctionParaActionController extends Controller {
 
         $this->render('customCreate');
     }
-private function fetchActionIds($post, $report_column_index, $function_select_index){
-    $action_ids = []; // Initialize an array to store unique action IDs
-    foreach ($post as $action_key => $action_value) {
-        if (strpos($action_key, "action_id_{$report_column_index}_{$function_select_index}_") === 0) {
-           
-            preg_match('/action_id_' . $report_column_index . '_' . $function_select_index . '_(\d+)/', $action_key, $action_matches);
-           $arrKey= explode("_", $action_key);
-            $action_count = $arrKey[4];
-           
-            $action_ids[] = isset($post["action_id_{$report_column_index}_{$function_select_index}_{$action_count}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}_{$action_count}"] : null;
+
+    private function fetchActionIds($post, $report_column_index, $function_select_index) {
+        $action_ids = []; // Initialize an array to store unique action IDs
+        foreach ($post as $action_key => $action_value) {
+            if (strpos($action_key, "action_id_{$report_column_index}_{$function_select_index}_") === 0) {
+
+                preg_match('/action_id_' . $report_column_index . '_' . $function_select_index . '_(\d+)/', $action_key, $action_matches);
+                $arrKey = explode("_", $action_key);
+                $action_count = $arrKey[4];
+
+                $action_ids[] = isset($post["action_id_{$report_column_index}_{$function_select_index}_{$action_count}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}_{$action_count}"] : null;
+            }
         }
-    }
 //    echo '<br>';
 //           echo 'Check : ';
 //            print_r($action_ids);
 //            echo '<br>';
 //            die();
-    return $action_ids;
-}
+        return $action_ids;
+    }
 
-
-public function actionSave() {
+    public function actionSave() {
         $post = $_POST;
         print_r($post);
         echo '<br>';
@@ -135,7 +135,11 @@ public function actionSave() {
             // Check if the key contains 'function_argument_id_'
             if (strpos($key, 'function_argument_id_') !== false) {
                 // Extract the indices from the key
-                $arrKey= explode("_", $key);
+//                preg_match('/function_argument_id_(\d+)_(\d+)_(\d+)/', $key, $matches);
+               
+                
+                $arrKey = explode("_", $key);
+                
                 $report_column_index = $arrKey[3];
                 $function_select_index = $arrKey[4];
 //                print_r($report_column_index );
@@ -146,8 +150,8 @@ public function actionSave() {
 //die();
                 // Build the corresponding column names
                 $report_id = isset($post['report_id']) ? $post['report_id'] : null;
-    $report_column = isset($post["report_column_{$report_column_index}"]) ? trim($post["report_column_{$report_column_index}"]) : null;
-           $report_row = isset($post["report_row_{$report_column_index}"]) ? $post["report_row_{$report_column_index}"] : null;
+                $report_column = isset($post["report_column_{$report_column_index}"]) ? trim($post["report_column_{$report_column_index}"]) : null;
+                $report_row = isset($post["report_row_{$report_column_index}"]) ? $post["report_row_{$report_column_index}"] : null;
                 $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
 
                 $action_ids = $this->fetchActionIds($post, $report_column_index, $function_select_index);
@@ -155,17 +159,16 @@ public function actionSave() {
 //                die();
 
                 $function_library_parameter = $value;
-                 foreach ($action_ids as $action_id) {
-                $data[] = [
-                    'report_id' => $report_id,
-                    'report_column' => $report_column,
-                    'report_row' => $report_row,
-                    'function_library_id' => $function_library_id,
-                    'function_library_parameter' => $function_library_parameter,
-                    'action_id' => $action_id
-                ];
-            }
-               
+                foreach ($action_ids as $action_id) {
+                    $data[] = [
+                        'report_id' => $report_id,
+                        'report_column' => $report_column,
+                        'report_row' => $report_row,
+                        'function_library_id' => $function_library_id,
+                        'function_library_parameter' => $function_library_parameter,
+                        'action_id' => $action_id
+                    ];
+                }
             }
         }
 //    print_r($data);
@@ -189,20 +192,19 @@ public function actionSave() {
         $actionSaveOut = $this->saveActionParaValues($actionArgRecord);
         $targetColumnSaveout = $this->saveTargetColumn($targetColumnData);
 //        print_r($actionSaveOut);
-
     }
 
     private function formActionArgumentArr($post) {
-       
+ $actionParaValue = [];
         foreach ($post as $key => $value) {
             if (strpos($key, 'action_parameter_') !== false) {
 
-                $arrKey= explode("_", $key);
+                $arrKey = explode("_", $key);
                 $report_column_index = $arrKey[2];
-               
+
                 $function_select_index = $arrKey[3];
                 $action_argument_id_match = $arrKey[4];
-                $action_id_count= $arrKey[5];
+                $action_id_count = $arrKey[5];
 //                 echo "<br>";
 //                 print_r($report_column_index);
 //                echo "<br>";
@@ -230,44 +232,54 @@ public function actionSave() {
                 ];
             }
         }
+        return [$actionParaValue];
 //        print_r($actionParaValue);
 //        die();
-        return [$actionParaValue];
+        
     }
 
     private function saveActionParaValues($actionArgRecord) {
-        $count=0;
-        
+        $count = 0;
+$matches =[];
         foreach ($actionArgRecord as $key => $innerArray) {
             foreach ($innerArray as $rcfam => $value) {
-              
-                foreach ($value as $key =>$record)
+
+                foreach ($value as $key => $record)
                     print_r($key);
 //                die();
-                 echo'<br>';
- 
-                    
-                    $arrKey= explode("_", $key);
-                    $arrKey = array_map('trim', $arrKey);
+                echo'<br>';
+                preg_match('/(\d+)_(\w+)_(\d+)_(\d+)/', $key, $matches);
+                $report_column = $matches[2];
+                echo '<br>';
+                echo 'report column in action para ';
+                 print_r($report_column);
+                 echo '<br>';
+                 
+                
+                $arrKey = explode("_", $key);
+                $arrKey = array_map('trim', $arrKey);
 
-                     $report_id=$arrKey[0];
-                      print_r($report_id);
-                      echo '<br>';
-                      
-                    $report_column=$arrKey[1];
-                     print_r($report_column);
-                      echo '<br>';
-                      
-                     echo '<br>';
-                    $function_library_id=$arrKey[2];
-                    print_r($function_library_id);
-                    echo '<br>';
-                      echo '<br>';
-                    $action_id=$arrKey[3];
-                    echo 'action id in action para';
-          print_r($action_id);
+                $report_id = $arrKey[0];
+              echo 'report id in action para ';
 
-//                die();
+                print_r($report_id);
+                echo '<br>';
+
+//                $report_column = $arrKey[1];
+               
+//
+//                echo '<br>';
+                $function_library_id = $arrKey[3];
+                                echo 'function id in action para ';
+
+                print_r($function_library_id);
+                echo '<br>';
+//                echo '<br>';
+                $action_id = $arrKey[4];
+                echo 'action id in action para ';
+              print_r($action_id);
+
+                die();
                 // Fetch the ID from the ReportSelectorFunctionParaAction model based on the key
                 $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes([
                     'report_id' => $report_id,
@@ -279,8 +291,8 @@ public function actionSave() {
 //                die();
                 if ($reportFunctionMapModel !== null) {
                     $report_function_mapping_id = $reportFunctionMapModel->id;
-                     $count++; 
-                    $this->saveActionParameters($value, $report_function_mapping_id,$count);
+                    $count++;
+                    $this->saveActionParameters($value, $report_function_mapping_id, $count);
                 } else {
                     echo "Function ID not found in Report Function Action Mapping.";
                 }
@@ -288,15 +300,15 @@ public function actionSave() {
         }
     }
 
-    private function saveActionParameters($value, $report_function_mapping_id,$count) {
-          
+    private function saveActionParameters($value, $report_function_mapping_id, $count) {
+
 //          die();
 //        print_r($report_function_mapping_id);
-        
+
         foreach ($value as $key => $row) {
 
-      
-         
+
+
             $newModel = new ReportFunctionMappingActionValue; // Create a new model instance
             // Assign attributes from the current row to the model
             $newModel->action_id = $row['action_id'];
@@ -304,7 +316,6 @@ public function actionSave() {
             $newModel->action_parameter_value = $row['action_parameter_value'];
             $newModel->report_function_mapping_id = $report_function_mapping_id;
 
-              
 //        die();
             // Attempt to save the model
             if ($newModel->save()) {
@@ -314,21 +325,21 @@ public function actionSave() {
                 print_r($row); // Print the row causing the error
                 print_r($newModel->getErrors()); // Print any validation errors if save fails
             }
-        
-    }}
-    
-private function formTargetColumns($post){
-    $targetColumsPost = []; // Initialize the array
-    foreach($post as $key => $value) {
-        if(strpos($key, 'target_column_') !== false) {
+        }
+    }
 
-            
-            $arrKey= explode("_", $key);
-                     $report_column_index=$arrKey[2];                   
-                    $function_select_index=$arrKey[3];                    
-                    $target_column_count=$arrKey[4];                
-                    $action_id_count=$arrKey[5];
-                    
+    private function formTargetColumns($post) {
+        $targetColumsPost = []; // Initialize the array
+        foreach ($post as $key => $value) {
+            if (strpos($key, 'target_column_') !== false) {
+
+
+                $arrKey = explode("_", $key);
+                $report_column_index = $arrKey[2];
+                $function_select_index = $arrKey[3];
+                $target_column_count = $arrKey[4];
+                $action_id_count = $arrKey[5];
+
 //                print_r($key);
 //            echo "<br>";
 //            print_r($report_column_index); 
@@ -341,30 +352,29 @@ private function formTargetColumns($post){
 //            print_r($action_id_count);
 //                echo "<br>";
 //                  die();
-               
-            $report_id = isset($post['report_id']) ? $post['report_id'] : null;
-            $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
-            $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
-            $action_id = isset($post["action_id_{$report_column_index}_{$function_select_index}_{$action_id_count}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}_{$action_id_count}"] : null;
-            $targetColumnInput = isset($post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}_{$action_id_count}"]) ? $post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}_{$action_id_count}"] : null;
+
+                $report_id = isset($post['report_id']) ? $post['report_id'] : null;
+                $report_column = isset($post["report_column_{$report_column_index}"]) ? $post["report_column_{$report_column_index}"] : null;
+                $function_library_id = isset($post["function_select_{$report_column_index}_{$function_select_index}"]) ? $post["function_select_{$report_column_index}_{$function_select_index}"] : null;
+                $action_id = isset($post["action_id_{$report_column_index}_{$function_select_index}_{$action_id_count}"]) ? $post["action_id_{$report_column_index}_{$function_select_index}_{$action_id_count}"] : null;
+                $targetColumnInput = isset($post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}_{$action_id_count}"]) ? $post["target_column_{$report_column_index}_{$function_select_index}_{$target_column_count}_{$action_id_count}"] : null;
 //             print_r($targetColumnInput);
 //             die();
-            
-            $rcfma = "{$report_id}_{$report_column}_{$function_library_id}_{$action_id}";
 
-            $targetColumsPost[] = [
-                $rcfma => [
-                    'target_column' => $targetColumnInput
-                ]
-            ];
+                $rcfma = "{$report_id}_{$report_column}_{$function_library_id}_{$action_id}";
+
+                $targetColumsPost[] = [
+                    $rcfma => [
+                        'target_column' => $targetColumnInput
+                    ]
+                ];
+            }
         }
+        return $targetColumsPost;
     }
-    return $targetColumsPost;
-    
-}
-    
-    private function saveTargetColumn($targetColumnData){
-        
+
+    private function saveTargetColumn($targetColumnData) {
+
 //        echo "<br>";
 //        print_r("Passing Target Column :");
 //                echo "<br>";
@@ -372,11 +382,11 @@ private function formTargetColumns($post){
 //                print_r($targetColumnData);
 //
 //        die();
-        foreach ($targetColumnData as $key =>$innerArray ){
-            
-            foreach($innerArray as $rcfm => $value ){
-                                
-                $arrKey= explode("_", $rcfm);
+        foreach ($targetColumnData as $key => $innerArray) {
+
+            foreach ($innerArray as $rcfm => $value) {
+
+                $arrKey = explode("_", $rcfm);
                 $report_id = $arrKey[0];
                 $report_column = $arrKey[1];
                 $function_library_id = $arrKey[2];
@@ -386,9 +396,8 @@ private function formTargetColumns($post){
                     'report_column' => $report_column,
                     'function_library_id' => $function_library_id,
                     'action_id' => $action_id
-
                 ]);
-               
+
                 if ($reportFunctionMapModel !== null) {
                     $report_function_mapping_id = $reportFunctionMapModel->id;
 
@@ -398,19 +407,16 @@ private function formTargetColumns($post){
                 }
             }
         }
-        
-        
     }
-    
-    
-    private function saveTargetColumnModel($innerArray, $report_function_mapping_id){
-        
+
+    private function saveTargetColumnModel($innerArray, $report_function_mapping_id) {
+
         print_r($innerArray);
         echo '<br>';
 //                print_r($report_function_mapping_id);
 //                die();
 
-        
+
         foreach ($innerArray as $key => $row) {
 
 //        print_r($row);
@@ -419,7 +425,7 @@ private function formTargetColumns($post){
             $newModel = new TargetColumn(); // Create a new model instance
             // Assign attributes from the current row to the model
             $newModel->target_column = $row['target_column'];
-             
+
             $newModel->report_function_mapping_id = $report_function_mapping_id;
 //           print_r($newModel);
 //            die();
@@ -432,9 +438,6 @@ private function formTargetColumns($post){
                 print_r($newModel->getErrors()); // Print any validation errors if save fails
             }
         }
-        
-        
-        
     }
 
 //***************************************************************************************************************************************************************
@@ -479,76 +482,7 @@ private function formTargetColumns($post){
         ];
     }
 
-//    private function scriptToCall($newModel) {
-//
-//        // Call fetchFunctionAction
-//        $functionActionDetails = $this->fetchFunctionAction($newModel);
-//
-//        // Extract values from the returned array
-//        $reportColumn = $functionActionDetails['reportColumn'];
-//        $functionPara = $functionActionDetails['functionPara'];
-//        $functionName = $functionActionDetails['functionName'];
-//        $functionActionSyntax = $functionActionDetails['functionActionSyntax'];
-//        $actionName = $functionActionDetails['actionName'];
-//
-//        $actionParameter = []; // Initialize the array
-//// Append the string element to the array
-//        $actionParameter[] = '$actionParameter';
-//
-//        foreach ($actionParameter as $param) {
-//            // Check if it's numeric
-//            if (is_numeric($param)) {
-//                $actionParameterStr[] = $param;
-//            } else {
-//                // If it's a string, wrap it in single quotes
-//                $actionParameterStr[] = "'" . $param . "'";
-//            }
-//        }
-//
-//        $actionParameter = implode(',', $actionParameterStr); // Implode the array
-//
-//        $selector = $this->fetchSelector($newModel);
-//        if ($selector != null) {
-//
-//
-//
-//            $selector = str_replace('column_Name', $reportColumn, $selector);
-//            $selector = str_replace('functionParameterValue', $functionPara, $selector);
-////     print_r($selector);
-////
-////    die();
-//            $selector = str_replace('function_Name', $functionName, $selector);
-//
-//            $selector = $functionActionSyntax . " " . $selector;
-//
-//            $executionCode = "targetColumnNames.forEach(function(columnName) {
-//    var data = fetchData({ selectorType: selectorType, selectorValue: columnName });
-//    if (data !== null) {
-//        data.values.forEach(function(value, index) {
-//            var functionResult = conditionFunction(value, functionParameter);
-//            if (functionResult == true) {
-//                console.log(functionResult);
-//                var element = data.elements[index];
-//                " . $actionName . "(element, " . $actionParameter . ");
-//            } else {
-//               
-//            }
-//        });
-//    } else {
-//        console.log(\"Unable to fetch values for the '\" + columnName + \"' column or no values in the column.\");
-//    }
-//});";
-//
-//            $executionCode = nl2br($executionCode);
-//
-//            $scriptToCall = $selector . "  " . $executionCode;
-//
-//            return $scriptToCall;
-//        } else {
-//
-//            echo "Selector not found";
-//        }
-//    }
+
 
     private function fetchSelector($model) {
 
@@ -584,14 +518,14 @@ private function formTargetColumns($post){
 //            die();
         } else {
 //            echo "action parameters not found";
-            return null; 
+            return null;
         }
     }
 
     private function fetchActionArg($mappingId) {
         $actionParaModels = ReportFunctionMappingActionValue::model()->findAllByAttributes(['report_function_mapping_id' => $mappingId]);
         $actionParameter = []; // Initialize the array
-       
+
         foreach ($actionParaModels as $actionParaModel) {
             $actionParaValue = $actionParaModel->action_parameter_value;
 
@@ -599,53 +533,53 @@ private function formTargetColumns($post){
             $actionParameter[] = is_numeric($actionParaValue) ? $actionParaValue : "'" . $actionParaValue . "'";
 //       print_r($actionParameter);
 //               die();
-            }
+        }
 
         if (!empty($actionParameter)) {
             return implode(',', $actionParameter); // Implode the array
-               
         } else {
-            echo "action parameters not found for ".$mappingId;
-            return null; 
+            echo "action parameters not found for " . $mappingId;
+            return null;
         }
     }
 
     private function getUniqueModels($objectsArray) {
         $uniqueObjects = [];
         foreach ($objectsArray as $object) {
-            $key = $object->function_library_id . '_' . $object->report_column. '_' . $object->action_id;
+            $key = $object->function_library_id . '_' . $object->report_column . '_' . $object->action_id;
             if (!isset($uniqueObjects[$key])) {
                 $uniqueObjects[$key] = $object;
             }
         }
         return array_values($uniqueObjects);
     }
+
 //**********************************************************************************************
     function actionApplyfunctionAction($reportId) {
-    $fetchReportModels = ReportSelectorFunctionParaAction::model()->findAllByAttributes(['report_id' => $reportId]);
-    $uniqueModels = $this->getUniqueModels($fetchReportModels);
+        $fetchReportModels = ReportSelectorFunctionParaAction::model()->findAllByAttributes(['report_id' => $reportId]);
+        $uniqueModels = $this->getUniqueModels($fetchReportModels);
 //   print_r($uniqueModels);
 //   die();
-   
-    $appliedScripts = []; // Initialize an empty array to hold the JavaScript scripts
 
-    foreach ($uniqueModels as $uniqueModel) {
-        $mappingId = $uniqueModel->id;
-        $functionActionDetails = $this->fetchFunctionAction($uniqueModel);
-        $reportColumn = $functionActionDetails['reportColumn'];
-        $functionPara = $functionActionDetails['functionPara'];
-        $functionName = $functionActionDetails['functionName'];
-        $functionActionSyntax = $functionActionDetails['functionActionSyntax'];
-        $actionName = $functionActionDetails['actionName'];
-        $actionParameter = $this->fetchActionArg($mappingId);
-        
-        $target_Column = $this->fetchTargetColumn($mappingId);
+        $appliedScripts = []; // Initialize an empty array to hold the JavaScript scripts
 
-        $selector = $this->fetchSelector($uniqueModel);
+        foreach ($uniqueModels as $uniqueModel) {
+            $mappingId = $uniqueModel->id;
+            $functionActionDetails = $this->fetchFunctionAction($uniqueModel);
+            $reportColumn = $functionActionDetails['reportColumn'];
+            $functionPara = $functionActionDetails['functionPara'];
+            $functionName = $functionActionDetails['functionName'];
+            $functionActionSyntax = $functionActionDetails['functionActionSyntax'];
+            $actionName = $functionActionDetails['actionName'];
+            $actionParameter = $this->fetchActionArg($mappingId);
 
-        $staticCode = $this->executionCode();
+            $target_Column = $this->fetchTargetColumn($mappingId);
 
-        $dynamicCode = <<<SCRIPT
+            $selector = $this->fetchSelector($uniqueModel);
+
+            $staticCode = $this->executionCode();
+
+            $dynamicCode = <<<SCRIPT
 var selectorType = 'reportColumn';
 var reportColumnName = ['$reportColumn'];
 var targetColumnNames = [$target_Column];
@@ -654,34 +588,28 @@ var functionPara = $functionPara;
 var actionStyle = $actionName;
 var actionPara = [$actionParameter];
 SCRIPT;
-       
-        $dynamicCode = trim($dynamicCode);
 
-        $scriptToApply = <<<SCRIPT
+            $dynamicCode = trim($dynamicCode);
+
+            $scriptToApply = <<<SCRIPT
 $functionActionSyntax
 $selector
 $dynamicCode
 $staticCode
 SCRIPT;
-        
 
-        $scriptToApply = trim($scriptToApply);
+            $scriptToApply = trim($scriptToApply);
 
-        $appliedScripts[] = $scriptToApply; // Add the script to the array
-  
-    }
+            $appliedScripts[] = $scriptToApply; // Add the script to the array
+        }
 
 // Encode the array into JSON format
-$jsonResponse = json_encode($appliedScripts, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $jsonResponse = json_encode($appliedScripts, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
-echo $jsonResponse;
+        echo $jsonResponse;
 // print_r($jsonResponse);
 // die();
-
-
-    
-}
-
+    }
 
     private function executionCode() {
         $static_code = <<<SCRIPT
@@ -788,10 +716,9 @@ SCRIPT;
 
     public function actionQuery() {
 
-            $selectedReportId = Yii::app()->request->getPost('reportId');
-           
-            
-            if ($selectedReportId!=null){
+        $selectedReportId = Yii::app()->request->getPost('reportId');
+
+        if ($selectedReportId != null) {
             $fetchQuery = Report::model()->findByPk($selectedReportId);
 //             print_r($selectedReportId);
 //            die();
@@ -803,10 +730,8 @@ SCRIPT;
                 echo "Report not found";
                 echo "Error in running the query";
                 return; // Exit the function if the report is not found
-            }}
- 
-           
-
+            }
+        }
     }
 
     public function actionFetchParametersForFunction() {
@@ -845,19 +770,17 @@ SCRIPT;
         }
         echo json_encode($actionParameterDisplayNames); // Return the array of display names
     }
-    
-    public function actionFetchReportColumns() {
-        
-     $selectedReportId = Yii::app()->request->getPost('selectReportId');
-//     $selectedReportId = 6;
-     $reportModel = Report::model()->findByPk($selectedReportId);
-     $reportColumnStr = $reportModel->reportColumn;
-     $elements = explode(",",$reportColumnStr);
-     $reportColumn[$selectedReportId] = $elements;
-//     print_r($reportColumn);
-     echo json_encode($reportColumn);
 
-       
+    public function actionFetchReportColumns() {
+
+        $selectedReportId = Yii::app()->request->getPost('selectReportId');
+//     $selectedReportId = 6;
+        $reportModel = Report::model()->findByPk($selectedReportId);
+        $reportColumnStr = $reportModel->reportColumn;
+        $elements = explode(",", $reportColumnStr);
+        $reportColumn[$selectedReportId] = $elements;
+//     print_r($reportColumn);
+        echo json_encode($reportColumn);
     }
 
 //***************************************************************************************************
@@ -947,29 +870,28 @@ SCRIPT;
         }
     }
 
-    public function actionCustomDelete(){
-        
+    public function actionCustomDelete() {
+
         $this->render('customDelete');
-        
     }
-    public function actionMapping(){
-        
-            $reportId = Yii::app()->request->getPost('reportId');
-             if($reportId!=null){
-        
-        $reportFAMappingModel = ReportSelectorFunctionParaAction::model()->findAllByAttributes(array('report_id'=>$reportId));
-        
-        $id = array();
-        foreach($reportFAMappingModel as $model){
-            $ids[]=$model->id;
-            
-        }
+
+    public function actionMapping() {
+
+        $reportId = Yii::app()->request->getPost('reportId');
+        if ($reportId != null) {
+
+            $reportFAMappingModel = ReportSelectorFunctionParaAction::model()->findAllByAttributes(array('report_id' => $reportId));
+
+            $id = array();
+            foreach ($reportFAMappingModel as $model) {
+                $ids[] = $model->id;
+            }
 //        print_r($ids);
 //        die();
-        if(!empty($ids)){
-            
-            $idList = implode(',', $ids);
-            $delete = "
+            if (!empty($ids)) {
+
+                $idList = implode(',', $ids);
+                $delete = "
 DELETE FROM target_column
 WHERE report_function_mapping_id IN ($idList);
 
@@ -979,22 +901,16 @@ WHERE report_function_mapping_id IN ($idList);
 DELETE FROM report_selector_function_para_action
 WHERE id IN ($idList);
 ";
-            $command = Yii::app()->db->createCommand($delete);
-            $command->execute();
-                        echo "Records deleted successfully.";
-
-            
+                $command = Yii::app()->db->createCommand($delete);
+                $command->execute();
+                echo "Records deleted successfully.";
+            } else {
+                echo "No Script for Report Found";
+            }
+        } else {
+            echo "Report Id not found ";
         }
-        else{
-           echo  "No Script for Report Found";
-        }
-    }
-    else{
-        echo "Report Id not found ";
     }
 
-
-        
-    }
     //****************Applying Script to report ************//
 }
