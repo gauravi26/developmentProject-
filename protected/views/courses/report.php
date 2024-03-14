@@ -21,7 +21,7 @@ echo CHtml::hiddenField('actionId', $actionId);
     <div class="report-container">
                 <h2 class="report-heading">Courses Report</h2> <!-- Dynamic Heading -->
 
-        <table class="report-table" id="Courses">
+        <table class="report-table" id="7">
             <thead>
                 <tr>
                     <?php foreach($columns as $columnName): ?>
@@ -49,7 +49,6 @@ echo CHtml::hiddenField('actionId', $actionId);
             </tbody>
         </table>
     </div>
-    <script>
-        
-    </script>
+                                    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyFunctionActionScript.js"></script>
+
 </body>

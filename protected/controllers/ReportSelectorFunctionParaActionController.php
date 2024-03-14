@@ -238,67 +238,39 @@ class ReportSelectorFunctionParaActionController extends Controller {
         
     }
 
-    private function saveActionParaValues($actionArgRecord) {
-        $count = 0;
-$matches =[];
-        foreach ($actionArgRecord as $key => $innerArray) {
-            foreach ($innerArray as $rcfam => $value) {
+private function saveActionParaValues($actionArgRecord) {
+    $count = 0;
+    $matches = [];
 
-                foreach ($value as $key => $record)
-                    print_r($key);
-//                die();
-                echo'<br>';
-                preg_match('/(\d+)_(\w+)_(\d+)_(\d+)/', $key, $matches);
+    foreach ($actionArgRecord as $record => $innerArray) {
+        foreach ($innerArray as $rcfam => $value) {
+           foreach($value as $key=>$dataValues){
+            
+            
+            preg_match('/(\d+)_(\w+)_(\d+)_(\d+)/', $key, $matches);
+            $report_id = $matches[1];
                 $report_column = $matches[2];
-                echo '<br>';
-                echo 'report column in action para ';
-                 print_r($report_column);
-                 echo '<br>';
-                 
-                
-                $arrKey = explode("_", $key);
-                $arrKey = array_map('trim', $arrKey);
+                $function_library_id = $matches[3];
+                $action_id = $matches[4];
 
-                $report_id = $arrKey[0];
-              echo 'report id in action para ';
+            // Fetch the ID from the ReportSelectorFunctionParaAction model based on the key
+            $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes([
+                'report_id' => $report_id,
+                'report_column' => $report_column,
+                'function_library_id' => $function_library_id,
+                'action_id' => $action_id
+            ]);
 
-                print_r($report_id);
-                echo '<br>';
-
-//                $report_column = $arrKey[1];
-               
-//
-//                echo '<br>';
-                $function_library_id = $arrKey[3];
-                                echo 'function id in action para ';
-
-                print_r($function_library_id);
-                echo '<br>';
-//                echo '<br>';
-                $action_id = $arrKey[4];
-                echo 'action id in action para ';
-              print_r($action_id);
-
-                die();
-                // Fetch the ID from the ReportSelectorFunctionParaAction model based on the key
-                $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes([
-                    'report_id' => $report_id,
-                    'report_column' => $report_column,
-                    'function_library_id' => $function_library_id,
-                    'action_id' => $action_id
-                ]);
-//               print_r($reportFunctionMapModel);
-//                die();
-                if ($reportFunctionMapModel !== null) {
-                    $report_function_mapping_id = $reportFunctionMapModel->id;
-                    $count++;
-                    $this->saveActionParameters($value, $report_function_mapping_id, $count);
-                } else {
-                    echo "Function ID not found in Report Function Action Mapping.";
-                }
+            if ($reportFunctionMapModel !== null) {
+                $report_function_mapping_id = $reportFunctionMapModel->id;
+                $count++;
+                $this->saveActionParameters($value, $report_function_mapping_id, $count);
+            } else {
+                echo "Function ID not found in Report Function Action Mapping.";
             }
-        }
+    }}
     }
+}
 
     private function saveActionParameters($value, $report_function_mapping_id, $count) {
 
@@ -375,29 +347,25 @@ $matches =[];
 
     private function saveTargetColumn($targetColumnData) {
 
-//        echo "<br>";
-//        print_r("Passing Target Column :");
-//                echo "<br>";
-//
-//                print_r($targetColumnData);
-//
-//        die();
-        foreach ($targetColumnData as $key => $innerArray) {
 
+        foreach ($targetColumnData as $key => $innerArray) {
+            $matches = [];
             foreach ($innerArray as $rcfm => $value) {
 
-                $arrKey = explode("_", $rcfm);
-                $report_id = $arrKey[0];
-                $report_column = $arrKey[1];
-                $function_library_id = $arrKey[2];
-                $action_id = $arrKey[3];
+                preg_match('/(\d+)_(\w+)_(\d+)_(\d+)/', $rcfm, $matches);
+                $report_id = $matches[1];
+                $report_column = $matches[2];
+                $function_library_id = $matches[3];
+                $action_id = $matches[4];
+
                 $reportFunctionMapModel = ReportSelectorFunctionParaAction::model()->findByAttributes([
                     'report_id' => $report_id,
                     'report_column' => $report_column,
                     'function_library_id' => $function_library_id,
                     'action_id' => $action_id
                 ]);
-
+//print_r($reportFunctionMapModel);
+//           die();
                 if ($reportFunctionMapModel !== null) {
                     $report_function_mapping_id = $reportFunctionMapModel->id;
 
@@ -411,7 +379,7 @@ $matches =[];
 
     private function saveTargetColumnModel($innerArray, $report_function_mapping_id) {
 
-        print_r($innerArray);
+//        print_r($innerArray);
         echo '<br>';
 //                print_r($report_function_mapping_id);
 //                die();
