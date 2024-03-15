@@ -354,9 +354,9 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
             var selectFunctionField = $actionDiv.closest('.row');
            
             // Remove previous action parameters labels and input fields
-//            selectFunctionField.find('.actionParaLable').remove();
-//            selectFunctionField.find('.actionPara').remove();
-//            selectFunctionField.find('.br').remove(); // Remove only the created <br> elements
+            selectFunctionField.find('.actionParaLable').remove();
+            selectFunctionField.find('.actionPara').remove();
+            selectFunctionField.find('.actionBr').remove(); // Remove only the created <br> elements
 
             selectFunctionField.find('.br').remove();
             var actionParamsCount = 0; // Initialize action parameters count
@@ -367,7 +367,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
                         'margin-left': '200px',
                         'font-weight':'bold',
                         'padding': '1px'
-                    }).addClass('actionParaLable_' + index + '_' + count);
+                    }).addClass('actionParaLable');
 
                     var input = $('<input>').attr({
                         type: 'text',
@@ -383,11 +383,16 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
                    
 
                     // Append the label and input within the actionDiv
-                    $actionDiv.append('<br><br>');
+                    var lineBreak = $('<br><br>').addClass('actionBr');
+                    $actionDiv.append(lineBreak);
                     $actionDiv.append(label);
-                    $actionDiv.append('<br>');
+                    
+                    var lineBreak = $('<br>').addClass('actionBr');
+                    $actionDiv.append(lineBreak);
+
                     $actionDiv.append(input);
-                    $actionDiv.append('<br>');
+                    var lineBreak = $('<br>').addClass('actionBr');
+                    $actionDiv.append(lineBreak);
                     actionParamsCount++;
 
 

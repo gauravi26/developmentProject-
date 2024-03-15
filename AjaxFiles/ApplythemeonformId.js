@@ -21,7 +21,7 @@ $(window).on('load', function() {
             // Set a flag to indicate that the page-specific theme has been applied
             pageSpecificThemeApplied = true;
 
-            console.log('Response:', response); // Log the response to the console
+            console.log("Final Theme Applied using general and specific theme"+'Response:', response); // Log the response to the console
             
             // Apply styles using the appropriate selector (e.g., .span-19)
             if (response && response.css) {

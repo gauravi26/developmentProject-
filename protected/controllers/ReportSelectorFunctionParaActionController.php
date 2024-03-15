@@ -610,7 +610,7 @@ reportColumnData[0].values.forEach((value, i) => {
     var reportElementIndex = i;
     var functionParaValues = functionArg(reportElementIndex);
    
-    console.log(functionParaValues);
+    
     var functionResult = conditionfunction(value, ...functionParaValues);
     if (functionResult === true) {
         applyActionOnTargetColumns(reportElementIndex);

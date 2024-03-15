@@ -225,40 +225,45 @@ private function combinationValidation($model)
 	}
         
         
-       public function actionApplyStylesToFormElement($formID)
+      public function actionApplyStylesToFormElement($formID)
 {
-         
-    // Find the form ID
-    $formMapping = Forms::model()->findByAttributes(array('FORM_NAME' => $formID));
+          
    
-    $formId = $formMapping->FORM_ID;
-    
-    // Find the CSS properties for the given form ID
-    $formFieldStyles = FormFieldCsspropertyValueMapping::model()->findAllByAttributes(array('form_id' => $formId));
+        // Find the form ID
+        $formMapping = Forms::model()->findByAttributes(array('FORM_NAME' => $formID));
+if ($formMapping !== null) {
+        $formId = $formMapping->FORM_ID;
 
-    // Array to store CSS properties for each form element
-    $cssStyles = array();
+        // Find the CSS properties for the given form ID
+        $formFieldStyles = FormFieldCsspropertyValueMapping::model()->findAllByAttributes(array('form_id' => $formId));
 
-    // Iterate over each CSS property entry
-    foreach ($formFieldStyles as $formFieldStyle) {
-        // Store CSS property for each form element
-        $fieldId = $formFieldStyle->field_id;
-        $field = "field_".$fieldId;
-        $cssPropertyId = $formFieldStyle->css_property_id;
-        $cssProperty = CssProperties::model()->findByPk($cssPropertyId)->property_name;
-        $value = $formFieldStyle->value;
+        // Array to store CSS properties for each form element
+        $cssStyles = array();
 
-        // Create CSS rule and add it to the array
-        $cssStyles[] = "#" . $field . "{" . $cssProperty . ":" . $value . "}";
+        // Iterate over each CSS property entry
+        foreach ($formFieldStyles as $formFieldStyle) {
+            // Store CSS property for each form element
+            $fieldId = $formFieldStyle->field_id;
+            $field = "field_" . $fieldId;
+            $cssPropertyId = $formFieldStyle->css_property_id;
+            $cssProperty = CssProperties::model()->findByPk($cssPropertyId)->property_name;
+            $value = $formFieldStyle->value;
+
+            // Create CSS rule and add it to the array
+            $cssStyles[] = "#" . $field . "{" . $cssProperty . ":" . $value . "}";
+        }
+
+        // Convert the CSS properties array to a string
+        $cssStylesString = implode(' ', $cssStyles);
+
+        // Return the CSS styles in the JSON response
+        echo CJSON::encode($cssStylesString);
+        Yii::app()->end();
+    } else {
+        echo CJSON::encode("No styles saved for these fields");
     }
-
-    // Convert the CSS properties array to a string
-    $cssStylesString = implode(' ', $cssStyles);
-
-    // Return the CSS styles in the JSON response
-    echo CJSON::encode($cssStylesString);
-    Yii::app()->end();
 }
+
 public function actionCustomDelete(){
     
     $this->render('deletePage');

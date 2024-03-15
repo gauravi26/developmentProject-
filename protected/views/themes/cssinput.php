@@ -518,6 +518,7 @@ input {
 
                 foreach ($savedImages as $savedImage) {
                     $imageName = htmlspecialchars(urldecode($savedImage));
+                    echo "<option value=\"\">Select</option>";
                     echo "<option value=\"$imageName\">$imageName</option>";
                 }
                 ?>

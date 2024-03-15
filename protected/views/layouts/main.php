@@ -127,6 +127,8 @@
                         <li><a href="index.php?r=formFieldCsspropertyValueMapping/create">Element CSS Properties</a></li>
                         <li><a href="index.php?r=effects/create">Apply Effect</a></li>
                         <li><a href="index.php?r=scriptCode/index">Effect Script</a></li>
+                        <li><a href="index.php?r=FormElementCssPropertiesThemeMapping/getThemeDropBox">Customize Applied Themes</a></li>
+
                     </ul>
                 </div>
             </nav>

@@ -483,9 +483,7 @@ class FormThemeController extends Controller {
 
     foreach ($themeArray as $value) {
         // Split the string by ":"
-        
-        print_r($themeArray);
-        die();
+        echo "Key: $key, Value: $value\n";
         $parts = explode(':', $value, 2);
         if (count($parts) === 2) {
             // Trim property and value

@@ -290,10 +290,10 @@ public function actionFormingFinalTheme() {
     $generalTheme = $this->actionApplyGeneralTheme();
     $generalThemeArray = $generalTheme['general'];
     $general = $this->convertAssociativeArray($generalThemeArray);
-   print_r($generalThemeArray);
-   echo '<br><br>';
-    print_r($general);
-    echo '<br><br>';
+//   print_r($generalThemeArray);
+//   echo '<br><br>';
+//    print_r($general);
+//    echo '<br><br>';
     // Apply form theme
     $formTheme = $this->actionApplyThemeToForms($controllerId,$actionId);
 //    print_r($formTheme);
