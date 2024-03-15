@@ -213,13 +213,13 @@ class ReportThemeMappingController extends Controller
                     echo "$elementSelector { $cssProperty: $value !important; }\n";
                 }
             } else {
-                echo "Theme Not Found";
+                echo "@Theme Not Found";
             }
         } else {
-            echo "No Theme Mapped with Page and Reports";
+            echo "@Report not found to apply report theme";
         }
     } else {
-        echo "ApplicationForms not found for controller: $controllerId, action: $actionId";
+        echo "@ApplicationForms not found for controller: $controllerId, action: $actionId";
     }
 }
 
