@@ -46,10 +46,10 @@
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/bootstrap.css"  />
 
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <!-- Pagination CSS -->
+    <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/dataTables.css"  />
 
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
@@ -61,13 +61,13 @@
     <link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
 
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/jquery3.5.1.js"></script>
 
     <!-- Bootstrap JS -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/bootstrap.js"></script>
     
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <!-- Pagination JS -->
+    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/pagination.js"></script>
 
     <!-- Custom JavaScript -->
 <!--    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/customProperties.js"></script>-->
