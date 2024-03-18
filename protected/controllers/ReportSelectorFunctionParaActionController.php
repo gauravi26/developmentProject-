@@ -593,30 +593,36 @@ function functionArg(reportElementIndex) {
         var remainingStrings = foundElements.map(element => element.replace('@', ''));
         remainingStrings.forEach(functionParaColumn => {
             var ColumnForFunctionPara = fetchData({selectorType: selectorType, selectorValue: functionParaColumn});
-            functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
-            functionValues.splice(0);
-            functionValues.push(functionValue);
+            if (ColumnForFunctionPara && ColumnForFunctionPara.length > 0) {
+                functionValue = ColumnForFunctionPara[0].values[reportElementIndex];
+                functionValues.splice(0);
+                functionValues.push(functionValue);
+            } else {
+                console.error("@Values not found for function parameter:", functionParaColumn);
+            }
         });
         return [functionValue];
     } else { 
-        
-return [functionPara];
+        return [functionPara];
     }
-
 }
 
-reportColumnData[0].values.forEach((value, i) => {
-    const element = reportColumnData[0].elements[i];
-    var reportElementIndex = i;
-    var functionParaValues = functionArg(reportElementIndex);
-   
-    
-    var functionResult = conditionfunction(value, ...functionParaValues);
-    if (functionResult === true) {
-        applyActionOnTargetColumns(reportElementIndex);
-    }
-});
+if (reportColumnData.length === 0) {
+    console.error("@Report column not found:", reportColumnName);
+} else {
+    reportColumnData[0].values.forEach((value, i) => {
+        const element = reportColumnData[0].elements[i];
+        var reportElementIndex = i;
+        var functionParaValues = functionArg(reportElementIndex);
 
+        var functionResult = conditionfunction(value, ...functionParaValues);
+        
+
+        if (functionResult === true) {
+            applyActionOnTargetColumns(reportElementIndex);
+        }
+    });
+}
 
 function applyActionOnTargetColumns(reportElementIndex) {
     if (targetColumnNames.length === 0) {
@@ -625,10 +631,15 @@ function applyActionOnTargetColumns(reportElementIndex) {
     } else {
         targetColumnNames.forEach(targetColumnName => {
             var targetColumnData = fetchData({selectorType: selectorType, selectorValue: targetColumnName});
-            targetColumnData.forEach(function (columnData, columnIndex) {
-                const element = targetColumnData[0].elements[reportElementIndex];
-                actionStyle(element, ...actionPara);
-            });
+            console.log("@Target Column Data:", targetColumnData);
+            if (targetColumnData && targetColumnData.length > 0) {
+                targetColumnData.forEach(function (columnData, columnIndex) {
+                    const element = targetColumnData[0].elements[reportElementIndex];
+                    actionStyle(element, ...actionPara);
+                });
+            } else {
+                console.error("@Values not found for target column:", targetColumnName);
+            }
         });
     }
 }

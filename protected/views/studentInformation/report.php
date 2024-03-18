@@ -52,7 +52,7 @@ echo CHtml::hiddenField('actionId', $actionId); // Populate hidden field with ac
             
         </table>
     </div>
-    
+   
 <!--<script>
     
     function stringCheck(value, checkStrings) {

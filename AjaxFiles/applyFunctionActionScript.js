@@ -48,8 +48,8 @@ $(document).ready(function() {
     // Event handler for draw.dt
     $('.report-table').on('draw.dt', function () {
         // Get the controller and action names
-        var controllerName = $("#controllerId").val();
-        var actionName = $("#actionId").val();
+         var reportId = $('.report-table').attr('id');
+
 
         // Call the applyColorStyles function with report ID
         applyColorStyles(reportId);
