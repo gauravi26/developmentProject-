@@ -142,8 +142,10 @@ class ReportSelectorFunctionParaActionController extends Controller {
                 
                 $report_column_index = $arrKey[3];
                 $function_select_index = $arrKey[4];
-//                print_r($report_column_index );
+                $function_para_id = $arrKey[5];
+//                print_r($function_para_id);
 //                echo "<br>";
+//                die();
 //                
 //                print_r($function_select_index );
 //echo "<br>";
@@ -166,7 +168,8 @@ class ReportSelectorFunctionParaActionController extends Controller {
                         'report_row' => $report_row,
                         'function_library_id' => $function_library_id,
                         'function_library_parameter' => $function_library_parameter,
-                        'action_id' => $action_id
+                        'action_id' => $action_id,
+                        'function_para_id' => $function_para_id
                     ];
                 }
             }
@@ -409,15 +412,14 @@ private function saveActionParaValues($actionArgRecord) {
     }
 
 //***************************************************************************************************************************************************************
-    //***************************Building Script to Call Function********************//
+    //***************************Building Script ********************//
 
-    private function fetchFunctionAction($model) {
+   private function fetchFunctionParaToApply($models)
+{
+    $formattedParams = []; // Initialize an array to store formatted parameters
 
-        $reportColumn = $model->report_column;
-        $functionId = $model->function_library_id;
-//   Handling multiple parameters of function
+    foreach ($models as $model) {
         $functionPara = explode(',', $model->function_library_parameter);
-        $formattedParams = [];
 
         foreach ($functionPara as $param) {
             // Check if it's numeric
@@ -428,11 +430,25 @@ private function saveActionParaValues($actionArgRecord) {
                 $formattedParams[] = "'" . $param . "'";
             }
         }
+    }
 
-        $functionPara = '[' . implode(',', $formattedParams) . ']';
+    // Combine all formatted parameters into a single string
+    $functionPara = '[' . implode(',', $formattedParams) . ']';
+
+    return [
+        'functionPara' => $functionPara,
+    ];
+}
+   
+            
+    private function fetchFunctionAction($model) {
+
+        $reportColumn = $model->report_column;
+        $functionId = $model->function_library_id;
+//   Handling multiple parameters of function
+       
 
         $actionId = $model->action_id;
-
         $functionName = FunctionLibrary::model()->findByPk($functionId)->function_name;
         $functionSyntax = FunctionLibrary::model()->findByPk($functionId)->syntax;
         $actionName = ActionLibrary::model()->findByPk($actionId)->action_name;
@@ -442,7 +458,7 @@ private function saveActionParaValues($actionArgRecord) {
 
         return [
             'reportColumn' => $reportColumn,
-            'functionPara' => $functionPara,
+//            'functionPara' => $functionPara,
             'functionName' => $functionName,
             'functionActionSyntax' => $functionActionSyntax,
             'actionName' => $actionName,
@@ -512,15 +528,18 @@ private function saveActionParaValues($actionArgRecord) {
     }
 
     private function getUniqueModels($objectsArray) {
-        $uniqueObjects = [];
-        foreach ($objectsArray as $object) {
-            $key = $object->function_library_id . '_' . $object->report_column . '_' . $object->action_id;
-            if (!isset($uniqueObjects[$key])) {
-                $uniqueObjects[$key] = $object;
-            }
+    $uniqueObjects = [];
+    foreach ($objectsArray as $object) {
+        $key = $object->function_library_id . '_' . $object->report_column . '_' . $object->function_para_id;
+        if (!isset($uniqueObjects[$key])) {
+            // If the key doesn't exist, initialize it as an empty array
+            $uniqueObjects[$key] = [];
         }
-        return array_values($uniqueObjects);
+        // Append the object to the array under the respective key
+        $uniqueObjects[$key][] = $object;
     }
+    return $uniqueObjects;
+}
 
 //**********************************************************************************************
     function actionApplyfunctionAction($reportId) {
@@ -531,14 +550,25 @@ private function saveActionParaValues($actionArgRecord) {
 
         $appliedScripts = []; // Initialize an empty array to hold the JavaScript scripts
 
-        foreach ($uniqueModels as $uniqueModel) {
-            $mappingId = $uniqueModel->id;
+        foreach ($uniqueModels as $key => $models) {
+                        
+            $functionArgs = $this->fetchFunctionParaToApply($models);
+            $functionPara = $functionArgs['functionPara'];
+            echo "Function Para";
+            echo "<br>";
+            print_r($functionPara);
+            die();
+
+            foreach ($models as $uniqueModel) {
+                
+                            $mappingId = $uniqueModel->id;
+
             $functionActionDetails = $this->fetchFunctionAction($uniqueModel);
             $reportColumn = $functionActionDetails['reportColumn'];
-            $functionPara = $functionActionDetails['functionPara'];
             $functionName = $functionActionDetails['functionName'];
             $functionActionSyntax = $functionActionDetails['functionActionSyntax'];
             $actionName = $functionActionDetails['actionName'];
+            }
             $actionParameter = $this->fetchActionArg($mappingId);
 
             $target_Column = $this->fetchTargetColumn($mappingId);
@@ -546,7 +576,8 @@ private function saveActionParaValues($actionArgRecord) {
             $selector = $this->fetchSelector($uniqueModel);
 
             $staticCode = $this->executionCode();
-
+//print_r($functionPara);
+//        die();
             $dynamicCode = <<<SCRIPT
 var selectorType = 'reportColumn';
 var reportColumnName = ['$reportColumn'];
@@ -728,6 +759,7 @@ SCRIPT;
         foreach ($functionModels as $functionModel) {
             $functionParameters[$functionModel->id] = $functionModel->argument_name; // Assuming "argument_name" is the correct attribute name
         }
+        
 
         echo json_encode($functionParameters);
     }

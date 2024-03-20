@@ -354,9 +354,9 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
             var selectFunctionField = $actionDiv.closest('.row');
            
             // Remove previous action parameters labels and input fields
-            selectFunctionField.find('.actionParaLable').remove();
-            selectFunctionField.find('.actionPara').remove();
-            selectFunctionField.find('.actionBr').remove(); // Remove only the created <br> elements
+            selectFunctionField.find('.actionParaLable' + index + '_' + count + '_' + value+'_'+actioncount).remove();
+            selectFunctionField.find('.actionPara' + index + '_' + count + '_' + value+'_'+actioncount).remove();
+            selectFunctionField.find('.actionBr').remove(); 
 
             selectFunctionField.find('.br').remove();
             var actionParamsCount = 0; // Initialize action parameters count
@@ -367,7 +367,7 @@ $(document).on('change', '[name="action_id_' + index + '_' + count+ '_' + action
                         'margin-left': '200px',
                         'font-weight':'bold',
                         'padding': '1px'
-                    }).addClass('actionParaLable');
+                    }).addClass('actionParaLable' + index + '_' + count + '_' + value+'_'+actioncount);
 
                     var input = $('<input>').attr({
                         type: 'text',

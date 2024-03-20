@@ -11,7 +11,13 @@
  * @property integer $function_library_id
  * @property string $function_library_parameter
  * @property integer $action_id
- * @property string $script_to_call
+ * @property integer $function_para_id
+ *
+ * The followings are the available model relations:
+ * @property ReportFunctionMappingActionValue[] $reportFunctionMappingActionValues
+ * @property ActionLibrary $action
+ * @property FunctionLibrary $functionLibrary
+ * @property Report $report
  */
 class ReportSelectorFunctionParaAction extends CActiveRecord
 {
@@ -31,12 +37,12 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('report_id, report_column,function_library_id, function_library_parameter', 'required'),
-			array('report_id, function_library_id, action_id', 'numerical', 'integerOnly'=>true),
+			array('report_id, report_column, function_library_id, function_library_parameter, action_id, function_para_id', 'required'),
+			array('report_id, function_library_id, action_id, function_para_id', 'numerical', 'integerOnly'=>true),
 			array('report_column, report_row, function_library_parameter', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, report_id, report_column, report_row, function_library_id, function_library_parameter, action_id, script_to_call', 'safe', 'on'=>'search'),
+			array('id, report_id, report_column, report_row, function_library_id, function_library_parameter, action_id, function_para_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -48,6 +54,10 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'reportFunctionMappingActionValues' => array(self::HAS_MANY, 'ReportFunctionMappingActionValue', 'report_function_mapping_id'),
+			'action' => array(self::BELONGS_TO, 'ActionLibrary', 'action_id'),
+			'functionLibrary' => array(self::BELONGS_TO, 'FunctionLibrary', 'function_library_id'),
+			'report' => array(self::BELONGS_TO, 'Report', 'report_id'),
 		);
 	}
 
@@ -64,7 +74,7 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 			'function_library_id' => 'Function Library',
 			'function_library_parameter' => 'Function Library Parameter',
 			'action_id' => 'Action',
-			'script_to_call' => 'Script To Call',
+			'function_para_id' => 'Function Para',
 		);
 	}
 
@@ -93,7 +103,7 @@ class ReportSelectorFunctionParaAction extends CActiveRecord
 		$criteria->compare('function_library_id',$this->function_library_id);
 		$criteria->compare('function_library_parameter',$this->function_library_parameter,true);
 		$criteria->compare('action_id',$this->action_id);
-		$criteria->compare('script_to_call',$this->script_to_call,true);
+		$criteria->compare('function_para_id',$this->function_para_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
