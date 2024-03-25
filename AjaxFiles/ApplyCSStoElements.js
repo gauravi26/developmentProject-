@@ -5,7 +5,7 @@
 
 
 
-$(document).ready(function() {
+//$(document).ready(function() {
     // Event handler for page load
     $(window).on('load', function() {
         // Make the AJAX request to fetch CSS properties
@@ -32,6 +32,6 @@ $(document).ready(function() {
             }
         });
     });
-});
+//});
 
 

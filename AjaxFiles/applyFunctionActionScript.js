@@ -19,7 +19,7 @@ $(document).ready(function() {
     // Function to apply color styles
     function applyColorStyles(reportId){
         $.ajax({
-            url: 'index.php?r=reportSelectorFunctionParaAction/applyfunctionAction&reportId=' + reportId,
+            url: 'index.php?r=reportSelectorFunctionMapping/applyfunctionAction&reportId=' + reportId,
             type: 'GET',
             dataType: 'json', // Expecting plain text response
             success: function(response) {

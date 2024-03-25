@@ -3,7 +3,7 @@ $(document).ready(function(){
     // Function to handle AJAX request and populate columns
     function fetchReportColumns(selectedReportId) {
         $.ajax({
-            url: 'index.php?r=ReportSelectorFunctionParaAction/query',
+            url: 'index.php?r=ReportSelectorFunctionMapping/query',
             type: 'POST',
             data: {reportId: selectedReportId},
             success: function(response){
@@ -19,7 +19,7 @@ $(document).ready(function(){
     // Function to handle response and populate columns
     function handleColumnResponse(response) {
         if(response.trim() !== '') {
-            $("input[name='ReportSelectorFunctionParaAction[report_column]']").val(response);
+            $("input[name='ReportSelectorFunctionMapping[report_column]']").val(response);
             $('#columnScriptFields').empty();
             var columnNames = response.split(',');
             columnNames.forEach(function(columnName) {
@@ -37,15 +37,15 @@ $(document).ready(function(){
        console.log(functionOptions);
               console.log(actionsList);
 
-    var label = $('<label for="ReportSelectorFunctionParaAction_columns_' + columnName + '">' + "Report Column: " + columnName + '</label>').css({
+    var label = $('<label for="ReportSelectorFunctionMapping_columns_' + columnName + '">' + "Report Column: " + columnName + '</label>').css({
         'font-size': '16px',
         'margin-bottom': '12px'
     });
 
     var textField = $('<input>').attr({
         type: 'text',
-        id: 'ReportSelectorFunctionParaAction_columns_' + columnName,
-        name: 'ReportSelectorFunctionParaAction[columns][' + columnName + ']',
+        id: 'ReportSelectorFunctionMapping_columns_' + columnName,
+        name: 'ReportSelectorFunctionMapping[columns][' + columnName + ']',
         value: columnName,
         size: '60',
         maxlength: '255',
@@ -53,11 +53,11 @@ $(document).ready(function(){
         style: 'display: none;'
     });
 
-    var labelRow = $('<label for="ReportSelectorFunctionParaAction_report_row_' + columnName + '">' + "Row(word)" + '</label>');
+    var labelRow = $('<label for="ReportSelectorFunctionMapping_report_row_' + columnName + '">' + "Row(word)" + '</label>');
     var reportRowField = $('<input>').attr({
         type: 'text',
-        id: 'ReportSelectorFunctionParaAction_report_row_' + columnName,
-        name: 'ReportSelectorFunctionParaAction[report_row][' + columnName + ']',
+        id: 'ReportSelectorFunctionMapping_report_row_' + columnName,
+        name: 'ReportSelectorFunctionMapping[report_row][' + columnName + ']',
         placeholder: 'Enter Word to Specify Row',
         size: '60',
         maxlength: '255',
@@ -70,7 +70,7 @@ $(document).ready(function(){
 var functionDiv = $('<div>').addClass('functionDiv');
 reportRowField.after('<br><br>');
 
-var labelFunction = $('<label>').attr('for', 'ReportSelectorFunctionParaAction[function_library_id][' + columnName + ']').text("Function").css({
+var labelFunction = $('<label>').attr('for', 'ReportSelectorFunctionMapping[function_library_id][' + columnName + ']').text("Function").css({
     'font-size': '16px',
     'margin-top': '12px', // Corrected property name
     'margin-left': ''
@@ -98,7 +98,7 @@ functionActionDiv.append(functionDiv);
 // Create the actionDiv
 var actionDiv = $('<div>').addClass('actionDiv').attr('id', 'actionDiv_' + columnName);
 
-var labelAction = $('<label>').attr('for', 'ReportSelectorFunctionParaAction[action_library_id][' + columnName + ']')
+var labelAction = $('<label>').attr('for', 'ReportSelectorFunctionMapping[action_library_id][' + columnName + ']')
     .text("Action")
     .css({
         'font-size': '16px',
@@ -107,7 +107,7 @@ var labelAction = $('<label>').attr('for', 'ReportSelectorFunctionParaAction[act
 
         var actionSelect = $('<select>').attr({
           id: 'actionIdDropdown_' + columnName,
-          name: 'ReportSelectorFunctionParaAction[action_id][' + columnName + '][]'
+          name: 'ReportSelectorFunctionMapping[action_id][' + columnName + '][]'
       });
 
       // Populate options based on the actionsList
@@ -158,7 +158,7 @@ reportRowField.after(functionActionDiv);
 //            console.log(selectedFunctionId);
 
             $.ajax({
-                url: 'index.php?r=ReportSelectorFunctionParaAction/fetchParametersForFunction',
+                url: 'index.php?r=ReportSelectorFunctionMapping/fetchParametersForFunction',
                 type: 'POST',
                 data: { selectedFunctionId: selectedFunctionId },
                 success: function(response) {
@@ -202,7 +202,7 @@ function attachActionParameter(columnName) {
         var selectedActionId = $(this).val();
         console.log(selectedActionId);
         $.ajax({
-                url: 'index.php?r=ReportSelectorFunctionParaAction/fetchParametersForAction',
+                url: 'index.php?r=ReportSelectorFunctionMapping/fetchParametersForAction',
                 type: 'POST',
                 data: { selectedActionId: selectedActionId },
                 success: function(response) {
@@ -248,7 +248,7 @@ function handleActionParameters(data, columnName) {
 //    // Create the actionDiv
 //    var actionDiv = $('<div>').addClass('actionDiv').attr('id', 'actionDiv_' + columnName);
 //
-//    var labelAction = $('<label>').attr('for', 'ReportSelectorFunctionParaAction[action_library_id][' + columnName + ']')
+//    var labelAction = $('<label>').attr('for', 'ReportSelectorFunctionMapping[action_library_id][' + columnName + ']')
 //        .text("Action")
 //        .css({
 //            'font-size': '16px',
@@ -257,7 +257,7 @@ function handleActionParameters(data, columnName) {
 //
 //    var actionIdDropdown = $('<select>').attr({
 //        id: 'actionIdDropdown_' + columnName,
-//        name: 'ReportSelectorFunctionParaAction[action_id][' + columnName + ']',
+//        name: 'ReportSelectorFunctionMapping[action_id][' + columnName + ']',
 //    }).html($('#actionIdDropdown').html());
 //
 //    actionDiv.append(labelAction)

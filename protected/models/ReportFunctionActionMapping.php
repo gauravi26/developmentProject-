@@ -5,12 +5,14 @@
  *
  * The followings are the available columns in table 'report_function_action_mapping':
  * @property integer $id
- * @property integer $application_forms_id
- * @property integer $report_id
- * @property integer $function_library_id
- * @property string $report_columns
- * @property string $report_row
- * @property string $fetched_function_to_call
+ * @property integer $report_function_mapping_id
+ * @property integer $action_library_id
+ *
+ * The followings are the available model relations:
+ * @property ActionLibrary $actionLibrary
+ * @property ReportSelectorFunctionMapping $reportFunctionMapping
+ * @property ReportFunctionMappingActionValue[] $reportFunctionMappingActionValues
+ * @property TargetColumn[] $targetColumns
  */
 class ReportFunctionActionMapping extends CActiveRecord
 {
@@ -30,12 +32,11 @@ class ReportFunctionActionMapping extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('application_forms_id, report_id, report_columns, report_row, fetched_function_to_call', 'required'),
-			array('application_forms_id, report_id, function_library_id', 'numerical', 'integerOnly'=>true),
-			array('report_columns, report_row', 'length', 'max'=>255),
+			array('report_function_mapping_id, action_library_id', 'required'),
+			array('report_function_mapping_id, action_library_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, application_forms_id, report_id, function_library_id, report_columns, report_row, fetched_function_to_call', 'safe', 'on'=>'search'),
+			array('id, report_function_mapping_id, action_library_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -47,6 +48,10 @@ class ReportFunctionActionMapping extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'actionLibrary' => array(self::BELONGS_TO, 'ActionLibrary', 'action_library_id'),
+			'reportFunctionMapping' => array(self::BELONGS_TO, 'ReportSelectorFunctionMapping', 'report_function_mapping_id'),
+			'reportFunctionMappingActionValues' => array(self::HAS_MANY, 'ReportFunctionMappingActionValue', 'report_function_action_mapping_id'),
+			'targetColumns' => array(self::HAS_MANY, 'TargetColumn', 'report_function_action_mapping_id'),
 		);
 	}
 
@@ -57,12 +62,8 @@ class ReportFunctionActionMapping extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'application_forms_id' => 'Application Forms',
-			'report_id' => 'Report',
-			'function_library_id' => 'Function Library',
-			'report_columns' => 'Report Columns',
-			'report_row' => 'Report Row',
-			'fetched_function_to_call' => 'Fetched Function To Call',
+			'report_function_mapping_id' => 'Report Function Mapping',
+			'action_library_id' => 'Action Library',
 		);
 	}
 
@@ -85,12 +86,8 @@ class ReportFunctionActionMapping extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('application_forms_id',$this->application_forms_id);
-		$criteria->compare('report_id',$this->report_id);
-		$criteria->compare('function_library_id',$this->function_library_id);
-		$criteria->compare('report_columns',$this->report_columns,true);
-		$criteria->compare('report_row',$this->report_row,true);
-		$criteria->compare('fetched_function_to_call',$this->fetched_function_to_call,true);
+		$criteria->compare('report_function_mapping_id',$this->report_function_mapping_id);
+		$criteria->compare('action_library_id',$this->action_library_id);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

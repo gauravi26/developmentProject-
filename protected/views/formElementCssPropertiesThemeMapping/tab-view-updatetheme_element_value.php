@@ -126,7 +126,7 @@
 
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="http://localhost/testproject/AjaxFiles/tab-view-updatetheme_element_value.js"></script>
+  <script src="http://localhost/themebuilder/AjaxFiles/tab-view-updatetheme_element_value.js"></script>
 
 <?php 
 $themeId = is_array($elementModels) ? $elementModels[0]->theme_ID : $elementModels->theme_ID; 

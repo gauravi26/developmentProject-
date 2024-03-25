@@ -74,7 +74,8 @@ class FormThemeMappingController extends Controller {
 
             // Check if the theme_ID already exists in FormElementCssPropertiesThemeMapping
             $existingMapping = FormElementCssPropertiesThemeMapping::model()->findByAttributes(array('theme_ID' => $themeID));
-
+//            print_r($existingMapping);
+//            die();
             if ($existingMapping) {
                 // If the theme_ID exists, save the model without redirecting
                 $model->save();
@@ -113,17 +114,6 @@ class FormThemeMappingController extends Controller {
             }
 
             if ($model->save()) {
-                // Delete the previous set of FormElementCssPropertiesThemeMapping
-//                FormElementCssPropertiesThemeMapping::model()
-//                        ->deleteAllByAttributes(array('theme_ID' => $model->theme_ID));
-
-                // Create a new set of FormElementCssPropertiesThemeMapping with the updated theme_ID
-//                foreach ($formElementCssPropertiesIDs as $formElementCssPropertyID) {
-//                    $mappingModel = new FormElementCssPropertiesThemeMapping;
-//                    $mappingModel->theme_ID = $themeID;
-//                    $mappingModel->form_element_css_properties_id = $formElementCssPropertyID;
-//                    $mappingModel->save();
-//                }
 
                 $this->redirect(array('view', 'id' => $model->id));
             }

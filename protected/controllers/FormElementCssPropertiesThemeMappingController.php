@@ -587,10 +587,13 @@ public function actionElementCssCustomUpdate($themeId)
                 if ($elementModel) {
                     $elementModel->value = $inputValue;
                     $elementModel->save();
+
                 }
             }
     }
         echo '<script>alert("Data saved successfully!");</script>';
+        $this->render('success');
+        
 
 }
 
@@ -598,6 +601,8 @@ public function actionElementCssCustomUpdate($themeId)
         'elementModels' => $elementModels,
         'form' => $form,
     ));
+                             
+
 }
 /////////////////////////////////////////////////////////////////Current /////////////////////////////////////////////////////////////////////////////////////
 //public function actionElementCssCustomUpdate($themeId)

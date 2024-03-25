@@ -5,9 +5,13 @@
  *
  * The followings are the available columns in table 'report_function_mapping_action_value':
  * @property integer $id
- * @property integer $report_function_mapping_id
- * @property string $action_parameter_value
+ * @property integer $report_function_action_mapping_id
  * @property integer $action_argument_id
+ * @property string $action_parameter_value
+ *
+ * The followings are the available model relations:
+ * @property ActionArgumentMap $actionArgument
+ * @property ReportFunctionActionMapping $reportFunctionActionMapping
  */
 class ReportFunctionMappingActionValue extends CActiveRecord
 {
@@ -27,12 +31,12 @@ class ReportFunctionMappingActionValue extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('report_function_mapping_id, action_parameter_value, action_argument_id', 'required'),
-			array('report_function_mapping_id, action_argument_id', 'numerical', 'integerOnly'=>true),
+			array('report_function_action_mapping_id, action_argument_id, action_parameter_value', 'required'),
+			array('report_function_action_mapping_id, action_argument_id', 'numerical', 'integerOnly'=>true),
 			array('action_parameter_value', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, report_function_mapping_id, action_parameter_value, action_argument_id', 'safe', 'on'=>'search'),
+			array('id, report_function_action_mapping_id, action_argument_id, action_parameter_value', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -44,6 +48,8 @@ class ReportFunctionMappingActionValue extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'actionArgument' => array(self::BELONGS_TO, 'ActionArgumentMap', 'action_argument_id'),
+			'reportFunctionActionMapping' => array(self::BELONGS_TO, 'ReportFunctionActionMapping', 'report_function_action_mapping_id'),
 		);
 	}
 
@@ -54,9 +60,9 @@ class ReportFunctionMappingActionValue extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'report_function_mapping_id' => 'Report Function Mapping',
-			'action_parameter_value' => 'Action Parameter Value',
+			'report_function_action_mapping_id' => 'Report Function Action Mapping',
 			'action_argument_id' => 'Action Argument',
+			'action_parameter_value' => 'Action Parameter Value',
 		);
 	}
 
@@ -79,9 +85,9 @@ class ReportFunctionMappingActionValue extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('report_function_mapping_id',$this->report_function_mapping_id);
-		$criteria->compare('action_parameter_value',$this->action_parameter_value,true);
+		$criteria->compare('report_function_action_mapping_id',$this->report_function_action_mapping_id);
 		$criteria->compare('action_argument_id',$this->action_argument_id);
+		$criteria->compare('action_parameter_value',$this->action_parameter_value,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

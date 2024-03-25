@@ -72,12 +72,12 @@
     <!-- Custom JavaScript -->
 <!--    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/customProperties.js"></script>-->
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/texttypeproperties.js"></script>
-<!--    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/effectScripts.js"></script>-->
+    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/effectScripts.js"></script>
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyReportTheme.js"></script>
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ApplythemeonformId.js"></script><!--
 -->  
 <!--<script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applytheme.js"></script>
-    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ApplyCSStoElements.js"></script>-->
+-->    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ApplyCSStoElements.js"></script>
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/themeingReport.js"></script>
              <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyStyleToFormElement.js"></script>
 
@@ -112,10 +112,12 @@
                                 <li><a href="index.php?r=report/index">Report</a></li>
                                 <li><a href="index.php?r=themeForReport/reportTheme">Create Theme for Report</a></li>
                                 <li><a href="index.php?r=reportThemeMapping/create">Apply Theme to Report</a></li>
-                                <li><a href="index.php?r=reportSelectorFunctionParaAction/customCreate">Apply Conditional Style to Report</a></li>
+                                <li><a href="index.php?r=reportSelectorFunctionMapping/customCreate">Apply Conditional Style to Report</a></li>
                                 <li><a href="index.php?r=report/testReport">Testing</a></li>
                                 <li><a href="index.php?r=studentinformation/reportTest">Student Report</a></li>
                                 <li><a href="index.php?r=courses/reportTest">Course Report</a></li>
+                                <li><a href="index.php?r=customers/report">Customer Report</a></li>
+                                <li><a href="index.php?r=reportSelectorFunctionMapping/customDelete">Delete Report Function</a></li>
                                 <li><a href="index.php?r=actionLibrary/create">Add Action</a></li>
                                 <li><a href="index.php?r=functionLibrary/create">Add Function</a></li>
 

@@ -5,8 +5,11 @@
  *
  * The followings are the available columns in table 'target_column':
  * @property integer $id
- * @property integer $report_function_mapping_id
+ * @property integer $report_function_action_mapping_id
  * @property string $target_column
+ *
+ * The followings are the available model relations:
+ * @property ReportFunctionActionMapping $reportFunctionActionMapping
  */
 class TargetColumn extends CActiveRecord
 {
@@ -26,12 +29,12 @@ class TargetColumn extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('report_function_mapping_id, target_column', 'required'),
-			array('report_function_mapping_id', 'numerical', 'integerOnly'=>true),
+			array('report_function_action_mapping_id, target_column', 'required'),
+			array('report_function_action_mapping_id', 'numerical', 'integerOnly'=>true),
 			array('target_column', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, report_function_mapping_id, target_column', 'safe', 'on'=>'search'),
+			array('id, report_function_action_mapping_id, target_column', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -43,6 +46,7 @@ class TargetColumn extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'reportFunctionActionMapping' => array(self::BELONGS_TO, 'ReportFunctionActionMapping', 'report_function_action_mapping_id'),
 		);
 	}
 
@@ -53,7 +57,7 @@ class TargetColumn extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'report_function_mapping_id' => 'Report Function Mapping',
+			'report_function_action_mapping_id' => 'Report Function Action Mapping',
 			'target_column' => 'Target Column',
 		);
 	}
@@ -77,7 +81,7 @@ class TargetColumn extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id);
-		$criteria->compare('report_function_mapping_id',$this->report_function_mapping_id);
+		$criteria->compare('report_function_action_mapping_id',$this->report_function_action_mapping_id);
 		$criteria->compare('target_column',$this->target_column,true);
 
 		return new CActiveDataProvider($this, array(

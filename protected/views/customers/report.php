@@ -3,7 +3,7 @@ $controller = Yii::app()->getController();
 $actionId = $controller->getAction()->getId();
 $controllerId = $controller->getId();
 
-$columns = array('CustomerID', 'FirstName', 'LastName', 'Email', 'PhoneNumber', 'RegistrationDate', 'PremiumMember', 'Balance'); // Column of report
+$columns = array('CustomerID', 'FirstName', 'LastName', 'Email', 'PhoneNumber', 'RegistrationDate', 'Balance', 'PremiumMember'); // Column of report
 $StudentInformation = Customers::model()->findAll(); // Assuming StudentInformation is your model
 
 echo CHtml::hiddenField('controllerId', $controllerId);
@@ -53,6 +53,8 @@ echo CHtml::hiddenField('actionId', $actionId);
     </div>
 </body>
                                  <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyFunctionActionScript.js"></script>
+
+
 
 <!--<script>
 function stringCheck(value, checkStrings) {
