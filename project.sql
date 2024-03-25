@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 12, 2024 at 05:49 AM
+-- Generation Time: Mar 25, 2024 at 09:49 AM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 5.6.40
 
@@ -127,7 +127,8 @@ INSERT INTO `application_forms` (`id`, `menu_form`, `controller`, `action`) VALU
 (15, 'Sudent Report', 'studentInformation', 'testReport'),
 (16, 'Themes of Report', 'themeForReport', 'reportTestTheme'),
 (17, 'Student Dynamic Report', 'studentinformation', 'reportTest'),
-(18, 'Course Report', 'courses', 'reportTest');
+(18, 'Course Report', 'courses', 'reportTest'),
+(19, 'Customer Report ', 'customers', 'report');
 
 -- --------------------------------------------------------
 
@@ -250,7 +251,48 @@ CREATE TABLE `current_theme` (
 --
 
 INSERT INTO `current_theme` (`id`, `theme_ID`) VALUES
-(1, 121);
+(1, 361);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customers`
+--
+
+CREATE TABLE `customers` (
+  `CustomerID` int(11) NOT NULL,
+  `FirstName` varchar(50) DEFAULT NULL,
+  `LastName` varchar(50) DEFAULT NULL,
+  `Email` varchar(100) DEFAULT NULL,
+  `PhoneNumber` varchar(15) DEFAULT NULL,
+  `RegistrationDate` date DEFAULT NULL,
+  `Balance` decimal(8,2) DEFAULT NULL,
+  `PremiumMember` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`CustomerID`, `FirstName`, `LastName`, `Email`, `PhoneNumber`, `RegistrationDate`, `Balance`, `PremiumMember`) VALUES
+(1, 'John', 'Doe', 'john.doe@example.com', '123-456-7890', '2024-01-01', '200.50', 1),
+(2, 'Jane', 'Doe', 'jane.doe@example.com', '098-765-4321', '2024-02-01', '100.25', 0),
+(3, 'Jim', 'Beam', 'jim.beam@example.com', '111-222-3333', '2024-03-01', '300.75', 1),
+(4, 'Alice', 'Smith', 'alice.smith@example.com', '222-333-4444', '2024-04-01', '150.00', 0),
+(5, 'Bob', 'Johnson', 'bob.johnson@example.com', '333-444-5555', '2024-05-01', '250.50', 1),
+(6, 'Charlie', 'Williams', 'charlie.williams@example.com', '444-555-6666', '2024-06-01', '350.75', 0),
+(7, 'David', 'Brown', 'david.brown@example.com', '555-666-7777', '2024-07-01', '450.25', 1),
+(8, 'Eve', 'Jones', 'eve.jones@example.com', '666-777-8888', '2024-08-01', '550.50', 0),
+(9, 'Frank', 'Miller', 'frank.miller@example.com', '777-888-9999', '2024-09-01', '650.75', 1),
+(10, 'Grace', 'Davis', 'grace.davis@example.com', '888-999-1111', '2024-10-01', '750.25', 0),
+(11, 'Harry', 'Garcia', 'harry.garcia@example.com', '999-111-2222', '2024-11-01', '850.50', 1),
+(12, 'Ivy', 'Rodriguez', 'ivy.rodriguez@example.com', '111-222-3333', '2024-12-01', '950.75', 0),
+(13, 'Jack', 'Wilson', 'jack.wilson@example.com', '222-333-4444', '2025-01-01', '1050.25', 1),
+(14, 'Kate', 'Martinez', 'kate.martinez@example.com', '333-444-5555', '2025-02-01', '1150.50', 0),
+(15, 'Luke', 'Anderson', 'luke.anderson@example.com', '444-555-6666', '2025-03-01', '1250.75', 1),
+(16, 'Mia', 'Taylor', 'mia.taylor@example.com', '555-666-7777', '2025-04-01', '1350.25', 0),
+(17, 'Nick', 'Thomas', 'nick.thomas@example.com', '666-777-8888', '2025-05-01', '1450.50', 1),
+(18, 'Olivia', 'Hernandez', 'olivia.hernandez@example.com', '777-888-9999', '2025-06-01', '1550.75', 0);
 
 -- --------------------------------------------------------
 
@@ -711,7 +753,8 @@ INSERT INTO `effects` (`id`, `form_id`, `trigger_id`, `FIELD_ID`, `effect_code_i
 (433, 12, 0, 42, '102'),
 (434, 14, 0, 42, '101'),
 (435, 11, 0, 0, '100'),
-(436, 17, 0, 0, '106');
+(436, 17, 0, 0, '106'),
+(437, 4, 1, 24, '1');
 
 -- --------------------------------------------------------
 
@@ -1214,6 +1257,345 @@ INSERT INTO `form_element_css_properties` (`id`, `element_id`, `form_element`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `form_element_css_properties_theme_mapping`
+--
+
+CREATE TABLE `form_element_css_properties_theme_mapping` (
+  `id` int(11) NOT NULL,
+  `theme_ID` int(11) NOT NULL,
+  `form_element_css_properties_id` int(11) NOT NULL,
+  `value` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `form_element_css_properties_theme_mapping`
+--
+
+INSERT INTO `form_element_css_properties_theme_mapping` (`id`, `theme_ID`, `form_element_css_properties_id`, `value`) VALUES
+(8161, 362, 0, NULL),
+(8162, 362, 1, '150px'),
+(8163, 362, 2, '2px'),
+(8164, 362, 3, 'Solid 2px red '),
+(8165, 362, 4, '4px'),
+(8166, 362, 5, NULL),
+(8167, 362, 6, NULL),
+(8168, 362, 7, '#f2f2f2'),
+(8169, 362, 8, '#d9d9d9'),
+(8170, 362, 9, NULL),
+(8171, 362, 10, 'normal'),
+(8172, 362, 11, 'block'),
+(8173, 362, 12, 'normal'),
+(8174, 362, 13, '#f7f7f7'),
+(8175, 362, 14, 'left'),
+(8176, 362, 15, 'none'),
+(8177, 362, 16, 'static'),
+(8178, 362, 17, '100px'),
+(8179, 362, 18, 'none'),
+(8180, 362, 19, NULL),
+(8181, 362, 20, NULL),
+(8182, 362, 21, NULL),
+(8183, 362, 22, NULL),
+(8184, 362, 23, 'linear'),
+(8185, 362, 24, 'none'),
+(8186, 362, 25, NULL),
+(8187, 362, 26, NULL),
+(8188, 362, 27, NULL),
+(8189, 362, 28, NULL),
+(8190, 362, 29, NULL),
+(8191, 362, 30, ' ?>'),
+(8192, 362, 31, NULL),
+(8193, 362, 32, '#000000'),
+(8194, 362, 33, '#000000'),
+(8195, 362, 34, NULL),
+(8196, 362, 35, 'normal'),
+(8197, 362, 36, 'block'),
+(8198, 362, 37, 'normal'),
+(8199, 362, 38, '#000000'),
+(8200, 362, 39, 'left'),
+(8201, 362, 40, 'none'),
+(8202, 362, 41, 'static'),
+(8203, 362, 42, '30px'),
+(8204, 362, 43, 'none'),
+(8205, 362, 44, NULL),
+(8206, 362, 45, NULL),
+(8207, 362, 46, NULL),
+(8208, 362, 47, NULL),
+(8209, 362, 48, 'linear'),
+(8210, 362, 49, 'none'),
+(8211, 362, 50, NULL),
+(8212, 362, 51, NULL),
+(8213, 362, 52, NULL),
+(8214, 362, 53, NULL),
+(8215, 362, 54, NULL),
+(8216, 362, 55, NULL),
+(8217, 362, 56, NULL),
+(8218, 362, 57, NULL),
+(8219, 362, 58, NULL),
+(8220, 362, 59, NULL),
+(8221, 362, 60, NULL),
+(8222, 362, 61, NULL),
+(8223, 362, 62, NULL),
+(8224, 362, 63, NULL),
+(8225, 362, 64, NULL),
+(8226, 362, 65, NULL),
+(8227, 362, 66, NULL),
+(8228, 362, 67, NULL),
+(8229, 362, 68, NULL),
+(8230, 362, 69, NULL),
+(8231, 362, 70, NULL),
+(8232, 362, 71, NULL),
+(8233, 362, 72, NULL),
+(8234, 362, 73, NULL),
+(8235, 362, 74, NULL),
+(8236, 362, 75, NULL),
+(8237, 362, 76, NULL),
+(8238, 362, 77, NULL),
+(8239, 362, 78, NULL),
+(8240, 362, 79, NULL),
+(8241, 362, 80, NULL),
+(8242, 362, 81, NULL),
+(8243, 362, 82, NULL),
+(8244, 362, 83, NULL),
+(8245, 362, 84, NULL),
+(8246, 362, 85, NULL),
+(8247, 362, 86, NULL),
+(8248, 362, 87, NULL),
+(8249, 362, 88, NULL),
+(8250, 362, 89, NULL),
+(8251, 362, 90, NULL),
+(8252, 362, 91, NULL),
+(8253, 362, 92, NULL),
+(8254, 362, 93, NULL),
+(8255, 362, 94, NULL),
+(8256, 362, 95, NULL),
+(8257, 362, 96, NULL),
+(8258, 362, 97, NULL),
+(8259, 362, 98, NULL),
+(8260, 362, 99, NULL),
+(8261, 362, 100, NULL),
+(8262, 362, 102, NULL),
+(8263, 362, 103, NULL),
+(8264, 362, 104, NULL),
+(8265, 362, 105, NULL),
+(8266, 362, 106, NULL),
+(8267, 362, 107, NULL),
+(8268, 362, 108, NULL),
+(8269, 362, 109, NULL),
+(8270, 362, 110, NULL),
+(8271, 362, 111, NULL),
+(8272, 362, 112, NULL),
+(8273, 362, 113, NULL),
+(8274, 362, 114, NULL),
+(8275, 362, 115, NULL),
+(8276, 362, 116, NULL),
+(8277, 362, 117, NULL),
+(8278, 362, 118, NULL),
+(8279, 362, 119, NULL),
+(8280, 362, 120, NULL),
+(8281, 362, 121, NULL),
+(8282, 362, 122, NULL),
+(8283, 362, 123, NULL),
+(8284, 362, 124, NULL),
+(8285, 362, 125, NULL),
+(8286, 362, 126, NULL),
+(8287, 362, 127, NULL),
+(8288, 362, 128, NULL),
+(8289, 362, 129, NULL),
+(8290, 362, 130, NULL),
+(8291, 362, 131, NULL),
+(8292, 362, 132, NULL),
+(8293, 362, 133, NULL),
+(8294, 362, 134, NULL),
+(8295, 362, 135, NULL),
+(8296, 362, 136, NULL),
+(8297, 362, 137, NULL),
+(8298, 362, 138, NULL),
+(8299, 362, 139, NULL),
+(8300, 362, 140, NULL),
+(8301, 362, 141, NULL),
+(8302, 362, 142, NULL),
+(8303, 362, 143, NULL),
+(8304, 362, 144, NULL),
+(8305, 362, 145, NULL),
+(8306, 362, 146, NULL),
+(8307, 362, 147, NULL),
+(8308, 362, 148, NULL),
+(8309, 362, 149, NULL),
+(8310, 362, 150, NULL),
+(8311, 362, 151, NULL),
+(8312, 362, 152, NULL),
+(8313, 362, 153, NULL),
+(8314, 362, 154, NULL),
+(8315, 362, 155, NULL),
+(8316, 362, 156, NULL),
+(8317, 362, 157, NULL),
+(8318, 362, 158, NULL),
+(8319, 362, 159, NULL),
+(8320, 362, 160, NULL),
+(8321, 121, 0, NULL),
+(8322, 121, 1, '150px'),
+(8323, 121, 2, NULL),
+(8324, 121, 3, NULL),
+(8325, 121, 4, NULL),
+(8326, 121, 5, NULL),
+(8327, 121, 6, NULL),
+(8328, 121, 7, '#92f7b0'),
+(8329, 121, 8, '#bbecc8'),
+(8330, 121, 9, NULL),
+(8331, 121, 10, 'normal'),
+(8332, 121, 11, 'block'),
+(8333, 121, 12, 'normal'),
+(8334, 121, 13, '#4b0b0b'),
+(8335, 121, 14, 'left'),
+(8336, 121, 15, 'none'),
+(8337, 121, 16, 'static'),
+(8338, 121, 17, '30px'),
+(8339, 121, 18, 'none'),
+(8340, 121, 19, NULL),
+(8341, 121, 20, NULL),
+(8342, 121, 21, NULL),
+(8343, 121, 22, NULL),
+(8344, 121, 23, 'linear'),
+(8345, 121, 24, 'none'),
+(8346, 121, 25, NULL),
+(8347, 121, 26, NULL),
+(8348, 121, 27, NULL),
+(8349, 121, 28, NULL),
+(8350, 121, 29, NULL),
+(8351, 121, 30, NULL),
+(8352, 121, 31, NULL),
+(8353, 121, 32, NULL),
+(8354, 121, 33, NULL),
+(8355, 121, 34, NULL),
+(8356, 121, 35, NULL),
+(8357, 121, 36, NULL),
+(8358, 121, 37, NULL),
+(8359, 121, 38, NULL),
+(8360, 121, 39, NULL),
+(8361, 121, 40, NULL),
+(8362, 121, 41, NULL),
+(8363, 121, 42, NULL),
+(8364, 121, 43, NULL),
+(8365, 121, 44, NULL),
+(8366, 121, 45, NULL),
+(8367, 121, 46, NULL),
+(8368, 121, 47, NULL),
+(8369, 121, 48, NULL),
+(8370, 121, 49, NULL),
+(8371, 121, 50, NULL),
+(8372, 121, 51, NULL),
+(8373, 121, 52, NULL),
+(8374, 121, 53, NULL),
+(8375, 121, 54, NULL),
+(8376, 121, 55, NULL),
+(8377, 121, 56, NULL),
+(8378, 121, 57, NULL),
+(8379, 121, 58, NULL),
+(8380, 121, 59, NULL),
+(8381, 121, 60, NULL),
+(8382, 121, 61, NULL),
+(8383, 121, 62, NULL),
+(8384, 121, 63, NULL),
+(8385, 121, 64, NULL),
+(8386, 121, 65, NULL),
+(8387, 121, 66, NULL),
+(8388, 121, 67, NULL),
+(8389, 121, 68, NULL),
+(8390, 121, 69, NULL),
+(8391, 121, 70, NULL),
+(8392, 121, 71, NULL),
+(8393, 121, 72, NULL),
+(8394, 121, 73, NULL),
+(8395, 121, 74, NULL),
+(8396, 121, 75, NULL),
+(8397, 121, 76, NULL),
+(8398, 121, 77, NULL),
+(8399, 121, 78, NULL),
+(8400, 121, 79, NULL),
+(8401, 121, 80, NULL),
+(8402, 121, 81, NULL),
+(8403, 121, 82, NULL),
+(8404, 121, 83, NULL),
+(8405, 121, 84, NULL),
+(8406, 121, 85, NULL),
+(8407, 121, 86, NULL),
+(8408, 121, 87, NULL),
+(8409, 121, 88, NULL),
+(8410, 121, 89, NULL),
+(8411, 121, 90, NULL),
+(8412, 121, 91, NULL),
+(8413, 121, 92, NULL),
+(8414, 121, 93, NULL),
+(8415, 121, 94, NULL),
+(8416, 121, 95, NULL),
+(8417, 121, 96, NULL),
+(8418, 121, 97, NULL),
+(8419, 121, 98, NULL),
+(8420, 121, 99, NULL),
+(8421, 121, 100, NULL),
+(8422, 121, 102, NULL),
+(8423, 121, 103, NULL),
+(8424, 121, 104, NULL),
+(8425, 121, 105, NULL),
+(8426, 121, 106, NULL),
+(8427, 121, 107, NULL),
+(8428, 121, 108, NULL),
+(8429, 121, 109, NULL),
+(8430, 121, 110, NULL),
+(8431, 121, 111, NULL),
+(8432, 121, 112, NULL),
+(8433, 121, 113, NULL),
+(8434, 121, 114, NULL),
+(8435, 121, 115, NULL),
+(8436, 121, 116, NULL),
+(8437, 121, 117, NULL),
+(8438, 121, 118, NULL),
+(8439, 121, 119, NULL),
+(8440, 121, 120, NULL),
+(8441, 121, 121, NULL),
+(8442, 121, 122, NULL),
+(8443, 121, 123, NULL),
+(8444, 121, 124, NULL),
+(8445, 121, 125, NULL),
+(8446, 121, 126, NULL),
+(8447, 121, 127, NULL),
+(8448, 121, 128, NULL),
+(8449, 121, 129, NULL),
+(8450, 121, 130, NULL),
+(8451, 121, 131, NULL),
+(8452, 121, 132, NULL),
+(8453, 121, 133, NULL),
+(8454, 121, 134, NULL),
+(8455, 121, 135, NULL),
+(8456, 121, 136, NULL),
+(8457, 121, 137, NULL),
+(8458, 121, 138, NULL),
+(8459, 121, 139, NULL),
+(8460, 121, 140, NULL),
+(8461, 121, 141, NULL),
+(8462, 121, 142, NULL),
+(8463, 121, 143, NULL),
+(8464, 121, 144, NULL),
+(8465, 121, 145, NULL),
+(8466, 121, 146, NULL),
+(8467, 121, 147, NULL),
+(8468, 121, 148, NULL),
+(8469, 121, 149, NULL),
+(8470, 121, 150, NULL),
+(8471, 121, 151, NULL),
+(8472, 121, 152, NULL),
+(8473, 121, 153, NULL),
+(8474, 121, 154, NULL),
+(8475, 121, 155, NULL),
+(8476, 121, 156, NULL),
+(8477, 121, 157, NULL),
+(8478, 121, 158, NULL),
+(8479, 121, 159, NULL),
+(8480, 121, 160, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `form_element_theme_mapping`
 --
 
@@ -1351,7 +1733,15 @@ INSERT INTO `form_field_cssproperty_value_mapping` (`id`, `form_id`, `field_id`,
 (17, 2, 2, 23, 'italic'),
 (18, 2, 2, 4, '3px solid dotted'),
 (19, 2, 1, 7, '5px'),
-(20, 4, 39, 1, 'green');
+(20, 4, 39, 1, 'green'),
+(21, 2, 2, 6, '20px'),
+(22, 2, 1, 1, 'grey'),
+(23, 4, 24, 1, 'grey'),
+(24, 4, 23, 4, '2px solid yellow'),
+(25, 1, 15, 1, 'blue'),
+(26, 4, 27, 1, 'purple'),
+(27, 3, 9, 1, 'green'),
+(28, 4, 29, 1, 'orange');
 
 -- --------------------------------------------------------
 
@@ -1373,11 +1763,9 @@ CREATE TABLE `form_theme_mapping` (
 --
 
 INSERT INTO `form_theme_mapping` (`id`, `form_id`, `theme_ID`, `theme_name`, `controller`, `action`) VALUES
-(108, 3, 351, NULL, 'courses', 'create'),
-(109, 2, 342, NULL, 'departments', 'create'),
-(111, 1, 140, NULL, 'faculty', 'create'),
-(112, 6, 309, NULL, 'courseType', 'create'),
-(113, 4, 86, NULL, 'studentInformation', 'create');
+(116, 2, 362, NULL, 'departments', 'create'),
+(117, 3, 121, NULL, 'courses', 'create'),
+(118, 4, 121, NULL, 'studentInformation', 'create');
 
 -- --------------------------------------------------------
 
@@ -1399,9 +1787,12 @@ CREATE TABLE `function_argument_map` (
 INSERT INTO `function_argument_map` (`id`, `function_library_id`, `argument_name`, `argument`) VALUES
 (7, 7, 'NO PARAMETER NEEDED', ''),
 (8, 8, 'Criteria Value', 'markParameter'),
-(9, 11, 'Value 2', 'value'),
-(10, 7, 'minimum para 2', 'para2'),
-(11, 10, 'value2', 'value2');
+(9, 11, 'Number to Compare', 'value'),
+(10, 7, 'Minimum', 'para2'),
+(11, 10, 'String to Check', 'value2'),
+(12, 9, 'Maximum', 'max'),
+(13, 12, 'Minimum Range', 'rangeMin'),
+(14, 12, 'Maximum Range', 'rangeMax');
 
 -- --------------------------------------------------------
 
@@ -1451,7 +1842,8 @@ INSERT INTO `function_library` (`id`, `function_display_name`, `function_name`, 
 (8, 'Compare with Given number(Value)', 'checkPassFail', 'This function is to set a passing criteria with a mark \r\n\r\nExample 30 is threshold\r\n\r\nif value of column is < 30 false\r\n                      else true \r\n\r\n', 'function checkPassFail(value, markParameter) {\r\n    if (value >= markParameter) {\r\n        return true;\r\n    } else {\r\n        return false;\r\n    }\r\n}', '', 'It have two parameters value that is to be checked and markParameter (criteria of passing)', 3, 1, 0),
 (9, 'Maximum', 'calculateMax', 'Calculate maximum out of given range ', 'function calculateMax(numbers) {\r\n    return Math.max(...numbers);\r\n}\r\n', '', 'Array range of numbers', 1, 1, 0),
 (10, 'Check String', 'stringCheck', 'Check if value string is equal to given string ', 'function stringCheck(value, checkStrings) {\r\n    return checkStrings.includes(value);\r\n}\r\n', '', 'value  - value of column index \r\n\r\ncheckString - String to check with ', 3, 1, 0),
-(11, 'Check Equality Of Two', 'checkEqualityOfTwo', 'Check equality of two number', 'function checkEqualityOfTwo(value1, value2) {\r\n            return value1 === value2;\r\n        }', '', 'Take two numberic parameters', 3, 1, 0);
+(11, 'Check Equality Of Two', 'checkEqualityOfTwo', 'Check equality of two number', 'function checkEqualityOfTwo(value1, value2) {\r\n            return value1 === value2;\r\n        }', '', 'Take two numberic parameters', 3, 1, 0),
+(12, 'In Range ', 'isInRange', ' returns true if test Number is greater than minValue and smaller then maxValue\r\nparam Integer var value is the Number to be tested.\r\nparam Integer var minValue is the lower limit.\r\nparam Integer var maxValue is the upper limit.\r\nreturn boolean true or false.\r\n', 'function isInRange(value, minValue, maxValue) {\r\n    return value>minValue && value<maxValue;\r\n}', '.', '2 parameter max and min that defines a range', 3, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -1570,7 +1962,8 @@ INSERT INTO `report` (`id`, `report_name`, `query`, `reportColumn`, `reportRow`,
 (4, 'Theme of Report Dynamic table ', 'ThemeForReport', '0', '0', 'report-table', 'report-container', 'Complete Dynamic Table '),
 (5, 'Manage', 'TableTheme', '.', '.', 'report-table', 'report-container', 'Table Theme Report'),
 (6, 'Student Report ', 'SELECT first_name,last_name,percentage,course_id,academic_status FROM student_information', 'first_name,last_name,percentage,marks,course_id,academic_status', '', '', '', 'Student Information Report with Name , course ,major,academic_status'),
-(7, 'Course Dynamic Report', 'SELECT id,course_name,course_link FROM courses', 'id,course_name,course_link', '', '', '', '');
+(7, 'Course Dynamic Report', 'SELECT id,course_name,course_link FROM courses', 'id,course_name,course_link', '', '', '', ''),
+(8, 'Customer', '.', 'CustomerID,FirstName,LastName,Email,PhoneNumber,RegistrationDate,PremiumMember,Balance', '', 'report-table', 'report-container', 'Customer Report ');
 
 -- --------------------------------------------------------
 
@@ -1642,13 +2035,69 @@ INSERT INTO `report_element_css_set` (`id`, `element_id`, `css_property_id`) VAL
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `report_function_action_mapping`
+--
+
+CREATE TABLE `report_function_action_mapping` (
+  `id` int(11) NOT NULL,
+  `report_function_mapping_id` int(11) NOT NULL,
+  `action_library_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `report_function_action_mapping`
+--
+
+INSERT INTO `report_function_action_mapping` (`id`, `report_function_mapping_id`, `action_library_id`) VALUES
+(1, 1, 15),
+(2, 1, 1),
+(3, 2, 1),
+(4, 3, 2),
+(281, 1511, 1),
+(282, 1511, 15),
+(283, 1511, 2),
+(288, 1514, 1),
+(289, 1515, 15),
+(290, 1515, 2),
+(291, 1516, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `report_function_arg_value_mapping`
+--
+
+CREATE TABLE `report_function_arg_value_mapping` (
+  `id` int(11) NOT NULL,
+  `report_function_mapping_id` int(11) NOT NULL,
+  `function_argument_map_id` int(11) NOT NULL,
+  `value` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `report_function_arg_value_mapping`
+--
+
+INSERT INTO `report_function_arg_value_mapping` (`id`, `report_function_mapping_id`, `function_argument_map_id`, `value`) VALUES
+(111, 1, 13, '10'),
+(112, 1, 14, '90'),
+(113, 2, 8, '30'),
+(114, 3, 11, 'Enrolled'),
+(613, 1511, 11, 'B.com'),
+(617, 1514, 8, '1'),
+(618, 1515, 13, '200'),
+(619, 1515, 14, '550.50'),
+(620, 1516, 8, '300.75');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `report_function_mapping_action_value`
 --
 
 CREATE TABLE `report_function_mapping_action_value` (
   `id` int(11) NOT NULL,
-  `report_function_mapping_id` int(11) NOT NULL,
-  `action_id` int(11) NOT NULL,
+  `report_function_action_mapping_id` int(11) NOT NULL,
   `action_argument_id` int(11) NOT NULL,
   `action_parameter_value` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1657,37 +2106,48 @@ CREATE TABLE `report_function_mapping_action_value` (
 -- Dumping data for table `report_function_mapping_action_value`
 --
 
-INSERT INTO `report_function_mapping_action_value` (`id`, `report_function_mapping_id`, `action_id`, `action_argument_id`, `action_parameter_value`) VALUES
-(354, 425, 15, 15, '20px'),
-(355, 425, 15, 16, 'underline'),
-(356, 426, 1, 1, 'green'),
-(357, 427, 1, 1, 'grey');
+INSERT INTO `report_function_mapping_action_value` (`id`, `report_function_action_mapping_id`, `action_argument_id`, `action_parameter_value`) VALUES
+(413, 1, 15, '30px'),
+(414, 1, 16, 'underline'),
+(415, 2, 1, 'grey'),
+(416, 3, 2, 'green'),
+(417, 4, 2, 'orange'),
+(822, 281, 1, 'green'),
+(823, 282, 15, '30px'),
+(824, 282, 16, 'underline'),
+(825, 283, 2, 'pink'),
+(832, 288, 1, 'yellow'),
+(833, 289, 15, '30px'),
+(834, 289, 16, 'underline'),
+(835, 290, 2, 'blue'),
+(836, 291, 1, 'pink');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `report_selector_function_para_action`
+-- Table structure for table `report_selector_function_mapping`
 --
 
-CREATE TABLE `report_selector_function_para_action` (
+CREATE TABLE `report_selector_function_mapping` (
   `id` int(11) NOT NULL,
   `report_id` int(11) NOT NULL,
   `report_column` varchar(255) NOT NULL,
   `report_row` varchar(255) NOT NULL,
-  `function_library_id` int(11) NOT NULL,
-  `function_library_parameter` varchar(255) NOT NULL,
-  `action_id` int(11) NOT NULL,
-  `script_to_call` text NOT NULL
+  `function_library_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `report_selector_function_para_action`
+-- Dumping data for table `report_selector_function_mapping`
 --
 
-INSERT INTO `report_selector_function_para_action` (`id`, `report_id`, `report_column`, `report_row`, `function_library_id`, `function_library_parameter`, `action_id`, `script_to_call`) VALUES
-(425, 6, 'percentage', '', 11, '@marks', 15, ''),
-(426, 6, 'percentage', '', 11, '@marks', 1, ''),
-(427, 6, 'academic_status', '', 10, 'Regural', 1, '');
+INSERT INTO `report_selector_function_mapping` (`id`, `report_id`, `report_column`, `report_row`, `function_library_id`) VALUES
+(1, 6, 'percentage', '', 12),
+(2, 6, 'percentage', '', 8),
+(3, 6, 'academic_status', '', 10),
+(1511, 7, 'course_name', '', 10),
+(1514, 8, 'PremiumMember', '', 8),
+(1515, 8, 'Balance', '', 12),
+(1516, 8, 'Balance', '', 8);
 
 -- --------------------------------------------------------
 
@@ -1749,8 +2209,10 @@ INSERT INTO `report_theme_mapping` (`id`, `application_forms_id`, `report_id`, `
 (3, 13, 2, 42),
 (4, 14, 3, 111),
 (6, 16, 4, 42),
-(8, 18, 7, 42),
-(18, 17, 6, 7);
+(8, 18, 7, 111),
+(18, 17, 6, 7),
+(19, 19, 8, 111),
+(20, 19, 8, 1233);
 
 -- --------------------------------------------------------
 
@@ -1848,7 +2310,8 @@ INSERT INTO `script_code` (`id`, `effects`, `css`, `code`, `Description`) VALUES
 (104, 'Row/Record High Light', '', 'var targetWords = [\'word\'];\r\nvar rows = document.querySelectorAll(\'table tbody tr\');\r\n\r\nrows.forEach(function (row) {\r\n    var cells = row.querySelectorAll(\'td\');\r\n\r\n    var shouldHighlight = Array.from(cells).some(function (cell) {\r\n        var value = cell.textContent.trim();\r\n        return targetWords.some(function (word) {\r\n            return value.includes(word);\r\n        });\r\n    });\r\n\r\n    if (shouldHighlight) {\r\n        row.style.setProperty(\'background-color\', \'#6495ED\', \'important\');\r\n        row.style.setProperty(\'font-weight\', \'bold\', \'important\');\r\n    }\r\n});\r\n', 'Higlight Rows or record with give word'),
 (105, 'Marks Pass', '', 'var targetColumnNames = [\'column_Name\'];\r\n\r\n    var columnIndices = targetColumnNames.map(function (columnName) {\r\n        return Array.from(document.querySelectorAll(\'table th\')).findIndex(th => th.textContent.trim() === columnName);\r\n    });\r\n\r\n    columnIndices.forEach(function (columnIndex) {\r\n        if (columnIndex !== -1) {\r\n            var targetElements = document.querySelectorAll(\'table td:nth-child(\' + (columnIndex + 1) + \')\');\r\n            \r\n            targetElements.forEach(function (element) {\r\n                var value = parseInt(element.textContent);\r\n                if (!isNaN(value)) {\r\n                    if (value >= 30) {\r\n                        element.style.setProperty(\'color\', \'green\', \'important\');\r\n                    } else {\r\n                        element.style.setProperty(\'color\', \'red\', \'important\');\r\n                    }\r\n                }\r\n            });\r\n        } else {\r\n            console.error(\'Column not found: \' + targetColumnNames.join(\', \'));\r\n        }\r\n    });', 'For Numberical Columns only , Show marks less than 30 in red and above 30 in green'),
 (106, 'Dynamic Cell Hight Light ', '', 'var targetColumnNames = [\'column_Name\'];\r\nvar targetWords = [\'word\'];\r\n\r\nvar columnIndex = Array.from(document.querySelectorAll(\'table th\')).findIndex(th => th.textContent.trim() === targetColumnNames[0]);\r\n\r\nif (columnIndex !== -1) {\r\n    var rows = document.querySelectorAll(\'table tbody tr\');\r\n\r\n    rows.forEach(function (row) {\r\n        var cell = row.querySelector(\'td:nth-child(\' + (columnIndex + 1) + \')\');\r\n        var value = cell ? cell.textContent.trim() : \'\';\r\n\r\n        if (targetWords.includes(value)) {\r\n            cell.style.setProperty(\'background-color\', \'#6495ED\', \'important\');\r\n            cell.style.setProperty(\'font-weight\', \'bold\', \'important\');\r\n        }\r\n    });\r\n} else {\r\n    console.error(\'Column not found: \' + targetColumnNames.join(\', \'));\r\n}', 'HightLight Cell using column and word.There should be only one column, and words can be multiplely related to that field.'),
-(107, 'Function Mark effect ', '', ' function highlightPassFailByMark(markParameter, passColor, failColor) {\r\n    var targetColumnNames = [\'column_Name\'];\r\n\r\n    var columnIndices = targetColumnNames.map(function (columnName) {\r\n        return Array.from(document.querySelectorAll(\'table th\')).findIndex(th => th.textContent.trim() === columnName);\r\n    });\r\n\r\n    columnIndices.forEach(function (columnIndex) {\r\n        if (columnIndex !== -1) {\r\n            var targetElements = document.querySelectorAll(\'table td:nth-child(\' + (columnIndex + 1) + \')\');\r\n            \r\n            targetElements.forEach(function (element) {\r\n                var value = parseInt(element.textContent);\r\n                if (!isNaN(value)) {\r\n                    if (value >= markParameter) {\r\n                        element.style.setProperty(\'color\', passColor, \'important\');\r\n                    } else {\r\n                        element.style.setProperty(\'color\', failColor, \'important\');\r\n                    }\r\n                }\r\n            });\r\n        } else {\r\n            console.error(\'Column not found: \' + targetColumnNames.join(\', \'));\r\n        }\r\n    });\r\n}\r\n\r\nhighlightPassFailByMark(30, \'green\', \'red\');', 'Function for mark based script');
+(107, 'Function Mark effect ', '', ' function highlightPassFailByMark(markParameter, passColor, failColor) {\r\n    var targetColumnNames = [\'column_Name\'];\r\n\r\n    var columnIndices = targetColumnNames.map(function (columnName) {\r\n        return Array.from(document.querySelectorAll(\'table th\')).findIndex(th => th.textContent.trim() === columnName);\r\n    });\r\n\r\n    columnIndices.forEach(function (columnIndex) {\r\n        if (columnIndex !== -1) {\r\n            var targetElements = document.querySelectorAll(\'table td:nth-child(\' + (columnIndex + 1) + \')\');\r\n            \r\n            targetElements.forEach(function (element) {\r\n                var value = parseInt(element.textContent);\r\n                if (!isNaN(value)) {\r\n                    if (value >= markParameter) {\r\n                        element.style.setProperty(\'color\', passColor, \'important\');\r\n                    } else {\r\n                        element.style.setProperty(\'color\', failColor, \'important\');\r\n                    }\r\n                }\r\n            });\r\n        } else {\r\n            console.error(\'Column not found: \' + targetColumnNames.join(\', \'));\r\n        }\r\n    });\r\n}\r\n\r\nhighlightPassFailByMark(30, \'green\', \'red\');', 'Function for mark based script'),
+(108, 'Demo Effect ', '//Styles ', '{\n    \"css\": \"\\/\\/Styles\",\n    \"js\": \"document.load {\\n\\n\\/\\/javascript\\n}\"\n}', 'Test');
 
 -- --------------------------------------------------------
 
@@ -2004,7 +2467,7 @@ INSERT INTO `table_theme` (`id`, `report_id`, `report_element_name`, `report_ele
 
 CREATE TABLE `target_column` (
   `id` int(11) NOT NULL,
-  `report_function_mapping_id` int(11) NOT NULL,
+  `report_function_action_mapping_id` int(11) NOT NULL,
   `target_column` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -2012,10 +2475,15 @@ CREATE TABLE `target_column` (
 -- Dumping data for table `target_column`
 --
 
-INSERT INTO `target_column` (`id`, `report_function_mapping_id`, `target_column`) VALUES
-(16, 425, 'first_name'),
-(17, 425, 'last_name'),
-(18, 426, 'percentage');
+INSERT INTO `target_column` (`id`, `report_function_action_mapping_id`, `target_column`) VALUES
+(3, 1, 'first_name'),
+(4, 2, 'marks'),
+(75, 282, 'course_name'),
+(76, 282, 'course_link'),
+(83, 288, 'FirstName'),
+(84, 288, 'PremiumMember'),
+(85, 291, 'LastName'),
+(86, 291, 'FirstName');
 
 -- --------------------------------------------------------
 
@@ -2240,12 +2708,12 @@ INSERT INTO `themes` (`ID`, `theme_name`, `created_at`, `color`, `font_size`, `b
 (120, 'Custom', '2023-10-18 05:53:44.224437', '#ff9d8f', '16px', '#E6F0FF', '', NULL, NULL, '2px solid #FF5733', 'left', '', '', 'relative', '', NULL, NULL, NULL, NULL, NULL, NULL, 'Chivo, sans-serif', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'url(\"beach-summer-background.jpg\")', NULL, NULL, NULL, NULL, NULL, '#FFCFCF', '', '', '', '', '10px', '10px', '10px', '10px', '', '80%', NULL, NULL, NULL, NULL, 'content-box', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'none', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '#1550B2', '#FFCFCF', '2px', '12px 24px', '8px', '#FF9D8F', '18px', 'bold', 'uppercase', NULL, NULL, NULL, 'color, background-color, border-color', '0.4s', 'ease-in-out', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '10px', ''),
 (121, 'Education Theme', '2023-10-02 02:51:03.969224', '#336699', '16px', '#F2F2F2', '', NULL, NULL, '1px solid #336699', NULL, '', '', '', '1px 1px 1px rgba(0, 0, 0, 0.2)', NULL, NULL, NULL, NULL, NULL, NULL, 'Roboto, sans-serif', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'url(\"education-background.jpg\")', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '#007BFF', '#007BFF', '2px', '12px 24px', '8px', '#FFF', '14px', 'bold', 'uppercase', NULL, NULL, NULL, 'color, background-color, border-color', '0.4s', 'ease-in-out', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '5px', ''),
 (122, 'Red Portal Theme', '2023-10-02 02:51:03.969224', '#CC0000', '16px', '#F8F8F8', '', NULL, NULL, '1px solid #CC0000', NULL, '', '', '', '1px 1px 1px rgba(0, 0, 0, 0.2)', NULL, NULL, NULL, NULL, NULL, NULL, 'Open Sans, sans-serif', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'url(\"red-background.jpg\")', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '#FF5733', '#FF5733', '2px', '12px 24px', '8px', '#FFF', '14px', 'bold', 'uppercase', NULL, NULL, NULL, 'color, background-color, border-color', '0.4s', 'ease-in-out', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '5px', ''),
-(351, 'image test', NULL, NULL, NULL, '#ebf9ff', '', NULL, NULL, NULL, NULL, '', '', '', NULL, 'px', 'px', 'px', 'px', NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'url(\"images/image2.jpg\")', 'no-repeat', NULL, 'left top', 'px', NULL, NULL, 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', NULL, NULL, NULL, 'none', 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'row', NULL, NULL, NULL, NULL, NULL, NULL, 'start', 'start', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', 'px', 'px', NULL, 'px', 'px', 'none', NULL, 'none', NULL, 'all', NULL, 'ease', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', ''),
-(352, 'test case 1', NULL, NULL, NULL, '#919191', '', NULL, NULL, NULL, NULL, '', '', '', NULL, 'px', 'px', 'px', 'px', NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'url(\"images/.jpg\")', 'Select', NULL, 'center center', '3px', 'solid', NULL, 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', NULL, NULL, NULL, 'none', 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'row', NULL, NULL, NULL, NULL, NULL, NULL, 'start', 'start', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', 'px', 'px', NULL, 'px', 'px', 'none', NULL, 'none', NULL, 'all', NULL, 'ease', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', ''),
-(353, 'Testing 12', NULL, NULL, NULL, '#ffffff', '', NULL, NULL, NULL, NULL, '', '', '', NULL, 'px', 'px', 'px', 'px', NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'url(\"images/.jpg\")', 'Select', NULL, 'center center', 'px', NULL, NULL, 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', NULL, NULL, NULL, 'none', 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'row', NULL, NULL, NULL, NULL, NULL, NULL, 'start', 'start', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', 'px', 'px', NULL, 'px', 'px', 'none', NULL, 'none', NULL, 'all', NULL, 'ease', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', ''),
-(354, 'test 13', NULL, NULL, NULL, '#ffffff', '', NULL, NULL, NULL, NULL, '', '', '', NULL, 'px', 'px', 'px', 'px', NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'url(\"images/.jpg\")', 'Select', NULL, 'center center', 'px', NULL, NULL, 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', NULL, NULL, NULL, 'none', 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'row', NULL, NULL, NULL, NULL, NULL, NULL, 'start', 'start', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', 'px', 'px', NULL, 'px', 'px', 'none', NULL, 'none', NULL, 'all', NULL, 'ease', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', ''),
-(355, 'test 14', NULL, NULL, NULL, '#ffffff', '', NULL, NULL, NULL, NULL, '', '', '', NULL, 'px', 'px', 'px', 'px', NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'url(\"images/.jpg\")', 'Select', NULL, 'center center', 'px', NULL, NULL, 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', NULL, NULL, NULL, 'none', 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'row', NULL, NULL, NULL, NULL, NULL, NULL, 'start', 'start', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', 'px', 'px', NULL, 'px', 'px', 'none', NULL, 'none', NULL, 'all', NULL, 'ease', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', ''),
-(356, 'testing theme 2', NULL, NULL, NULL, '#ffffff', '', NULL, NULL, NULL, NULL, '', '', '', NULL, 'px', 'px', 'px', 'px', NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'url(\"images/.jpg\")', 'Select', NULL, 'center center', 'px', NULL, NULL, 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', NULL, NULL, NULL, 'none', 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'row', NULL, NULL, NULL, NULL, NULL, NULL, 'start', 'start', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', 'px', 'px', NULL, 'px', 'px', 'none', NULL, 'none', NULL, 'all', NULL, 'ease', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', '');
+(357, 'Default', NULL, NULL, NULL, '', '', NULL, NULL, NULL, NULL, '', '', '', NULL, 'px', 'px', 'px', 'px', NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 'Select', NULL, '', 'px', NULL, NULL, 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', NULL, NULL, NULL, 'none', 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'row', NULL, NULL, NULL, NULL, NULL, NULL, 'start', 'start', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', 'px', 'px', NULL, 'px', 'px', 'none', NULL, 'none', NULL, 'all', NULL, 'ease', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', ''),
+(358, 'Course Theme ', '2024-03-12 08:48:25.745239', NULL, NULL, '#525252', '', NULL, NULL, NULL, NULL, '', '', '', NULL, 'px', 'px', 'px', 'px', NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 'Select', NULL, 'center center', '3px', 'groove', NULL, 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', NULL, NULL, NULL, 'none', 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'row', NULL, NULL, NULL, NULL, NULL, NULL, 'start', 'start', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', 'px', 'px', NULL, 'px', 'px', 'none', NULL, 'none', NULL, 'all', NULL, 'ease', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', ''),
+(360, 'default 2.0', '2024-03-15 09:51:01.207311', NULL, NULL, '#fafdff', '', NULL, NULL, NULL, NULL, '', '', '', NULL, 'px', 'px', 'px', 'px', NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Select', NULL, 'center center', '1pxpxpx', 'solid', NULL, 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'pxpx', 'pxpx', 'px', 'px', 'px', 'px', NULL, NULL, NULL, 'none', 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'row', NULL, NULL, NULL, NULL, NULL, NULL, 'start', 'start', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', 'px', 'px', NULL, 'px', 'px', 'none', NULL, 'none', NULL, 'all', NULL, 'ease', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2px', ''),
+(361, 'Default 2.1', '2024-03-15 09:53:58.713462', NULL, NULL, '#fafeff', '', NULL, NULL, NULL, NULL, '', '', '', NULL, 'px', 'px', 'px', 'px', NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Select', NULL, 'center center', '1px', 'solid', NULL, 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', NULL, NULL, NULL, 'none', 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'row', NULL, NULL, NULL, NULL, NULL, NULL, 'start', 'start', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', 'px', 'px', NULL, 'px', 'px', 'none', NULL, 'none', NULL, 'all', NULL, 'ease', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2px', ''),
+(362, 'Latest Theme ', NULL, NULL, NULL, '#fdbfbf', '', NULL, NULL, NULL, NULL, '', '', '', NULL, 'px', 'px', 'px', 'px', NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Select', NULL, 'center center', '2px', 'dashed', NULL, 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', NULL, NULL, NULL, 'none', 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'row', NULL, NULL, NULL, NULL, NULL, NULL, 'start', 'start', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', 'px', 'px', NULL, 'px', 'px', 'none', NULL, 'none', NULL, 'all', NULL, 'ease', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', ''),
+(363, 'Demostration Thee', NULL, NULL, NULL, '#a5cfe9', '', NULL, NULL, NULL, NULL, '', '', '', NULL, 'px', 'px', 'px', 'px', NULL, NULL, NULL, NULL, NULL, 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'url(\"images/Book.jpg\")', 'no-repeat', NULL, 'right top', '2px', 'dashed', NULL, 'px', 'px', 'px', 'px', 'px', 'px', 'px', 'px', '500px', '500px', 'px', 'px', 'px', 'px', NULL, NULL, NULL, 'none', 'px', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', NULL, '#215f28', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'row', NULL, NULL, NULL, NULL, NULL, NULL, 'start', 'start', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'px', 'px', 'px', NULL, 'px', 'px', 'none', NULL, '2px 2px 4px rgba(0, 0, 0, 0.2)', NULL, 'all', '3', 'linear', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '5px', '');
 
 -- --------------------------------------------------------
 
@@ -2420,7 +2888,57 @@ INSERT INTO `theme_for_report` (`id`, `reference_id`, `theme_name`, `element_id`
 (1228, 1183, 'TEST 7', 119, 3, '#000000'),
 (1229, 1183, 'TEST 7', 119, 18, ''),
 (1230, 1183, 'TEST 7', 120, 2, ''),
-(1231, 1183, 'TEST 7', 120, 18, '');
+(1231, 1183, 'TEST 7', 120, 18, ''),
+(1232, 0, 'Demo Report Theme March', 0, 0, ''),
+(1233, 1233, 'Demo Report Theme March', 60, 32, ' '),
+(1234, 1233, 'Demo Report Theme March', 60, 33, ' '),
+(1235, 1233, 'Demo Report Theme March', 60, 34, '10px'),
+(1236, 1233, 'Demo Report Theme March', 60, 35, ' '),
+(1237, 1233, 'Demo Report Theme March', 60, 36, ' '),
+(1238, 1233, 'Demo Report Theme March', 60, 1, '#b5b5b5'),
+(1239, 1233, 'Demo Report Theme March', 60, 7, 'px'),
+(1240, 1233, 'Demo Report Theme March', 60, 6, 'px'),
+(1241, 1233, 'Demo Report Theme March', 60, 37, '\'Times New Roman\', serif'),
+(1242, 1233, 'Demo Report Theme March', 60, 13, ''),
+(1243, 1233, 'Demo Report Theme March', 60, 5, 'px'),
+(1244, 1233, 'Demo Report Theme March', 115, 12, ' '),
+(1245, 1233, 'Demo Report Theme March', 115, 38, ' '),
+(1246, 1233, 'Demo Report Theme March', 115, 3, '#ffffff'),
+(1247, 1233, 'Demo Report Theme March', 115, 2, '35px'),
+(1248, 1233, 'Demo Report Theme March', 61, 13, '10px'),
+(1249, 1233, 'Demo Report Theme March', 61, 39, 'separate'),
+(1250, 1233, 'Demo Report Theme March', 61, 40, '1px 0'),
+(1251, 1233, 'Demo Report Theme March', 61, 41, '10px'),
+(1252, 1233, 'Demo Report Theme March', 61, 1, '#535bc6'),
+(1253, 1233, 'Demo Report Theme March', 53, 6, 'px'),
+(1254, 1233, 'Demo Report Theme March', 53, 4, ' '),
+(1255, 1233, 'Demo Report Theme March', 53, 1, '#756c6c'),
+(1256, 1233, 'Demo Report Theme March', 53, 3, '#d7d973'),
+(1257, 1233, 'Demo Report Theme March', 53, 18, 'bolder'),
+(1258, 1233, 'Demo Report Theme March', 55, 1, '#d9d9d9'),
+(1259, 1233, 'Demo Report Theme March', 56, 1, '#f7f2f2'),
+(1260, 1233, 'Demo Report Theme March', 57, 1, '#d56bd6'),
+(1261, 1233, 'Demo Report Theme March', 116, 6, 'px'),
+(1262, 1233, 'Demo Report Theme March', 116, 4, ' '),
+(1263, 1233, 'Demo Report Theme March', 116, 3, '#000000'),
+(1264, 1233, 'Demo Report Theme March', 58, 1, '#000000'),
+(1265, 1233, 'Demo Report Theme March', 58, 3, '#000000'),
+(1266, 1233, 'Demo Report Theme March', 58, 18, 'px'),
+(1267, 1233, 'Demo Report Theme March', 53, 2, '20px'),
+(1268, 1233, 'Demo Report Theme March', 116, 37, ' '),
+(1269, 1233, 'Demo Report Theme March', 116, 2, 'px'),
+(1270, 1233, 'Demo Report Theme March', 116, 23, ' '),
+(1271, 1233, 'Demo Report Theme March', 117, 3, '#f56161'),
+(1272, 1233, 'Demo Report Theme March', 117, 18, 'bolder'),
+(1273, 1233, 'Demo Report Theme March', 117, 2, '18px'),
+(1274, 1233, 'Demo Report Theme March', 118, 3, '#000000'),
+(1275, 1233, 'Demo Report Theme March', 118, 18, ' '),
+(1276, 1233, 'Demo Report Theme March', 118, 2, 'px'),
+(1277, 1233, 'Demo Report Theme March', 119, 2, 'px'),
+(1278, 1233, 'Demo Report Theme March', 119, 3, '#000000'),
+(1279, 1233, 'Demo Report Theme March', 119, 18, ' '),
+(1280, 1233, 'Demo Report Theme March', 120, 2, 'px'),
+(1281, 1233, 'Demo Report Theme March', 120, 18, ' ');
 
 -- --------------------------------------------------------
 
@@ -2443,36 +2961,20 @@ CREATE TABLE `theme_text_css_properties_value` (
 --
 
 INSERT INTO `theme_text_css_properties_value` (`id`, `theme_id`, `text_type_id`, `text_CSS_Property`, `value`, `created_at`, `updated_at`) VALUES
-(745, 352, 1, 'font_size', '30', '2024-03-11 06:32:03', '2024-03-11 06:32:03'),
-(746, 352, 1, 'color', '#ffffff', '2024-03-11 06:32:03', '2024-03-11 06:32:03'),
-(747, 352, 1, 'text_align', 'center', '2024-03-11 06:32:03', '2024-03-11 06:32:03'),
-(748, 352, 1, 'text_decoration', 'underline', '2024-03-11 06:32:03', '2024-03-11 06:32:03'),
-(749, 352, 2, 'color', '#000000', '2024-03-11 06:32:03', '2024-03-11 06:32:03'),
-(750, 352, 3, 'color', '#000000', '2024-03-11 06:32:03', '2024-03-11 06:32:03'),
-(751, 352, 4, 'font_size', '18', '2024-03-11 06:32:03', '2024-03-11 06:32:03'),
-(752, 352, 4, 'color', '#5aabdd', '2024-03-11 06:32:03', '2024-03-11 06:32:03'),
-(753, 352, 5, 'color', '#000000', '2024-03-11 06:32:03', '2024-03-11 06:32:03'),
-(754, 353, 1, 'color', '#000000', '2024-03-11 09:52:47', '2024-03-11 09:52:47'),
-(755, 353, 2, 'color', '#000000', '2024-03-11 09:52:47', '2024-03-11 09:52:47'),
-(756, 353, 3, 'color', '#000000', '2024-03-11 09:52:47', '2024-03-11 09:52:47'),
-(757, 353, 4, 'color', '#000000', '2024-03-11 09:52:47', '2024-03-11 09:52:47'),
-(758, 353, 5, 'color', '#000000', '2024-03-11 09:52:47', '2024-03-11 09:52:47'),
-(759, 354, 2, 'color', '#000000', '2024-03-11 09:53:54', '2024-03-11 09:53:54'),
-(760, 354, 3, 'color', '#000000', '2024-03-11 09:53:54', '2024-03-11 09:53:54'),
-(761, 354, 4, 'color', '#000000', '2024-03-11 09:53:54', '2024-03-11 09:53:54'),
-(762, 354, 5, 'color', '#000000', '2024-03-11 09:53:54', '2024-03-11 09:53:54'),
-(763, 355, 2, 'color', '#000000', '2024-03-11 10:06:25', '2024-03-11 10:06:25'),
-(764, 355, 4, 'color', '#fd3f3f', '2024-03-11 10:06:25', '2024-03-11 10:06:25'),
-(765, 356, 1, 'color', '#000000', '2024-03-12 00:11:12', '2024-03-12 00:11:12'),
-(766, 356, 1, 'font_family', 'Arial, Helvetica, sans-serif', '2024-03-12 00:11:12', '2024-03-12 00:11:12'),
-(767, 356, 2, 'color', '#000000', '2024-03-12 00:11:12', '2024-03-12 00:11:12'),
-(768, 356, 2, 'font_family', 'Arial, Helvetica, sans-serif', '2024-03-12 00:11:12', '2024-03-12 00:11:12'),
-(769, 356, 3, 'color', '#000000', '2024-03-12 00:11:12', '2024-03-12 00:11:12'),
-(770, 356, 3, 'font_family', 'Arial, Helvetica, sans-serif', '2024-03-12 00:11:12', '2024-03-12 00:11:12'),
-(771, 356, 4, 'color', '#000000', '2024-03-12 00:11:12', '2024-03-12 00:11:12'),
-(772, 356, 4, 'font_family', 'Arial, Helvetica, sans-serif', '2024-03-12 00:11:12', '2024-03-12 00:11:12'),
-(773, 356, 5, 'color', '#000000', '2024-03-12 00:11:12', '2024-03-12 00:11:12'),
-(774, 356, 5, 'font_family', 'Arial, Helvetica, sans-serif', '2024-03-12 00:11:12', '2024-03-12 00:11:12');
+(775, 357, 1, 'color', '#f5f5f5', '2024-03-12 09:13:25', '2024-03-12 02:44:04'),
+(776, 358, 1, 'font_size', '30', '2024-03-12 04:14:09', '2024-03-12 04:14:09'),
+(777, 358, 1, 'color', '#f5f5f5 !important', '2024-03-12 09:05:06', '2024-03-12 04:14:09'),
+(778, 358, 4, 'font_size', '18', '2024-03-12 04:14:09', '2024-03-12 04:14:09'),
+(779, 358, 4, 'color', '#497cf3', '2024-03-12 04:14:09', '2024-03-12 04:14:09'),
+(780, 358, 4, 'font_family', 'Courier New, Courier, monospace', '2024-03-12 04:14:09', '2024-03-12 04:14:09'),
+(781, 357, 4, 'color', 'yellow', '2024-03-12 09:17:32', '0000-00-00 00:00:00'),
+(782, 363, 1, 'font_size', '30px', '2024-03-24 02:38:55', '2024-03-24 02:38:55'),
+(783, 363, 1, 'color', '#1c53ab', '2024-03-24 02:38:55', '2024-03-24 02:38:55'),
+(784, 363, 1, 'font_family', 'Verdana, Geneva, sans-serif', '2024-03-24 02:38:55', '2024-03-24 02:38:55'),
+(785, 363, 1, 'text_align', 'center', '2024-03-24 02:38:55', '2024-03-24 02:38:55'),
+(786, 363, 1, 'text_decoration', 'underline', '2024-03-24 02:38:55', '2024-03-24 02:38:55'),
+(787, 363, 4, 'font_size', '18', '2024-03-24 02:38:55', '2024-03-24 02:38:55'),
+(788, 363, 4, 'color', '#7a7575', '2024-03-24 02:38:55', '2024-03-24 02:38:55');
 
 --
 -- Indexes for dumped tables
@@ -2533,6 +3035,12 @@ ALTER TABLE `css_properties`
 --
 ALTER TABLE `current_theme`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `customers`
+--
+ALTER TABLE `customers`
+  ADD PRIMARY KEY (`CustomerID`);
 
 --
 -- Indexes for table `custom_page_properties`
@@ -2612,6 +3120,15 @@ ALTER TABLE `form_element_css_properties`
   ADD PRIMARY KEY (`id`),
   ADD KEY `element_id` (`element_id`),
   ADD KEY `css_properties_id` (`css_properties_id`);
+
+--
+-- Indexes for table `form_element_css_properties_theme_mapping`
+--
+ALTER TABLE `form_element_css_properties_theme_mapping`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `value` (`value`),
+  ADD KEY `theme_ID` (`theme_ID`),
+  ADD KEY `form_element_css_properties_id` (`form_element_css_properties_id`);
 
 --
 -- Indexes for table `form_element_theme_mapping`
@@ -2709,20 +3226,36 @@ ALTER TABLE `report_element_css_set`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `report_function_action_mapping`
+--
+ALTER TABLE `report_function_action_mapping`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `report_function_mapping_id` (`report_function_mapping_id`),
+  ADD KEY `action_id` (`action_library_id`);
+
+--
+-- Indexes for table `report_function_arg_value_mapping`
+--
+ALTER TABLE `report_function_arg_value_mapping`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `report_function_mapping` (`report_function_mapping_id`),
+  ADD KEY `function_argument_map` (`function_argument_map_id`);
+
+--
 -- Indexes for table `report_function_mapping_action_value`
 --
 ALTER TABLE `report_function_mapping_action_value`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `report_function_mapping` (`report_function_mapping_id`);
+  ADD KEY `action_arg` (`action_argument_id`),
+  ADD KEY `rfam` (`report_function_action_mapping_id`);
 
 --
--- Indexes for table `report_selector_function_para_action`
+-- Indexes for table `report_selector_function_mapping`
 --
-ALTER TABLE `report_selector_function_para_action`
+ALTER TABLE `report_selector_function_mapping`
   ADD PRIMARY KEY (`id`),
   ADD KEY `report` (`report_id`),
-  ADD KEY `funtion` (`function_library_id`),
-  ADD KEY `action` (`action_id`);
+  ADD KEY `funtion` (`function_library_id`);
 
 --
 -- Indexes for table `report_theme`
@@ -2781,7 +3314,8 @@ ALTER TABLE `table_theme`
 -- Indexes for table `target_column`
 --
 ALTER TABLE `target_column`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `rfam_id` (`report_function_action_mapping_id`);
 
 --
 -- Indexes for table `text_css_properties`
@@ -2844,7 +3378,7 @@ ALTER TABLE `action_type`
 -- AUTO_INCREMENT for table `application_forms`
 --
 ALTER TABLE `application_forms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -2886,7 +3420,7 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `effects`
 --
 ALTER TABLE `effects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=437;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=438;
 
 --
 -- AUTO_INCREMENT for table `effect_trigger`
@@ -2931,6 +3465,12 @@ ALTER TABLE `form_element_css_properties`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
 
 --
+-- AUTO_INCREMENT for table `form_element_css_properties_theme_mapping`
+--
+ALTER TABLE `form_element_css_properties_theme_mapping`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8481;
+
+--
 -- AUTO_INCREMENT for table `form_element_theme_mapping`
 --
 ALTER TABLE `form_element_theme_mapping`
@@ -2946,19 +3486,19 @@ ALTER TABLE `form_fields`
 -- AUTO_INCREMENT for table `form_field_cssproperty_value_mapping`
 --
 ALTER TABLE `form_field_cssproperty_value_mapping`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `form_theme_mapping`
 --
 ALTER TABLE `form_theme_mapping`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
 
 --
 -- AUTO_INCREMENT for table `function_argument_map`
 --
 ALTER TABLE `function_argument_map`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `function_category`
@@ -2970,7 +3510,7 @@ ALTER TABLE `function_category`
 -- AUTO_INCREMENT for table `function_library`
 --
 ALTER TABLE `function_library`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `function_library_manager`
@@ -3000,7 +3540,7 @@ ALTER TABLE `night_time_settings`
 -- AUTO_INCREMENT for table `report`
 --
 ALTER TABLE `report`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `report_element_css_set`
@@ -3009,16 +3549,28 @@ ALTER TABLE `report_element_css_set`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
+-- AUTO_INCREMENT for table `report_function_action_mapping`
+--
+ALTER TABLE `report_function_action_mapping`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=292;
+
+--
+-- AUTO_INCREMENT for table `report_function_arg_value_mapping`
+--
+ALTER TABLE `report_function_arg_value_mapping`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=621;
+
+--
 -- AUTO_INCREMENT for table `report_function_mapping_action_value`
 --
 ALTER TABLE `report_function_mapping_action_value`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=358;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=837;
 
 --
--- AUTO_INCREMENT for table `report_selector_function_para_action`
+-- AUTO_INCREMENT for table `report_selector_function_mapping`
 --
-ALTER TABLE `report_selector_function_para_action`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=428;
+ALTER TABLE `report_selector_function_mapping`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1517;
 
 --
 -- AUTO_INCREMENT for table `report_theme`
@@ -3030,7 +3582,7 @@ ALTER TABLE `report_theme`
 -- AUTO_INCREMENT for table `report_theme_mapping`
 --
 ALTER TABLE `report_theme_mapping`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `report_trigger_mapping`
@@ -3048,7 +3600,7 @@ ALTER TABLE `return_type`
 -- AUTO_INCREMENT for table `script_code`
 --
 ALTER TABLE `script_code`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- AUTO_INCREMENT for table `table_theme`
@@ -3060,7 +3612,7 @@ ALTER TABLE `table_theme`
 -- AUTO_INCREMENT for table `target_column`
 --
 ALTER TABLE `target_column`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `text_css_properties`
@@ -3078,19 +3630,19 @@ ALTER TABLE `text_type`
 -- AUTO_INCREMENT for table `themes`
 --
 ALTER TABLE `themes`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=357;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=364;
 
 --
 -- AUTO_INCREMENT for table `theme_for_report`
 --
 ALTER TABLE `theme_for_report`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1232;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1282;
 
 --
 -- AUTO_INCREMENT for table `theme_text_css_properties_value`
 --
 ALTER TABLE `theme_text_css_properties_value`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=775;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=789;
 
 --
 -- Constraints for dumped tables
@@ -3137,18 +3689,44 @@ ALTER TABLE `form_field_cssproperty_value_mapping`
   ADD CONSTRAINT `field_id` FOREIGN KEY (`field_id`) REFERENCES `form_fields` (`FIELD_ID`);
 
 --
+-- Constraints for table `function_argument_map`
+--
+ALTER TABLE `function_argument_map`
+  ADD CONSTRAINT `function_library_ibfk` FOREIGN KEY (`function_library_id`) REFERENCES `function_library` (`id`);
+
+--
+-- Constraints for table `report_function_action_mapping`
+--
+ALTER TABLE `report_function_action_mapping`
+  ADD CONSTRAINT `action_id` FOREIGN KEY (`action_library_id`) REFERENCES `action_library` (`id`),
+  ADD CONSTRAINT `report_function_mapping_id` FOREIGN KEY (`report_function_mapping_id`) REFERENCES `report_selector_function_mapping` (`id`);
+
+--
+-- Constraints for table `report_function_arg_value_mapping`
+--
+ALTER TABLE `report_function_arg_value_mapping`
+  ADD CONSTRAINT `function_argument_map` FOREIGN KEY (`function_argument_map_id`) REFERENCES `function_argument_map` (`id`),
+  ADD CONSTRAINT `report_function_mapping` FOREIGN KEY (`report_function_mapping_id`) REFERENCES `report_selector_function_mapping` (`id`);
+
+--
 -- Constraints for table `report_function_mapping_action_value`
 --
 ALTER TABLE `report_function_mapping_action_value`
-  ADD CONSTRAINT `report_function_mapping` FOREIGN KEY (`report_function_mapping_id`) REFERENCES `report_selector_function_para_action` (`id`);
+  ADD CONSTRAINT `action_arg` FOREIGN KEY (`action_argument_id`) REFERENCES `action_argument_map` (`id`),
+  ADD CONSTRAINT `rfam` FOREIGN KEY (`report_function_action_mapping_id`) REFERENCES `report_function_action_mapping` (`id`);
 
 --
--- Constraints for table `report_selector_function_para_action`
+-- Constraints for table `report_selector_function_mapping`
 --
-ALTER TABLE `report_selector_function_para_action`
-  ADD CONSTRAINT `action` FOREIGN KEY (`action_id`) REFERENCES `action_library` (`id`),
+ALTER TABLE `report_selector_function_mapping`
   ADD CONSTRAINT `funtion` FOREIGN KEY (`function_library_id`) REFERENCES `function_library` (`id`),
   ADD CONSTRAINT `report` FOREIGN KEY (`report_id`) REFERENCES `report` (`id`);
+
+--
+-- Constraints for table `target_column`
+--
+ALTER TABLE `target_column`
+  ADD CONSTRAINT `rfam_id` FOREIGN KEY (`report_function_action_mapping_id`) REFERENCES `report_function_action_mapping` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
