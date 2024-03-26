@@ -36,19 +36,19 @@ $controller = Yii::app()->getController();
 
         <div class="row" id="field_2">
             <?php echo $form->labelEx($model,'department_name'); ?>
-            <?php echo $form->textField($model,'department_name',array('size'=>60,'maxlength'=>255, 'id'=>'department_name')); ?>
+            <?php echo $form->textField($model,'department_name',array('size'=>60,'maxlength'=>255, 'id'=>'field_2')); ?>
             <?php echo $form->error($model,'department_name'); ?>
         </div>
 
         <div class="row">
             <?php echo $form->labelEx($model,'department_desc'); ?>
-            <?php echo $form->textField($model,'department_desc',array('size'=>60,'maxlength'=>255, 'id'=>'department_desc')); ?>
+            <?php echo $form->textField($model,'department_desc',array('size'=>60,'maxlength'=>255, 'id'=>'field_3')); ?>
             <?php echo $form->error($model,'department_desc'); ?>
         </div>
 
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save',array('id' => "department_btn")); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save',array('id' => "field_4")); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

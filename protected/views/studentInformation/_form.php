@@ -192,9 +192,9 @@ $(document).ready(function() {
 });
 </script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="http://localhost/testproject/AjaxFiles/ApplyCSStoElements.js"></script>
-         <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ApplythemeonformId.js"></script>
+<!--  <script src="http://localhost/testproject/AjaxFiles/ApplyCSStoElements.js"></script>-->
+<!--         <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ApplythemeonformId.js"></script>-->
 
 
 
-  
+<!--  <script>$(document).ready(function() { $('#field_39').hover(function() { var element = $(this); element.addClass('blink'); setTimeout(function() { element.removeClass('blink'); }, 1000); }); });</script>-->

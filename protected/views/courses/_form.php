@@ -62,19 +62,19 @@ $controller = Yii::app()->getController();
 
 	<div class="row">
     <?php echo $form->labelEx($model, 'course_name'); ?>
-    <?php echo $form->textField($model, 'course_name', array('size' => 60, 'maxlength' => 255, 'id' => 'course_name')); ?>
+    <?php echo $form->textField($model, 'course_name', array('size' => 60, 'maxlength' => 255, 'id' => 'field_9')); ?>
     <?php echo $form->error($model, 'course_name'); ?>
 </div>
 
 <div class="row">
     <?php echo $form->labelEx($model, 'course_link'); ?>
-    <?php echo $form->textField($model, 'course_link', array('size' => 60, 'maxlength' => 255, 'id' => 'course_link')); ?>
+    <?php echo $form->textField($model, 'course_link', array('size' => 60, 'maxlength' => 255, 'id' => 'field_8')); ?>
     <?php echo $form->error($model, 'course_link'); ?>
 </div>
 
 <div class="row">
     <?php echo $form->labelEx($model, 'department_id'); ?>
-    <?php echo $form->dropDownList($model, 'department_id', $departmentList, array('empty' => 'Select Department', 'id' => 'course_page_department_id')); ?>
+    <?php echo $form->dropDownList($model, 'department_id', $departmentList, array('empty' => 'Select Department', 'id' => 'field_10')); ?>
     <?php echo $form->error($model, 'department_id'); ?>
 </div>
 
@@ -83,7 +83,7 @@ $controller = Yii::app()->getController();
     <?php
         // get the list of course types
         $courseTypes = CourseType::model()->findAll();
-        $courseTypeList = CHtml::listData($courseTypes, 'id', 'course_type');
+        $courseTypeList = CHtml::listData($courseTypes, 'id', 'field_11');
         
         // display the radio buttons for course types
         foreach($courseTypeList as $value=>$name){
@@ -100,7 +100,7 @@ $controller = Yii::app()->getController();
 </div>
 
 	<div class="row buttons" >
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save',array('id' => "course_btn")); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save',array('id' => "field_12")); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

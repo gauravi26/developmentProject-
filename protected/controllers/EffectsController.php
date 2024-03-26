@@ -63,7 +63,7 @@ class EffectsController extends Controller
 	 */
 function addToQueue($formId, $fieldId, $effectId, $triggerId) {
     // Define the filename where the queue data is stored
-    $queueFilename = 'C:\xampp\htdocs\themebuilder\AjaxFiles\effectScriptsQueue.json';
+    $queueFilename = 'C:\xampp\htdocs\themebuilder11\AjaxFiles\effectScriptsQueue.json';
 
     // Load the existing queue data
     $queue = json_decode(file_get_contents($queueFilename), true);
@@ -117,7 +117,7 @@ public function actionCreate() {
 //                $jsCode = str_replace('triggerValue', $triggerName, $jsCode);
 
                 // Define the filename where the JSON data is stored
-                $filename = 'C:\xampp\htdocs\testproject\AjaxFiles\effectScripts.json';
+                $filename = 'C:\xampp\htdocs\themebuilder11\AjaxFiles\effectScripts.json';
 
                 // Load the existing data from the JSON file
                 $jsonContent = file_get_contents($filename);
@@ -129,9 +129,12 @@ public function actionCreate() {
                 // Loop through the formFieldTitles and generate JavaScript code
                 foreach ($formFieldTitles as $formFieldTitle) {
                     $id = $formFieldTitle->FIELD_ID;
+                    $elemenID = "field_".$id;
+//                    print_r($elemenID);
+//                    die();
                     $title = $formFieldTitle->TITLE;
                     // Replace "elementId" with the "id" from the title in the JavaScript code
-                     $jsCode = str_replace('elementId', $title, $scriptCode['js']);
+                     $jsCode = str_replace('elementId', $elemenID, $scriptCode['js']);
                 $jsCode = str_replace('triggerValue', $triggerName, $jsCode);
 
                     // Create an array for the effect data
@@ -228,7 +231,7 @@ public function actionCreate() {
 //            }
 //
 //            // Define the filename where the JSON data is stored
-//            $filename = 'C:\xampp\htdocs\testproject\AjaxFiles\effectScripts.json';
+//            $filename = 'C:\xampp\htdocs\themebuilder11\AjaxFiles\effectScripts.json';
 //
 //            // Read the current content from the file (if the file already exists)
 //            $currentContent = file_get_contents($filename);
@@ -276,7 +279,7 @@ public function actionApplyScript()
         $formId = $applicationForm->id;
 
         // Define the filename where the JSON data is stored
-        $filename = 'C:\xampp\htdocs\testproject\AjaxFiles\effectScripts.json';
+        $filename = 'C:\xampp\htdocs\themebuilder11\AjaxFiles\effectScripts.json';
 
         // Read the current content from the file
         $currentContent = file_get_contents($filename);

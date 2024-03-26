@@ -227,8 +227,7 @@ private function combinationValidation($model)
         
       public function actionApplyStylesToFormElement($formID)
 {
-          
-   
+        
         // Find the form ID
         $formMapping = Forms::model()->findByAttributes(array('FORM_NAME' => $formID));
 if ($formMapping !== null) {
