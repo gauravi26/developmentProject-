@@ -257,7 +257,6 @@ public function actionCreate() {
 //            // Optionally, you can also append a newline character to separate the new content from the existing content
 //            file_put_contents($filename, "\n", FILE_APPEND);
 //
-//            // Optionally, you can store the generatedScripts array in your database for future reference.
 //
 //            $this->redirect(array('view', 'id' => $model->id));
 //        }

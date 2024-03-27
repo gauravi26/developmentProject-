@@ -54,7 +54,6 @@ function fetchCssProperties(controller, action) {
                     // Combine normal and hover state rules
                     var combinedCssRule = cssRuleNormal + '\n\n' + cssRuleHover;
 
-                    // Log the result (you can also append this to a style tag in the head)
 //                    console.log("CSS Rule:", combinedCssRule);
 
                     // Append the CSS rule to the head of the document

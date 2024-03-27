@@ -20,7 +20,7 @@
 
             success: function(response) {
                 // Handle the success response here
-                // You can access the returned CSS string from the 'response' variable
+                //  can access the returned CSS string from the 'response' variable
 
                 // Create a <style> element and append the CSS styles to it
                 var styleElement = $('<style>').text(response);

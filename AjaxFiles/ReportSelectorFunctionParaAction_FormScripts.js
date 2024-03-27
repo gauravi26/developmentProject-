@@ -128,7 +128,6 @@ functionActionDiv.append(actionDiv);
     });
 
 // Append the combined function and action div to wherever it needs to go
-// For example, assuming reportRowField is where you want to append it:
 reportRowField.after(functionActionDiv);
 
     var inputFieldContainer = $('<div>').addClass('row');
@@ -273,7 +272,6 @@ function handleActionParameters(data, columnName) {
 //    });
 //
 //    // Append the combined function and action div to wherever it needs to go
-//    // For example, assuming reportRowField is where you want to append it:
 //    functionDiv.after(functionActionDiv).after(addMoreFunctionButton).append('<br>');
 //}
 

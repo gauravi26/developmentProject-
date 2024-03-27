@@ -1,4 +1,3 @@
-<!--$themeData = [];-->
 
 <?php
 
@@ -398,72 +397,68 @@ class FormThemeController extends Controller {
         
     }
     
-      public function actionFinalTextStyles() {
-        $controllerId = isset($_GET['controller']) ? $_GET['controller'] : null;
-        $actionId = isset($_GET['action']) ? $_GET['action'] : null;
-        $specficTextStyle = $this->actionSpecificTextProperties($controllerId,$actionId);
-        $generalTextStyle = $this->actionTextCSSProperties();
-        $general= $this->convertAssociativeArray($generalTextStyle);
-        
-        
-        
-        if (isset($specficTextStyle['specificStyle']) && $specficTextStyle['specificStyle'] !== NULL) {
-        $final = [];
-        foreach ($specficTextStyle['specificStyle'] as $property) {
-            $final[] = $property;
-        }
-        $final = $this->convertAssociativeArray($final);
-        print_r($final);
-        
-        // Merge general and form themes
-        foreach ($general as $key => $value) {
-            if (!isset($final[$key])) {
-                $final[$key] = $value;
+public function actionFinalTextStyles() {
+    $controllerId = isset($_GET['controller']) ? $_GET['controller'] : null;
+    $actionId = isset($_GET['action']) ? $_GET['action'] : null;
+    $specificTextStyle = $this->actionSpecificTextProperties($controllerId, $actionId);
+    $generalTextStyle = $this->actionTextCSSProperties();
+//print_r($specificTextStyle);
+//       echo "<br>";
+//       echo "<br>";
+//        print_r($generalTextStyle);
+    // Convert general text CSS properties to an associative array
+    $final = [];
+
+    // Merge specific text styles with precedence
+    if (isset($specificTextStyle['specificStyle']) && $specificTextStyle['specificStyle'] !== null) {
+        foreach ($specificTextStyle['specificStyle'] as $element => $properties) {
+            foreach ($properties as $property => $value) {
+                $final[$element][$property] = $value;
             }
         }
+    }
 
-                echo json_encode(['css' => $final]);
-            return;
+    // Merge general text styles into the final array if not already present
+    if (isset($generalTextStyle['generalStyle']) && $generalTextStyle['generalStyle'] !== null) {
+        foreach ($generalTextStyle['generalStyle'] as $element => $properties) {
+            foreach ($properties as $property => $value) {
+                if (!isset($final[$element][$property])) {
+                    $final[$element][$property] = $value;
+                }
+            }
+        }
+    }
+
+    // Return the merged CSS properties as JSON
+//     echo "<br>";
+// 
+//       echo "<br>";
+//        print_r($final);
+echo json_encode(['css' => $final]);
     
-    } else {
-        
-//         print_r($general);
-//         print_r("hi");
-       
-        echo json_encode(['css' => $general]);
-         return ;
-    }
-        print_r($generalTextStyle);
-        echo "<br>";
-        print_r($specficTextStyle);
-        
-        
-        
-        
-    }
-private function convertAssociativeArray($themeArray) {
+}
+
+    
+    private function convertAssociativeArray($themeArray) {
     $cssArray = [];
 
     foreach ($themeArray as $key => $value) {
-        // Split the string by ":"
+//        print_r($value);
+//         echo "<br>";
+//          echo "<br>";
         foreach ($value as $textType => $styles) {
             // Check if $styles is an array before iterating over it
+//             print_r($styles);
+//         echo "<br>";
+//         die();
             if (is_array($styles)) {
                 foreach ($styles as $cssProperty => $propertyValue) {
-                    // Debugging
-                    echo "Processing CSS property: $cssProperty, Value: $propertyValue<br>";
 
-                    // Split the property value string by ":"
-                    $parts = explode(':', $propertyValue, 2);
-                    if (count($parts) === 2) {
+                    if (is_string($propertyValue)) {
                         // Trim property and value
-                        $property = trim($parts[0]);
-                        $value = trim($parts[1]);
+                        $property = trim($cssProperty); // Use $cssProperty directly
+                        $value = trim($propertyValue);
 
-                        // Debugging
-                        echo "Trimmed Property: $property, Trimmed Value: $value<br>";
-
-                        // Add to the CSS array
                         $cssArray[$property] = $value;
                     } else {
                         // Debugging
@@ -480,9 +475,9 @@ private function convertAssociativeArray($themeArray) {
     }
 
     // Debugging
-    echo "Final CSS Array: ";
-    var_dump($cssArray);
-    echo "<br>";
+//    echo "Final CSS Array: ";
+//    var_dump($cssArray);
+//    echo "<br>";
 
     return $cssArray;
 }

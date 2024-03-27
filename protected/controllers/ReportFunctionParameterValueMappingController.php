@@ -236,7 +236,6 @@ class ReportFunctionParameterValueMappingController extends Controller
             die();
         } else {
             // Handle case when function library model is not found
-            // Maybe log an error or handle it according to your application logic
         }
     } else {
         // Handle case when report function mapping model is not found

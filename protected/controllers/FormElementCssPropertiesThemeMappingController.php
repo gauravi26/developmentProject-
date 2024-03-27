@@ -196,7 +196,6 @@ class FormElementCssPropertiesThemeMappingController extends Controller
 //    // Save the ID in a variable
 //    $selectedId = $model->theme_ID;
 //
-//    // Assuming you have defined the $form variable or widget earlier in your action
 //    $form = new CActiveForm();
 //
 //    $this->render('tab-view-updatetheme_element_value', array(
@@ -246,8 +245,7 @@ class FormElementCssPropertiesThemeMappingController extends Controller
 //    // Fetch the FormElementCssPropertiesThemeMapping model based on the provided ID and theme_ID
 //    $elementModel = FormElementCssPropertiesThemeMapping::model()->findByPk(array('id' => $id, 'theme_ID' => $themeID));
 //
-//    // Rest of your code...
-//
+//   
 //    // Render the view and pass the updated elementModel and themeModel
 //    $this->render('tab-view-updatetheme_element_value', array(
 //        'elementModel' => $elementModel,
