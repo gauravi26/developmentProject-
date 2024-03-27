@@ -215,5 +215,5 @@ function openTab(evt, tabName) {
 }
 
 // Initially, display the first tab
-document.getElementById('Tab1').style.display = 'block';
+//document.getElementById('Tab1').style.display = 'block';
 </script>

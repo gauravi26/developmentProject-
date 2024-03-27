@@ -1,17 +1,17 @@
+$(window).on('load', function () {              
+    if ($('.report-table').length > 0) {
+        // Initialize DataTable after fetching CSS properties
+        initializeDataTable();
+    } else {
+        console.log("Report not found with class .report-table");
+    }
+});
 
-            // Event handler for page load
-            $(window).on('load', function () {              
-                // Initialize DataTable after fetching CSS properties
-                initializeDataTable();
-            });
-       
-        // Function to initialize DataTable
-        function initializeDataTable() {
-            $('.report-table').DataTable({
-                
-                 "paging": true,
-            "ordering": true,
-            "info": true
-                // Add any DataTable options here
-            });
-        }
+// Function to initialize DataTable
+function initializeDataTable() {
+    $('.report-table').DataTable({
+        "paging": true,
+        "ordering": true,
+        "info": true
+    });
+}

@@ -12,11 +12,11 @@
             'buttons' => array(
                 'view' => array(
                     'label' => 'View',
-                    'url' => 'Yii::app()->createUrl("themes/cssinputview", array("id" => $data->ID))',
+                    'url' => 'Yii::app()->createUrl("themes/view", array("id" => $data->ID))',
                 ),
                 'update' => array(
                     'label' => 'Update',
-                    'url' => 'Yii::app()->createUrl("themes/cssinputcustomupdate", array("id" => $data->ID))',
+                    'url' => 'Yii::app()->createUrl("themes/update", array("id" => $data->ID))',
                 ),
              // Grid view configuration
 'delete' => array(

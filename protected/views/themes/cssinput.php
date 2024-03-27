@@ -902,7 +902,7 @@ input {
     include 'themePreview.php'; // or require 'themePreview.php';
     ?>
 </body>
-    <script src="http://localhost/testproject/AjaxFiles/preview.js"></script>
+    <script src="http://localhost/themebuilder11/AjaxFiles/preview.js"></script>
 
     <script>
             document.addEventListener("DOMContentLoaded", function () {

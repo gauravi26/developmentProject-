@@ -1,4 +1,3 @@
-$(document).ready(function() {
   $(window).on('load', function() {
       
     var controllerName = $("#controllerId").val();
@@ -43,7 +42,7 @@ $(document).ready(function() {
       }
     });
   });
-});
+
 
 
 

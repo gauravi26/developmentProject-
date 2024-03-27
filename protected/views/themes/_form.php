@@ -464,9 +464,9 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'icon_color'); ?>
-		<?php echo $form->textField($model,'icon_color',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'icon_color'); ?>
+		<?php echo $form->labelEx($model,'icon'); ?>
+		<?php echo $form->textField($model,'icon',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->error($model,'icon'); ?>
 	</div>
 
 	<div class="row">
@@ -476,15 +476,15 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'link_hover_color'); ?>
-		<?php echo $form->textField($model,'link_hover_color',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'link_hover_color'); ?>
+		<?php echo $form->labelEx($model,'hover'); ?>
+		<?php echo $form->textField($model,'hover',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->error($model,'hover'); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'link_visited_color'); ?>
-		<?php echo $form->textField($model,'link_visited_color',array('size'=>60,'maxlength'=>255)); ?>
-		<?php echo $form->error($model,'link_visited_color'); ?>
+		<?php echo $form->labelEx($model,'visited'); ?>
+		<?php echo $form->textField($model,'visited',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->error($model,'visited'); ?>
 	</div>
 
 	<div class="row">

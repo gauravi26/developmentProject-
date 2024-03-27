@@ -88,18 +88,23 @@ class ThemesController extends Controller
 	{
 		$model=$this->loadModel($id);
 
+
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Themes']))
+                print_r($_POST['Themes']);
+                        die(); 
 		{
 			$model->attributes=$_POST['Themes'];
+                        
+                                            
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->ID));
 		}
 
 		$this->render('update',array(
-			'model'=>$model,
+			'theme'=>$theme,
 		));
 	}
 
@@ -213,6 +218,9 @@ class ThemesController extends Controller
 
     // Check if the form is submitted
  if (isset($_POST['save_theme'])) {
+     
+//     print_r(($_POST['save_theme']));
+//             die();
         $extension = pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION);
         $name = $_POST["filename"];
 
@@ -683,25 +691,7 @@ public function actionselectImage()
 echo json_encode($imageList);
      
 }
-
-// public function actionselectImage()
-//{
-//     $imagePath = 'images/Flag.jpeg';
-//     
-//     if(file_exists($imagePath)){
-//         
-//        // Set the appropriate Content-Type header
-//        header('Content-Type: image/jpeg');
-//
-//        // Output the image content
-//        readfile($imagePath);
-//     }
-//     else  {
-//          echo "image not found";
-//     }
-//}
-//            
-            
+        
             
             
          
@@ -717,30 +707,7 @@ echo json_encode($imageList);
     return false;
 }
 
-//private function Uploadimage($imageFile)
-//{
-//    $uploadDir = 'images/';
-//
-//    // Debugging: Output the uploaded file information
-//    echo "Uploaded file info:\n";
-//    var_dump($imageFile);
-//
-//    $uniqueFilename = uniqid() . '_' . $imageFile['name'];
-//    $uploadPath = $uploadDir . '/' . $uniqueFilename;
-//
-//    // Debugging: Output the upload path
-//    echo "Upload path: $uploadPath\n";
-//
-//    if (move_uploaded_file($imageFile['tmp_name'], $uploadPath)) {
-//        // Debugging: Output success message
-//        echo "File uploaded successfully.\n";
-//        return $uploadPath;
-//    } else {
-//        // Debugging: Output error message
-//        echo "File upload failed.\n";
-//        return false;
-//    }
-//}
+
 
 // In  controller action, load the theme by ID and pass it to the view
 public function actioncssinputview($id)
@@ -762,37 +729,18 @@ public function actionCssinputcustomupdate($id)
     if (isset($_POST['Themes'])) {
         $theme->attributes = $_POST['Themes'];
         if ($theme->save()) {
-            $this->redirect(array('cssinput', 'id' => $theme->ID));
+            $this->redirect(array('cssinputview','id'=>$theme->ID));
         }
     }
+    else {
+       Yii::app()->user->setFlash('error', 'Error Updating theme.');
+       echo 'Error in Updating Theme';
 
-    $this->render('cssinput', array(
+        
+    }
+
+    $this->render('cssinputupdate', array(
         'theme' => $theme,
-    ));
-}
-// Controller action: customupdateview
-public function actionCustomupdateview($id)
-{
-$model = $this->loadModel('Themes', $id);
-
-    // Check if the theme is successfully loaded
-    if ($model === null) {
-        // Handle the case when the theme is not found
-        throw new CHttpException(404, 'The requested theme does not exist.');
-    }
-
-    // Uncomment the following line if AJAX validation is needed
-    // $this->performAjaxValidation($model);
-
-    if (isset($_POST['Themes'])) {
-        $model->attributes = $_POST['Themes'];
-        if ($model->save()) {
-            $this->redirect(array('customupdateview', 'id' => $model->ID));
-        }
-    }
-
-    $this->render('customupdateview', array(
-        'model' => $model,
     ));
 }
 

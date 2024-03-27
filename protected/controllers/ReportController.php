@@ -92,9 +92,15 @@ class ReportController extends Controller
 		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['Report']))
+                    print_r($_POST);
+                    echo '<br>';
+                     print_r($_POST['Report']);
+                    die();
 		{
+                 
 			$model->attributes=$_POST['Report'];
 			if($model->save())
+                          
 				$this->redirect(array('view','id'=>$model->id));
 		}
 

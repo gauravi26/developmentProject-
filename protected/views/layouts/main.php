@@ -76,13 +76,12 @@
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyReportTheme.js"></script>
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ApplythemeonformId.js"></script><!--
 -->  
-<!--<script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applytheme.js"></script>
--->    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ApplyCSStoElements.js"></script>
+  
+<script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/ApplyCSStoElements.js"></script>
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/themeingReport.js"></script>
              <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/applyStyleToFormElement.js"></script>
 
     <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/datatable.js"></script>
-<!--    <script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/reportScript.js"></script>-->
 </head>
     
 <body>
@@ -106,6 +105,14 @@
                                 <li><a href="index.php?r=faculty/create">Faculty</a></li>
                             </ul>
                         </li>
+                         <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Theme <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="index.php?r=themes/cssinput">Create Theme</a></li>
+                                <li><a href="index.php?r=themes/manage">Update Theme</a></li>
+                                <li><a href="index.php?r=themes/manage">Delete Theme </a></li>
+                            </ul>
+                        </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Report <span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -123,7 +130,6 @@
 
                             </ul>
                         </li>
-                        <li><a href="index.php?r=themes/cssinput">Create Theme</a></li>
                         <li><a href="index.php?r=currenttheme/update&id=1">Apply Theme</a></li>
                         <li><a href="index.php?r=formthememapping/create">Specific Page Theme</a></li>
                         <li><a href="index.php?r=formFieldCsspropertyValueMapping/create">Element CSS Properties</a></li>

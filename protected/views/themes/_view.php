@@ -306,20 +306,20 @@
 	<?php echo CHtml::encode($data->icon_size); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('icon_color')); ?>:</b>
-	<?php echo CHtml::encode($data->icon_color); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('icon')); ?>:</b>
+	<?php echo CHtml::encode($data->icon); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('link_color')); ?>:</b>
 	<?php echo CHtml::encode($data->link_color); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('link_hover_color')); ?>:</b>
-	<?php echo CHtml::encode($data->link_hover_color); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('hover')); ?>:</b>
+	<?php echo CHtml::encode($data->hover); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('link_visited_color')); ?>:</b>
-	<?php echo CHtml::encode($data->link_visited_color); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('visited')); ?>:</b>
+	<?php echo CHtml::encode($data->visited); ?>
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('list_style')); ?>:</b>

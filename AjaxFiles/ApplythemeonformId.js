@@ -33,6 +33,13 @@ $(window).on('load', function() {
                 const formattedCSS = formatCSS(cssString);
                 $('.span-19').attr('style', formattedCSS); // Set the 'style' attribute of the element
             }
+            else {
+                
+if (response && response.includes('@')) {
+        console.log("Message: ", response);
+    } else {
+        console.log("Theme not found for the given theme_ID.");
+    }            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             // Handle the error case here

@@ -7,12 +7,8 @@ $this->breadcrumbs=array(
 );
 
 $this->menu=array(
-//	array('label'=>'Create Themes', 'url'=>array('create')),
-//	array('label'=>'Manage Themes', 'url'=>array('admin')),
-        array('label'=>'Tab Create Themes', 'url'=>array('cssinput')),
-        array('label'=>'Tab Manage Themes', 'url'=>array('manage')),
-
-
+	array('label'=>'Create Themes', 'url'=>array('create')),
+	array('label'=>'Manage Themes', 'url'=>array('admin')),
 );
 ?>
 

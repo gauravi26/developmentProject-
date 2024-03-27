@@ -231,47 +231,6 @@ class FormThemeController extends Controller {
         }
     }
 
-    public function actionApplyGeneralTheme() {
-        global $themeData;
-
-        $currentTheme = CurrentTheme::model()->find();
-
-        if ($currentTheme !== null) {
-            $themeId = $currentTheme->theme_ID;
-
-            // Get the theme styles from RAM
-            $themeStyles = $this->getThemeFromRAM($themeId);
-//        
-//        print_r($themeStyles);
-//        die();
-
-            if ($themeStyles === null) {
-                // If styles not found in RAM, fetch from database and save to RAM
-                $theme = Themes::model()->findByPk($themeId);
-                if ($theme !== null) {
-                    $themeStyles = $this->generateThemeStyles($theme);
-                    $this->saveThemeToRAM($themeId, $themeStyles);
-                    print_r($themeStyles);
-                    die();
-                } else {
-                    echo "Theme not found for the given theme_ID.";
-                    return;
-                }
-            } else {
-
-                echo json_encode(['css' => $themeStyles]);
-            }
-
-            // Send the theme styles as JSON response
-//print_r($themeData);
-//        die();
-//        echo json_encode(['css' => $themeStyles]);
-        } else {
-            echo "Mapping not found for the specified controller and action!";
-        }
-    }
-
-// Function to generate theme styles based on the theme model
     private function generateThemeStyles($theme) {
         $elementCssProperties = ElementCssProperties::model()->findAll();
         $themesColumnName = [];
@@ -331,7 +290,8 @@ class FormThemeController extends Controller {
     public function actionTextCSSProperties() {
         // Retrieve the current theme ID
         $currentTheme = CurrentTheme::model()->find();
-
+        
+        
         if ($currentTheme !== null) {
             $themeId = $currentTheme->theme_ID;
 //        print_r($themeId);
@@ -340,6 +300,7 @@ class FormThemeController extends Controller {
                     'theme_id = :themeId',
                     array(':themeId' => $themeId)
             );
+//               print_r($textCssProperties);
 
             // Fetch text types from the TextType model
             $textTypes = TextType::model()->findAll(array('select' => 'id, text_type'));
@@ -360,15 +321,16 @@ class FormThemeController extends Controller {
                 // Replace underscores with dashes in the CSS property name
                 $cssStyle = str_replace('_', '-', $cssProperty->text_CSS_Property);
                 $cssValue = $cssProperty->value;
-
                 // Add CSS property for the text type
                 if (!isset($cssStyles[$textTypeName])) {
                     $cssStyles[$textTypeName] = array();
+                  
                 }
 
                 $cssStyles[$textTypeName][$cssStyle] = $cssValue;
             }
               $response['generalStyle']=$cssStyles;
+              
             return $response;
 //            // Convert CSS styles to a custom string format
 //            $customCssString = $this->customFormatCss($cssStyles);
@@ -444,6 +406,7 @@ class FormThemeController extends Controller {
         $general= $this->convertAssociativeArray($generalTextStyle);
         
         
+        
         if (isset($specficTextStyle['specificStyle']) && $specficTextStyle['specificStyle'] !== NULL) {
         $final = [];
         foreach ($specficTextStyle['specificStyle'] as $property) {
@@ -478,30 +441,48 @@ class FormThemeController extends Controller {
         
         
     }
-    private function convertAssociativeArray($themeArray) {
+private function convertAssociativeArray($themeArray) {
     $cssArray = [];
 
-    foreach ($themeArray as $value) {
+    foreach ($themeArray as $key => $value) {
         // Split the string by ":"
-        echo "Key: $key, Value: $value\n";
-        $parts = explode(':', $value, 2);
-        if (count($parts) === 2) {
-            // Trim property and value
-            $property = trim($parts[0]);
-            $value = trim($parts[1]);
-            // Add to the CSS array
-            $cssArray[$property] = $value;
+        foreach ($value as $textType => $styles) {
+            // Check if $styles is an array before iterating over it
+            if (is_array($styles)) {
+                foreach ($styles as $cssProperty => $propertyValue) {
+                    // Debugging
+                    echo "Processing CSS property: $cssProperty, Value: $propertyValue<br>";
+
+                    // Split the property value string by ":"
+                    $parts = explode(':', $propertyValue, 2);
+                    if (count($parts) === 2) {
+                        // Trim property and value
+                        $property = trim($parts[0]);
+                        $value = trim($parts[1]);
+
+                        // Debugging
+                        echo "Trimmed Property: $property, Trimmed Value: $value<br>";
+
+                        // Add to the CSS array
+                        $cssArray[$property] = $value;
+                    } else {
+                        // Debugging
+                        echo "Invalid CSS property value format: $propertyValue<br>";
+                    }
+                }
+            } else {
+                // Debugging
+                echo "Styles is not an array: ";
+                var_dump($styles);
+                echo "<br>";
+            }
         }
     }
-    
-    foreach ($cssArray as $key => $value) {
-//                echo "Key: $key, Value: $value\n";
-                if ($value === '' || trim($value) === '' || is_null($value)) {
-                            unset($cssArray[$key]);
 
-                    //add code to remove remove key that are empty or null or with NO value
-                }
-            }
+    // Debugging
+    echo "Final CSS Array: ";
+    var_dump($cssArray);
+    echo "<br>";
 
     return $cssArray;
 }

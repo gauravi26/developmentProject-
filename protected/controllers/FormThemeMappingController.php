@@ -99,30 +99,38 @@ class FormThemeMappingController extends Controller {
         ));
     }
 
-    public function actionUpdate($id) {
-        $model = $this->loadModel($id);
+public function actionUpdate($id) {
+    $model = $this->loadModel($id);
 
-        if (isset($_POST['FormThemeMapping'])) {
-            $model->attributes = $_POST['FormThemeMapping'];
-            $themeID = $_POST['FormThemeMapping']['theme_ID'];
+    if (isset($_POST['FormThemeMapping'])) {
+        $model->attributes = $_POST['FormThemeMapping'];
+        $themeID = $_POST['FormThemeMapping']['theme_ID'];
 
-            // Create a new set of FormElementCssPropertiesThemeMapping with the updated theme_ID
+        // Check if theme_ID is changed
+        if ($model->theme_ID !== $model->findAllByAttributes(array('theme_ID' => $model->theme_ID))) {
+
+            // Delete existing mappings for the old theme_ID
+            FormElementCssPropertiesThemeMapping::model()->deleteAllByAttributes(array('theme_ID' => $model->findAllByAttributes(array('theme_ID' => $model->theme_ID))));
+
+            // Create new mappings for the updated theme_ID
             $formElementCssProperties = FormElementCssProperties::model()->findAll();
-            $formElementCssPropertiesIDs = array();
             foreach ($formElementCssProperties as $formElementCssProperty) {
-                $formElementCssPropertiesIDs[] = $formElementCssProperty->id;
-            }
-
-            if ($model->save()) {
-
-                $this->redirect(array('view', 'id' => $model->id));
+                $mappingModel = new FormElementCssPropertiesThemeMapping;
+                $mappingModel->theme_ID = $themeID;
+                $mappingModel->form_element_css_properties_id = $formElementCssProperty->id;
+                $mappingModel->save();
             }
         }
 
-        $this->render('update', array(
-            'model' => $model,
-        ));
+        if ($model->save()) {
+            $this->redirect(array('view', 'id' => $model->id));
+        }
     }
+
+    $this->render('update', array(
+        'model' => $model,
+    ));
+}
 
     /**
      * Deletes a particular model.
@@ -274,20 +282,23 @@ private function convertAssociativeArray($themeArray) {
 }
 
 public function actionFormingFinalTheme() {
-      $controllerId = isset($_GET['controller']) ? $_GET['controller'] : null;
-        $actionId = isset($_GET['action']) ? $_GET['action'] : null;
+    $controllerId = isset($_GET['controller']) ? $_GET['controller'] : null;
+    $actionId = isset($_GET['action']) ? $_GET['action'] : null;
+    
     // Apply general theme
     $generalTheme = $this->actionApplyGeneralTheme();
+
+    if (!is_array($generalTheme)) {
+       echo json_encode(['message' => "$generalTheme"]);
+        return;
+    }
+    
     $generalThemeArray = $generalTheme['general'];
     $general = $this->convertAssociativeArray($generalThemeArray);
-//   print_r($generalThemeArray);
-//   echo '<br><br>';
-//    print_r($general);
-//    echo '<br><br>';
+
     // Apply form theme
-    $formTheme = $this->actionApplyThemeToForms($controllerId,$actionId);
-//    print_r($formTheme);
-//    die();
+    $formTheme = $this->actionApplyThemeToForms($controllerId, $actionId);
+
     if (isset($formTheme['formTheme']) && $formTheme['formTheme'] !== NULL) {
         $final = [];
         foreach ($formTheme['formTheme'] as $property) {
@@ -302,16 +313,11 @@ public function actionFormingFinalTheme() {
             }
         }
 
-                echo json_encode(['css' => $final]);
-            return;
-    
+        echo json_encode(['css' => $final]);
+        return;
     } else {
-        
-//         print_r($general);
-//         print_r("hi");
-       
         echo json_encode(['css' => $general]);
-         return ;
+        return;
     }
 }
 
@@ -402,8 +408,8 @@ public function actionFormingFinalTheme() {
                     // Save the theme styles to RAM
                     $this->saveThemeToRAM($themeId, $themeStyles);
                 } else {
-                    echo "Theme not found for the given theme_ID.";
-                    return $response;
+                    return "Theme not found for the given theme_ID.";
+//                    return $response;
                     ;
                 }
             }
@@ -412,7 +418,8 @@ public function actionFormingFinalTheme() {
 //        echo json_encode(['css' => $themeStyles]);
             $response['general'] = $themeStyles;
         } else {
-            echo "Current theme not found.";
+            return "Current theme not found.$themeId";
+            
         }
         return $response;
     }

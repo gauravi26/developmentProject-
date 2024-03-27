@@ -10,6 +10,18 @@
                 "css": ".blink { border: 3px solid #FBB72D; font-weight: bold; border-radius: 5px; }",
                 "js": "$(document).ready(function() { $('#field_39').hover(function() { var element = $(this); element.addClass('blink'); setTimeout(function() { element.removeClass('blink'); }, 1000); }); });"
             }
+        },
+       
+        {
+            "form_id": "4",
+            "field_id": "29",
+            "effect_id": "1",
+            "trigger": "hover",
+            "title": "email-address",
+            "code": {
+                "css": ".blink { border: 3px solid #FBB72D; font-weight: bold; border-radius: 5px; }",
+                "js": "$(document).ready(function() { $('#field_29').hover(function() { var element = $(this); element.addClass('blink'); setTimeout(function() { element.removeClass('blink'); }, 1000); }); });"
+            }
         }
     ],
     "3": [

@@ -37,7 +37,7 @@ if(session_status() == PHP_SESSION_NONE) {
     padding: 10px;
   }
 </style>
-<h1>CSS Input View Tab hii </h1>
+<h1>CSS Input View Tab  </h1>
 
 <div class="tab">
   <button class="tablinks" onclick="openCss(event, 'BoxModel')">Box Model</button>
@@ -60,6 +60,10 @@ if(session_status() == PHP_SESSION_NONE) {
 <div id="BoxModel" class="tabcontent">
   <table>
     <!-- Box Model properties -->
+    <tr>
+        <td font-weight="bolder" font-size="20px">Theme Name</td>
+        <td font-weight="bolder"><?php echo $theme->theme_name; ?></td>
+    </tr>
      <tr>
         <td>Height:</td>
         <td><?php echo $theme->height; ?></td>
