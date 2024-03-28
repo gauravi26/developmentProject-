@@ -7,7 +7,7 @@
     <head>
         
              <style>
-    label {
+  label {
     display: inline-block;
     width: 150px;
     margin-bottom: 10px;
@@ -33,7 +33,7 @@ label strong {
 
 .tabcontent {
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 8px;
 }
 
 .custom-select {
@@ -87,7 +87,7 @@ textarea {
     height: 25px;
 }
 
-#themeform {
+#Themes {
     width: 300px;
     float: left;
     max-height: 700px;
@@ -183,31 +183,30 @@ input {
 
 
 
-<form id="Themes" name="Themes" method="post" enctype="multipart/form-data" action="<?php echo Yii::app()->createUrl('/themes/updates', array('id' => $theme->ID)); ?>">
+<form id="Themes" name="Themes" method="post" enctype="multipart/form-data" action="<?php echo Yii::app()->createUrl('/themes/update', array('id' => $Themes->ID)); ?>">
 
-<!--<form id="themeform" method="post" enctype="multipart/form-data" action="<?php echo Yii::app()->createUrl('/themes/cssinputupdate'); ?>">-->
     <!-- Box Model -->     <div class="scroll-container">
 
 
         <div id = "BoxModel" class="tabcontent"><br>
             <label><strong>Box Model:</strong></label>
             <label class="label-bold"> Theme Name :</label>
-            <input type="text" name="theme_name" id="theme_name" value="<?php echo CHtml::encode($theme->theme_name); ?>"required><br>
+            <input type="text" name="theme_name" id="theme_name" value="<?php echo CHtml::encode($Themes->theme_name); ?>"required><br>
             <label>Height:</label>
-            <input type="text" name="height" value="<?php echo CHtml::encode($theme->height); ?>"> px<br> 
+            <input type="text" name="height" value="<?php echo CHtml::encode($Themes->height); ?>"> px<br> 
             <label>Width:</label>
-            <input type="text" name="width" value="<?php echo CHtml::encode($theme->width); ?>"> px<br> 
+            <input type="text" name="width" value="<?php echo CHtml::encode($Themes->width); ?>"> px<br> 
             <label>Margin:</label>
-            <input type="text" id="marginInput" name="margin" value="<?php echo CHtml::encode($theme->margin); ?>"> px
+            <input type="text" id="marginInput" name="margin" value="<?php echo CHtml::encode($Themes->margin); ?>"> px
 
             <label>Padding:</label>
-            <input type="text" id="paddingInput" name="padding" value="<?php echo CHtml::encode($theme->padding); ?>"> px
+            <input type="text" id="paddingInput" name="padding" value="<?php echo CHtml::encode($Themes->padding); ?>"> px
 
             <label>Slider:</label>
             <input type="range" id="slider" min="0" max="100" step="1" oninput="updateInputValues()" >
 
             <label>Display Property</label>
-            <select name="display_property" class="custom-select" value="<?php echo CHtml::encode($theme->display); ?>">
+            <select name="display_property" class="custom-select" value="<?php echo CHtml::encode($Themes->display); ?>">
                 <option selected disabled>Select</option>
                 <option value="block">Block</option>
                 <option value="inline">Inline</option>
@@ -221,10 +220,10 @@ input {
             </select><br>
 
             <label>Clear:</label>
-            <input type="text" name="clear" value="<?php echo CHtml::encode($theme->clear); ?>" ><br> 
+            <input type="text" name="clear" value="<?php echo CHtml::encode($Themes->clear); ?>" ><br> 
 
             <label>Position Property</label>
-            <select name="position" class="custom-select" value="<?php echo CHtml::encode($theme->position); ?>">
+            <select name="position" class="custom-select" value="<?php echo CHtml::encode($Themes->position); ?>">
                 <option selected disabled>Select</option>
                 <option value="static">Static</option>
                 <option value="relative">Relative</option>
@@ -235,7 +234,7 @@ input {
 
 
             <label>Box Sizing:</label>
-            <select name="box_sizing" class="custom-select" value="<?php echo CHtml::encode($theme->box_sizing); ?>">
+            <select name="box_sizing" class="custom-select" value="<?php echo CHtml::encode($Themes->box_sizing); ?>">
                 <option selected disabled>Select</option>
                 <option value="content-box">Content Box</option>
                 <option value="border-box">Border Box</option>
@@ -500,7 +499,7 @@ input {
 
             <label><strong>Background :</strong></label>                       
             <label>Background Color:</label>
-            <input type="color" name="background_color" value="<?php echo empty($theme->background_color) ? '#FFFFFF' : CHtml::encode($theme->background_color); ?>"><br>
+            <input type="color" name="background_color" value="<?php echo empty($Themes->background_color) ? '#FFFFFF' : CHtml::encode($Themes->background_color); ?>"><br>
             <label for="background_image">Background Image:</label>
             <input type="file" name="file" id="background_image"><br/>
             Enter image name:<input type="text" name="filename"><br/>
@@ -521,7 +520,7 @@ input {
             </select><br/>
             <label>Repeat:</label>
 
-            <select name="background_repeat" class="custom-select" id="background_repeat" value="<?php echo CHtml::encode($theme->background_repeat); ?>">>
+            <select name="background_repeat" class="custom-select" id="background_repeat" value="<?php echo CHtml::encode($Themes->background_repeat); ?>">>
                 <option selected >Select</option>
                 <option value="repeat">Repeat</option>
                 <option value="repeat-x">Repeat Horizontally</option>
@@ -529,7 +528,7 @@ input {
                 <option value="no-repeat">No Repeat</option>
             </select><br>
             <label>Position:</label>
-            <select name="background_position" id="background_position" value="<?php echo CHtml::encode($theme->background_position); ?>">
+            <select name="background_position" id="background_position" value="<?php echo CHtml::encode($Themes->background_position); ?>">
                 <option value="center center">Center</option>
                 <option value="left top">Left Top</option>
                 <option value="right top">Right Top</option>
@@ -549,7 +548,7 @@ input {
 
             echo CHtml::dropDownList(
                     'border_style',
-                    $theme->border_style,
+                    $Themes->border_style,
                     array_combine($borderStyles, $borderStyles),
                     array('class' => 'custom-select', 'prompt' => 'Select')
             );
@@ -560,11 +559,11 @@ input {
             </select>
             <br>
             <label>Border Width:</label><br>
-            <input type="text" name="border_width" value="<?php echo CHtml::encode($theme->border_width); ?>"> px<br>
+            <input type="text" name="border_width" value="<?php echo CHtml::encode($Themes->border_width); ?>"> px<br>
             <label>Border Radius:</label><br>
-            <input type="text" name="border_radius" value="<?php echo CHtml::encode($theme->border_radius); ?>"> px<br>
+            <input type="text" name="border_radius" value="<?php echo CHtml::encode($Themes->border_radius); ?>"> px<br>
             <label>Border color:</label><br>
-            <input type="color" name="border_color"value="<?php echo CHtml::encode($theme->border_color); ?>"> px<br>
+            <input type="color" name="border_color"value="<?php echo CHtml::encode($Themes->border_color); ?>"> px<br>
 
         </div><br>
 
