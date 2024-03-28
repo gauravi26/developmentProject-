@@ -105,13 +105,11 @@ public function actionUpdate($id) {
     if (isset($_POST['FormThemeMapping'])) {
         $model->attributes = $_POST['FormThemeMapping'];
         $themeID = $_POST['FormThemeMapping']['theme_ID'];
+        
+        // Check if mappings exist for the old theme_ID
+        $existingMappings = FormElementCssPropertiesThemeMapping::model()->findAllByAttributes(array('theme_ID' => $model->theme_ID));
 
-        // Check if theme_ID is changed
-        if ($model->theme_ID !== $model->findAllByAttributes(array('theme_ID' => $model->theme_ID))) {
-
-            // Delete existing mappings for the old theme_ID
-            FormElementCssPropertiesThemeMapping::model()->deleteAllByAttributes(array('theme_ID' => $model->findAllByAttributes(array('theme_ID' => $model->theme_ID))));
-
+        if (empty($existingMappings)) {
             // Create new mappings for the updated theme_ID
             $formElementCssProperties = FormElementCssProperties::model()->findAll();
             foreach ($formElementCssProperties as $formElementCssProperty) {
@@ -122,6 +120,7 @@ public function actionUpdate($id) {
             }
         }
 
+        // Save the updated FormThemeMapping
         if ($model->save()) {
             $this->redirect(array('view', 'id' => $model->id));
         }
