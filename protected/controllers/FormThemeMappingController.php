@@ -32,7 +32,7 @@ class FormThemeMappingController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update', 'applyElementCssProperties', 'applyThemeToPage', 'applyGeneralTheme', 'applyThemeToForms', 'formingFinalTheme'),
+                'actions' => array('create', 'update', 'applyElementCssProperties', 'applyThemeToPage', 'applyGeneralTheme', 'applyThemeToForms', 'formingFinalTheme','customDelete'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -105,11 +105,22 @@ public function actionUpdate($id) {
     if (isset($_POST['FormThemeMapping'])) {
         $model->attributes = $_POST['FormThemeMapping'];
         $themeID = $_POST['FormThemeMapping']['theme_ID'];
+        $checkformMappingsforThemeId = FormThemeMapping::model()->findAllByAttributes(array('theme_ID' => $model->theme_ID));
         
         // Check if mappings exist for the old theme_ID
-        $existingMappings = FormElementCssPropertiesThemeMapping::model()->findAllByAttributes(array('theme_ID' => $model->theme_ID));
+        if (!empty($checkformMappingsforThemeId)) {
+            // Create new mappings for the updated theme_ID
+            $formElementCssProperties = FormElementCssProperties::model()->findAll();
+            foreach ($formElementCssProperties as $formElementCssProperty) {
+                $mappingModel = new FormElementCssPropertiesThemeMapping;
+                $mappingModel->theme_ID = $themeID;
+                $mappingModel->form_element_css_properties_id = $formElementCssProperty->id;
+                $mappingModel->save();
+            }
+        } else {
+            // Delete existing mappings for the old theme_ID
+            FormElementCssPropertiesThemeMapping::model()->deleteAllByAttributes(array('theme_ID' => $model->theme_ID));
 
-        if (empty($existingMappings)) {
             // Create new mappings for the updated theme_ID
             $formElementCssProperties = FormElementCssProperties::model()->findAll();
             foreach ($formElementCssProperties as $formElementCssProperty) {
@@ -136,13 +147,42 @@ public function actionUpdate($id) {
      * If deletion is successful, the browser will be redirected to the 'admin' page.
      * @param integer $id the ID of the model to be deleted
      */
-    public function actionDelete($id) {
+public function actionDelete($id) {
         $this->loadModel($id)->delete();
 
-        // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+    // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
         if (!isset($_GET['ajax']))
-            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
     }
+
+public function actionCustomDelete($id){
+    $model = $this->loadModel($id);
+    $themeID = $model->theme_ID;
+
+    // Check if any other records exist with the same theme_ID
+    $otherMappingsExist = FormThemeMapping::model()->exists('id != :id AND theme_ID = :themeID', array(':id' => $id, ':themeID' => $themeID));
+
+    // Build SQL query to delete records
+    if ($otherMappingsExist) {
+        $sql = "DELETE FROM form_theme_mapping WHERE id = :id";
+        $params = array(':id' => $id);
+    } else {
+        $sql = "DELETE FROM form_theme_mapping WHERE theme_ID = :themeID;
+                DELETE FROM form_element_css_properties_theme_mapping WHERE theme_ID = :themeID;";
+        $params = array(':themeID' => $themeID);
+    }
+
+    // Execute the SQL query
+    $command = Yii::app()->db->createCommand($sql);
+    $command->execute($params);
+
+    // if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+    if (!isset($_GET['ajax'])) {
+        $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+    }
+
+}
+
 
     /**
      * Lists all models.

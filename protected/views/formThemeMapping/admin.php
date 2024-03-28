@@ -56,7 +56,13 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
         'action',
         array(
             'class'=>'CButtonColumn',
+            'buttons' => array(
+                'customDelete' => array(
+                    'label' => 'Custom Delete', // Custom label for the button
+                    'url' => 'Yii::app()->controller->createUrl("customDelete", array("id"=>$data->id))', // URL to trigger the actionCustomDelete function
+                ),
+            ),
+            'template' => '{update} {customDelete}', // Define which buttons to display and in what order
         ),
     ),
-));
- ?>
+)); ?>
