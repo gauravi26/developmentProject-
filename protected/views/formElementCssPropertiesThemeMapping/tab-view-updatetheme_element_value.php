@@ -263,29 +263,33 @@ $this->beginWidget('CActiveForm', array(
 </div>
     
 <div>
-        <button type="submit" name="save">Save </button><br>                
+        <button type="reset" >Clear </button><br>                
 </div>
 
   </div>
-  
-  <div id="Color" class="nested-tabcontent">
+ <div id="Color" class="nested-tabcontent">
     <h4>Color</h4>
     <!-- Content for the "Color" tab goes here -->
-    <div >
-    <label >Font Color:</label>
-    <input type="color" name="Form_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 109) : ''; ?>" ><br>
+    <div id="fontColorPicker" style="display: none;">
+        <label>Font Color:</label>
+        <input type="color" name="Form_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 109) : ''; ?>"><br>
+    </div>
+
+    <div id="backgroundColorPicker" style="display: none;">
+        <label>Background Color:</label>
+        <input type="color" name="Form_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 108) : ''; ?>"><br>
+    </div>
+
+    <div id="borderColorPicker" style="display: none;">
+        <label>Border Color:</label>
+        <input type="color" name="Form_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 114) : ''; ?>"><br>
+    </div>
+    
+    <button type="button" class="colorPickerButton" data-target="fontColorPicker"> Font Color </button>
+    <button type="button" class="colorPickerButton" data-target="backgroundColorPicker"> Background Color </button>
+    <button type="button" class="colorPickerButton" data-target="borderColorPicker"> Border Color </button><br>
 </div>
 
-<div >
-    <label >Background Color:</label>
-    <input type="color" name="Form_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 108) : ''; ?>" ><br>
-</div>
-
-<div >
-    <label >Border Color:</label>
-    <input type="color" name="Form_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 114) : ''; ?>" ><br>
-</div>
-  </div>
     <div id="Font" class="nested-tabcontent">
     <h4>Font</h4>
     <!-- Content for the "Font" tab goes here -->
@@ -312,6 +316,7 @@ $this->beginWidget('CActiveForm', array(
         <option value="oblique">Oblique</option>
     </select><br>
 </div>
+        <button type="reset" >Clear </button><br>                
 
 
   </div>
@@ -339,6 +344,7 @@ $this->beginWidget('CActiveForm', array(
         <option value="line-through">Line-through</option>
     </select><br>
 </div>
+        <button type="reset" >Clear </button><br>                
 
   </div>
 
@@ -386,6 +392,7 @@ $this->beginWidget('CActiveForm', array(
         <option value="vertical">Vertical</option>
     </select><br>
 </div>
+        <button type="reset" >Clear </button><br>                
 
   </div>
   <div>
@@ -482,27 +489,30 @@ $this->beginWidget('CActiveForm', array(
     </select><br>
 </div>
 
+        <button type="reset" >Clear </button><br>                
 
   </div>
   
-  <div id="InputColor" class="nested-tabcontent">
+ <div id="InputColor" class="nested-tabcontent">
     <h4>Color</h4>
     <!-- Content for the "Color" tab goes here -->
-    <div >
-    <label >Font Color:</label>
-    <input type="color" name="Input_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 8) : ''; ?>" ><br>
+    <div id="inputFontColorPicker" style="display: none;">
+        <label>Font Color:</label>
+        <input type="color" name="Input_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 8) : ''; ?>"><br>
+    </div>
+    <div id="inputBackgroundColorPicker" style="display: none;">
+        <label>Background Color:</label>
+        <input type="color" name="Input_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 7) : ''; ?>"><br>
+    </div>
+    <div id="inputBorderColorPicker" style="display: none;">
+        <label>Border Color:</label>
+        <input type="color" name="Input_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 13) : ''; ?>"><br>
+    </div>
+    <button type="button" class="colorPickerButton" data-target="inputFontColorPicker">Font Color</button>
+    <button type="button" class="colorPickerButton" data-target="inputBackgroundColorPicker">Background Color</button>
+    <button type="button" class="colorPickerButton" data-target="inputBorderColorPicker">Border Color</button><br>
 </div>
 
-<div >
-    <label >Background Color:</label>
-    <input type="color" name="Input_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 7) : ''; ?>" ><br>
-</div>
-
-<div >
-    <label >Border Color:</label>
-    <input type="color" name="Input_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 13) : ''; ?>" ><br>
-</div>
-  </div>
     <div id="InputFont" class="nested-tabcontent">
     <h4>Font</h4>
     <!-- Content for the "Font" tab goes here -->
@@ -529,6 +539,7 @@ $this->beginWidget('CActiveForm', array(
         <option value="oblique">Oblique</option>
     </select><br>
 </div>
+        <button type="reset" >Clear </button><br>                
 
 
   </div>
@@ -556,6 +567,7 @@ $this->beginWidget('CActiveForm', array(
         <option value="line-through">Line-through</option>
     </select><br>
 </div>
+        <button type="reset" >Clear </button><br>                
 
   </div>
 
@@ -603,6 +615,7 @@ $this->beginWidget('CActiveForm', array(
         <option value="vertical">Vertical</option>
     </select><br>
 </div>
+        <button type="reset" >Clear </button><br>                
 
   </div>
   <div>
@@ -692,28 +705,31 @@ $this->beginWidget('CActiveForm', array(
         <option value="both">Both</option>
     </select><br>
 </div>
+        <button type="reset" >Clear </button><br>                
 
 
   </div>
   
-  <div id="LableColor" class="nested-tabcontent">
+  <div id="LabelColor" class="nested-tabcontent">
     <h4>Color</h4>
     <!-- Content for the "Color" tab goes here -->
-    <div >
-    <label >Font Color:</label>
-    <input type="color" name="Label_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 33) : ''; ?>" ><br>
+    <div id="labelFontColorPicker" style="display: none;">
+        <label>Font Color:</label>
+        <input type="color" name="Label_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 33) : ''; ?>"><br>
+    </div>
+    <div id="labelBackgroundColorPicker" style="display: none;">
+        <label>Background Color:</label>
+        <input type="color" name="Label_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 32) : ''; ?>"><br>
+    </div>
+    <div id="labelBorderColorPicker" style="display: none;">
+        <label>Border Color:</label>
+        <input type="color" name="Label_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 38) : ''; ?>"><br>
+    </div>
+    <button type="button" class="colorPickerButton" data-target="labelFontColorPicker">Font Color</button>
+    <button type="button" class="colorPickerButton" data-target="labelBackgroundColorPicker">Background Color</button>
+    <button type="button" class="colorPickerButton" data-target="labelBorderColorPicker">Border Color</button><br>
 </div>
 
-<div >
-    <label >Background Color:</label>
-    <input type="color" name="Label_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 32) : ''; ?>" ><br>
-</div>
-
-<div >
-    <label >Border Color:</label>
-    <input type="color" name="Label_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 38) : ''; ?>" ><br>
-</div>
-  </div>
     <div id="LableFont" class="nested-tabcontent">
     <h4>Font</h4>
     <!-- Content for the "Font" tab goes here -->
@@ -741,6 +757,7 @@ $this->beginWidget('CActiveForm', array(
     </select><br>
 </div>
 
+        <button type="reset" >Clear </button><br>                
 
   </div>
 
@@ -767,6 +784,7 @@ $this->beginWidget('CActiveForm', array(
         <option value="line-through">Line-through</option>
     </select><br>
 </div>
+        <button type="reset" >Clear </button><br>                
 
   </div>
 
@@ -814,6 +832,7 @@ $this->beginWidget('CActiveForm', array(
         <option value="vertical">Vertical</option>
     </select><br>
 </div>
+        <button type="reset" >Clear </button><br>                
 
   </div>
    
@@ -908,27 +927,30 @@ $this->beginWidget('CActiveForm', array(
     </select><br>
 </div>
 
+        <button type="reset" >Clear </button><br>                
 
   </div>
   
-  <div id="SelectInputColor" class="nested-tabcontent">
+<div id="SelectInputColor" class="nested-tabcontent">
     <h4>Color</h4>
     <!-- Content for the "Color" tab goes here -->
-    <div >
-    <label >Font Color:</label>
-    <input type="color" name="SelectInput_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 58) : ''; ?>" ><br>
-</div>
+    <div id="selectInputFontColorPicker" style="display: none;">
+        <label>Font Color:</label>
+        <input type="color" name="SelectInput_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 58) : ''; ?>"><br>
+    </div>
+    <div id="selectInputBackgroundColorPicker" style="display: none;">
+        <label>Background Color:</label>
+        <input type="color" name="SelectInput_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 75) : ''; ?>"><br>
+    </div>
+    <div id="selectInputBorderColorPicker" style="display: none;">
+        <label>Border Color:</label>
+        <input type="color" name="SelectInput_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 63) : ''; ?>"><br>
+    </div>
+    <button type="button" class="colorPickerButton" data-target="selectInputFontColorPicker">Font Color</button>
+    <button type="button" class="colorPickerButton" data-target="selectInputBackgroundColorPicker">Background Color</button>
+    <button type="button" class="colorPickerButton" data-target="selectInputBorderColorPicker">Border Color</button><br>
+    <button type="
 
-<div >
-    <label >Background Color:</label>
-    <input type="color" name="SelectInput_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 75) : ''; ?>" ><br>
-</div>
-
-<div >
-    <label >Border Color:</label>
-    <input type="color" name="SelectInput_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 63) : ''; ?>" ><br>
-</div>
-  </div>
     <div id="SelectInputFont" class="nested-tabcontent">
     <h4>Font</h4>
     <!-- Content for the "Font" tab goes here -->
@@ -1137,21 +1159,23 @@ $this->beginWidget('CActiveForm', array(
   <div id="RadioButtonColor" class="nested-tabcontent">
     <h4>Color</h4>
     <!-- Content for the "Color" tab goes here -->
-    <div >
-    <label >Font Color:</label>
-    <input type="color" name="Radio_Button_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 147) : ''; ?>" ><br>
+    <div id="radioButtonFontColorPicker" style="display: none;">
+        <label>Font Color:</label>
+        <input type="color" name="Radio_Button_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 147) : ''; ?>"><br>
+    </div>
+    <div id="radioButtonBackgroundColorPicker" style="display: none;">
+        <label>Background Color:</label>
+        <input type="color" name="Radio_Button_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 146) : ''; ?>"><br>
+    </div>
+    <div id="radioButtonBorderColorPicker" style="display: none;">
+        <label>Border Color:</label>
+        <input type="color" name="Radio_Button_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 157) : ''; ?>"><br>
+    </div>
+    <button type="button" class="colorPickerButton" data-target="radioButtonFontColorPicker">Font Color</button>
+    <button type="button" class="colorPickerButton" data-target="radioButtonBackgroundColorPicker">Background Color</button>
+    <button type="button" class="colorPickerButton" data-target="radioButtonBorderColorPicker">Border Color</button><br>
 </div>
 
-<div >
-    <label >Background Color:</label>
-    <input type="color" name="Radio_Button_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 146) : ''; ?>" ><br>
-</div>
-
-<div >
-    <label >Border Color:</label>
-    <input type="color" name="Radio_Button_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 157) : ''; ?>" ><br>
-</div>
-  </div>
     <div id="RadioButtonFont" class="nested-tabcontent">
     <h4>Font</h4>
     <!-- Content for the "Font" tab goes here -->
@@ -1355,21 +1379,23 @@ $this->beginWidget('CActiveForm', array(
   <div id="CheckBoxColor" class="nested-tabcontent">
     <h4>Color</h4>
     <!-- Content for the "Color" tab goes here -->
-    <div >
-    <label >Font Color:</label>
-    <input type="color" name="Check_Box_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 138) : ''; ?>" ><br>
+    <div id="checkBoxFontColorPicker" style="display: none;">
+        <label>Font Color:</label>
+        <input type="color" name="Check_Box_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 138) : ''; ?>"><br>
+    </div>
+    <div id="checkBoxBackgroundColorPicker" style="display: none;">
+        <label>Background Color:</label>
+        <input type="color" name="Check_Box_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 118) : ''; ?>"><br>
+    </div>
+    <div id="checkBoxBorderColorPicker" style="display: none;">
+        <label>Border Color:</label>
+        <input type="color" name="Check_Box_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 118) : ''; ?>"><br>
+    </div>
+    <button type="button" class="colorPickerButton" data-target="checkBoxFontColorPicker">Font Color</button>
+    <button type="button" class="colorPickerButton" data-target="checkBoxBackgroundColorPicker">Background Color</button>
+    <button type="button" class="colorPickerButton" data-target="checkBoxBorderColorPicker">Border Color</button><br>
 </div>
 
-<!--<div >
-    <label >Background Color:</label>
-    <input type="color" name="Check_Box_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 118) : ''; ?>" ><br>
-</div>-->
-
-<!--<div >
-    <label >Border Color:</label>
-    <input type="color" name="Check_Box_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 118) : ''; ?>" ><br>
-</div>-->
-  </div>
     <div id="CheckBoxFont" class="nested-tabcontent">
     <h4>Font</h4>
     <!-- Content for the "Font" tab goes here -->
@@ -1572,21 +1598,31 @@ $this->beginWidget('CActiveForm', array(
   <div id="ButtonColor" class="nested-tabcontent">
     <h4>Color</h4>
     <!-- Content for the "Color" tab goes here -->
-    <div >
-    <label >Font Color:</label>
-    <input type="color" name="Button_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 83) : ''; ?>" ><br>
+ <div id="ButtonColor" class="nested-tabcontent">
+    <h4>Color</h4>
+    <!-- Content for the "Color" tab goes here -->
+    <div id="buttonColorPicker" style="display: none;">
+        <div id="buttonFontColorPicker" style="display: none;">
+            <label>Font Color:</label>
+            <input type="color" name="Button_Color_font-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 83) : ''; ?>"><br>
+        </div>
+        <div id="buttonBackgroundColorPicker" style="display: none;">
+            <label>Background Color:</label>
+            <input type="color" name="Button_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 82) : ''; ?>"><br>
+        </div>
+        <div id="buttonBorderColorPicker" style="display: none;">
+            <label>Border Color:</label>
+            <input type="color" name="Button_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 88) : ''; ?>"><br>
+        </div>
+    </div>
+    <button type="button" class="colorPickerButton" data-target="buttonFontColorPicker">Font Color</button>
+    <button type="button" class="colorPickerButton" data-target="buttonBackgroundColorPicker">Background Color</button>
+    <button type="button" class="colorPickerButton" data-target="buttonBorderColorPicker">Border Color</button><br>
 </div>
 
-<div >
-    <label >Background Color:</label>
-    <input type="color" name="Button_Color_background-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 82) : ''; ?>" ><br>
 </div>
 
-<div >
-    <label >Border Color:</label>
-    <input type="color" name="Button_Color_border-color" value="<?php echo isset($elementModels) && is_array($elementModels) ? getValueByPropertyId($elementModels, 88) : ''; ?>" ><br>
-</div>
-  </div>
+
     <div id="ButtonFont" class="nested-tabcontent">
     <h4>Font</h4>
     <!-- Content for the "Font" tab goes here -->
@@ -1702,6 +1738,20 @@ $this->beginWidget('CActiveForm', array(
 
 
 <?php $this->endWidget(); ?>
+<script>
+    // Get all buttons with class 'colorPickerButton'
+    var buttons = document.querySelectorAll('.colorPickerButton');
+
+    // Add click event listener to each button
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            // Get the target ID from the 'data-target' attribute
+            var targetId = button.getAttribute('data-target');
+            // Toggle the visibility of the corresponding color picker
+            document.getElementById(targetId).style.display = document.getElementById(targetId).style.display === 'none' ? 'block' : 'none';
+        });
+    });
+</script>
 
 
  <script>
