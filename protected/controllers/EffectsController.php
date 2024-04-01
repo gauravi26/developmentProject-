@@ -266,54 +266,128 @@ public function actionCreate() {
 //        'model' => $model,
 //    ));
 //}
-public function actionApplyScript()
-{
-    $controllerId = isset($_GET['controller']) ? $_GET['controller'] : null;
-    $actionId = isset($_GET['action']) ? $_GET['action'] : null;
-
-    $applicationForm = ApplicationForms::model()->findByAttributes(['controller' => $controllerId, 'action' => $actionId]);
-
-    if ($applicationForm) {
-        // Finding Form Based on the combination of Controller and Action
-        $formId = $applicationForm->id;
-
-        // Define the filename where the JSON data is stored
-        $filename = 'C:\xampp\htdocs\themebuilder11\AjaxFiles\effectScripts.json';
-
-        // Read the current content from the file
-        $currentContent = file_get_contents($filename);
-
-        // Convert the existing content to a PHP array
-        $existingData = json_decode($currentContent, true);
-
-        if ($existingData === null) {
-            // If the file is empty or not properly formatted as JSON, initialize an empty array
-            $existingData = [];
-        }
-
-        // Check if the $formId exists in the JSON data
-        if (isset($existingData[$formId])) {
-            // Fetch the script and CSS data for the specified form_id
-            $scriptData = $existingData[$formId];
-
-            // You can return the data as JSON to the client
-            $this->renderJson($scriptData);
-        } else {
-            // Return an empty response or an error message if the form_id is not found
-            $this->renderJson([]);
-        }
-    } else {
-        // Handle the case where the application form is not found
-        // You can return an error message or redirect to an error page.
-        // For example: $this->render('error', ['message' => 'Application form not found.']);
-    }
-}
+//public function actionApplyScript()
+//{
+//    $controllerId = isset($_GET['controller']) ? $_GET['controller'] : null;
+//    $actionId = isset($_GET['action']) ? $_GET['action'] : null;
+//
+//    $applicationForm = ApplicationForms::model()->findByAttributes(['controller' => $controllerId, 'action' => $actionId]);
+//
+//    if ($applicationForm) {
+//        // Finding Form Based on the combination of Controller and Action
+//        $formId = $applicationForm->id;
+//
+//        // Define the filename where the JSON data is stored
+//        $filename = 'C:\xampp\htdocs\themebuilder11\AjaxFiles\effectScripts.json';
+//
+//        // Read the current content from the file
+//        $currentContent = file_get_contents($filename);
+//
+//        // Convert the existing content to a PHP array
+//        $existingData = json_decode($currentContent, true);
+//
+//        if ($existingData === null) {
+//            // If the file is empty or not properly formatted as JSON, initialize an empty array
+//            $existingData = [];
+//        }
+//
+//        // Check if the $formId exists in the JSON data
+//        if (isset($existingData[$formId])) {
+//            // Fetch the script and CSS data for the specified form_id
+//            $scriptData = $existingData[$formId];
+//
+//            // You can return the data as JSON to the client
+//            $this->renderJson($scriptData);
+//        } else {
+//            // Return an empty response or an error message if the form_id is not found
+//            $this->renderJson([]);
+//        }
+//    } else {
+//        // Handle the case where the application form is not found
+//        // You can return an error message or redirect to an error page.
+//        // For example: $this->render('error', ['message' => 'Application form not found.']);
+//    }
+//}
 
 private function renderJson($data)
 {
     header('Content-Type: application/json');
     echo json_encode($data);
     Yii::app()->end();
+}
+
+public function actionApplyScript() {
+    $controllerId = isset($_GET['controller']) ? $_GET['controller'] : null;
+    $actionId = isset($_GET['action']) ? $_GET['action'] : null;
+
+    $applicationForm = ApplicationForms::model()->findByAttributes(['controller' => $controllerId, 'action' => $actionId]);
+
+    if ($applicationForm) {
+        $formId = $applicationForm->id;
+
+        $effectModels = Effects::model()->findAllByAttributes(['form_id' => $formId]);
+
+        $generatedScripts = []; // Initialize the array to store generated scripts
+
+        foreach ($effectModels as $effectModel) {
+            $formId = $effectModel->form_id;
+            $fieldId = $effectModel->FIELD_ID;
+            $effectCodeId = $effectModel->effect_code_id;
+            $triggerId = $effectModel->trigger_id;
+
+            // Fetch the titles from the FormFields table for the given form_id and FIELD_ID
+            $formFieldTitles = FormFields::model()->findAllByAttributes([
+                'FORM_ID' => $formId,
+                'FIELD_ID' => $fieldId
+            ]);
+
+            // Fetch the script code based on the effect_code_id from the ScriptCode model
+            $scriptCodeModel = ScriptCode::model()->findByPk($effectCodeId);
+            $scriptCode = json_decode($scriptCodeModel->code, true);
+
+            // Fetch the trigger name from the EffectTrigger model
+            $triggerModel = EffectTrigger::model()->findByPk($triggerId);
+            $triggerName = $triggerModel->effect_trigger;
+
+            // Loop through the formFieldTitles and generate JavaScript code
+            foreach ($formFieldTitles as $formFieldTitle) {
+                $id = $formFieldTitle->FIELD_ID;
+                $elementID = "field_".$id;
+                $title = $formFieldTitle->TITLE;
+
+                // Replace placeholders in JavaScript code with actual values
+                $jsCode = str_replace('elementId', $elementID, $scriptCode['js']);
+                $jsCode = str_replace('triggerValue', $triggerName, $jsCode);
+
+                // Create an array for the effect data
+                $effectData = [
+                    'form_id' => $formId,
+                    'field_id' => $fieldId,
+                    'effect_id' => $effectCodeId,
+                    'trigger' => $triggerName,
+                    'title' => $title,
+                    'code' => [
+                        'css' => $scriptCode['css'],
+                        'js' => $jsCode,
+                    ]
+                ];
+
+                // Add the effect data to the generatedScripts array using form_id as the key
+                if (!isset($generatedScripts[$formId])) {
+                    $generatedScripts[$formId] = [];
+                }
+
+                $generatedScripts[$formId][] = $effectData; // Store the effect data
+            }
+        }
+
+        // Encode the generatedScripts array as JSON
+        $jsonContent = json_encode($generatedScripts);
+
+        // Output the JSON response
+        header('Content-Type: application/json');
+        echo $jsonContent;
+    }
 }
 
 //	public function actionCreate()
