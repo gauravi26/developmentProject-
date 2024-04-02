@@ -44,25 +44,30 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
     'id'=>'form-theme-mapping-grid',
     'dataProvider'=>$model->search(),
     'filter'=>$model,
-    'columns'=>array(
-        'id',
-        array(
-            'name' => 'form_id',
-            'value' => '$data->applicationForms->menu_form',
-            'filter' => CHtml::listData(ApplicationForms::model()->findAll(), 'form_id', 'menu_form'),
-        ),
-        'theme_name',
-        'controller',
-        'action',
-        array(
-            'class'=>'CButtonColumn',
-            'buttons' => array(
-                'customDelete' => array(
-                    'label' => 'Custom Delete', // Custom label for the button
-                    'url' => 'Yii::app()->controller->createUrl("customDelete", array("id"=>$data->id))', // URL to trigger the actionCustomDelete function
-                ),
-            ),
-            'template' => '{update} {customDelete}', // Define which buttons to display and in what order
-        ),
+   'columns'=>array(
+    'id',
+    array(
+        'name' => 'form_id',
+        'value' => '$data->applicationForms->menu_form',
+        'filter' => CHtml::listData(ApplicationForms::model()->findAll(), 'form_id', 'menu_form'),
     ),
+    array(
+        'name' => 'theme_name',
+        'value' => '$data->theme->theme_name',
+        'filter' => CHtml::listData(Themes::model()->findAll(), 'id', 'theme_name'),
+    ),
+    'controller',
+    'action',
+    array(
+        'class'=>'CButtonColumn',
+        'buttons' => array(
+            'customDelete' => array(
+                'label' => 'Custom Delete', // Custom label for the button
+                'url' => 'Yii::app()->controller->createUrl("customDelete", array("id"=>$data->id))', // URL to trigger the actionCustomDelete function
+            ),
+        ),
+        'template' => '{update} {customDelete}', // Define which buttons to display and in what order
+    ),
+),
+
 )); ?>

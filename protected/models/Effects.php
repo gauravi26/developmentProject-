@@ -9,6 +9,10 @@
  * @property integer $trigger_id
  * @property integer $FIELD_ID
  * @property string $effect_code_id
+ *
+ * The followings are the available model relations:
+ * @property Forms $form
+ * @property EffectTrigger $trigger
  */
 class Effects extends CActiveRecord
 {
@@ -45,7 +49,12 @@ class Effects extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-		);
+			'form' => array(self::BELONGS_TO, 'Forms', 'form_id'),
+			'trigger' => array(self::BELONGS_TO, 'EffectTrigger', 'trigger_id'),
+		        'field' => array(self::BELONGS_TO, 'FormFields', 'FIELD_ID'),
+        'effect' => array(self::BELONGS_TO, 'ScriptCode', 'effect_code_id'),
+
+                    );
 	}
 
 	/**

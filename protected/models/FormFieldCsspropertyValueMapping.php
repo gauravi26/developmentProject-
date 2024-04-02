@@ -51,6 +51,8 @@ class FormFieldCsspropertyValueMapping extends CActiveRecord
 		return array(
 			'cssProperty' => array(self::BELONGS_TO, 'CssProperties', 'css_property_id'),
 			'field' => array(self::BELONGS_TO, 'FormFields', 'field_id'),
+                                'form' => array(self::BELONGS_TO, 'ApplicationForms', 'form_id'),
+
 		);
 	}
 

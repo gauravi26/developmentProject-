@@ -16,7 +16,7 @@ $(window).on('load', function() {
         type: 'GET',
         dataType: 'json', // Update the data type to 'json' since the response is JSON
         data: { controller: controllerName, action: actionName },
-
+//****
         success: function(response) {
             // Set a flag to indicate that the page-specific theme has been applied
             pageSpecificThemeApplied = true;

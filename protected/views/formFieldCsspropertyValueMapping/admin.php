@@ -46,9 +46,21 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
     'filter'=>$model,
     'columns'=>array(
         'id',
-        'form_id',
-        'field_id',
-        'css_property_id',
+        array(
+            'name'=>'form_id',
+            'value'=>'$data->form->menu_form',
+            'filter'=>CHtml::listData(ApplicationForms::model()->findAll(), 'form_id', 'menu_form'),
+        ),
+        array(
+            'name'=>'field_id',
+            'value'=>'$data->field->TITLE', // Update to use TITLE property
+            'filter'=>CHtml::listData(FormFields::model()->findAll(), 'field_id', 'TITLE'), // Update filter accordingly
+        ),
+        array(
+            'name'=>'css_property_id',
+            'value'=>'$data->cssProperty->property_name',
+            'filter'=>CHtml::listData(CssProperties::model()->findAll(), 'css_property_id', 'property_name'),
+        ),
         'value',
         array(
             'class'=>'CButtonColumn',
