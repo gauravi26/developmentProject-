@@ -1,9 +1,13 @@
-document.addEventListener("DOMContentLoaded", function () {
+$(document).ready(function(){
     const reportThemeForm = document.getElementById('reportThemeForm');
     const reportGridContainer = document.getElementById('report-container');
     const reportTable = document.getElementById('report-table');
     const reportHeader = document.getElementById('report-header');
     
+    const reportDataEntries = document.getElementById('report-table_length');
+    console.log(reportDataEntries);
+    const reportFilter = document.getElementById('report-table_filter');
+
     const tableHeaders = document.querySelectorAll('th');
 
     const thPaddingInput = document.getElementById('th_padding');
@@ -13,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const thFontWeightInput = document.getElementById('th_font-weight');
     const thFontSizeInput = document.getElementById('th_font-size');
 
-    
+
 
     function updateGridContainerProperties() {
         reportGridContainer.style.backgroundColor = reportThemeForm['.report-container_background-color'].value;
@@ -27,50 +31,53 @@ document.addEventListener("DOMContentLoaded", function () {
         reportGridContainer.style.fontFamily = reportThemeForm['.report-container_font-family'].value;
         reportGridContainer.style.width = reportThemeForm['.report-container_width'].value;
         reportGridContainer.style.margin = reportThemeForm['.report-container_margin'].value;
-       
-    }
-     //Function for Header 
-     
-     function updateHeader(){
-         
-         reportHeader.style.textAlign = reportThemeForm['.report-container h2_text-align'].value;
-         reportHeader.style.gridColumn = reportThemeForm['.report-container h2_grid-column'].value;
-         reportHeader.style.color = reportThemeForm['.report-container h2_color'].value;
-         reportHeader.style.fontSize = reportThemeForm['.report-container h2_font-size'].value;
-     
-         
-     }
-     
-     
-     
-      //Function for Table   
-     function updateTableProperties()  {
-        
-        reportTable.style.width = reportThemeForm['.report-table _width'].value;
-         reportTable.style.borderCollapse = reportThemeForm['.report-table _border-collapse'].value;
-    reportTable.style.borderSpacing = reportThemeForm['.report-table _border-spacing'].value;
-    reportTable.style.marginTop = reportThemeForm['.report-table _margin-top'].value;
-    reportTable.style.backgroundColor = reportThemeForm['.report-table _background-color'].value;
-
     }
     
-function updateTableHeader() {
-    const paddingValue = thPaddingInput.value;
-    const borderValue = thBorderInput.value;
-    const backgroundColorValue = thBackgroundColorInput.value;
-    const colorValue = thColorInput.value;
-    const fontWeightValue = thFontWeightInput.value;
-    const fontSizeValue = thFontSizeInput.value;
+    function updateDataTableProperties() {
+        reportDataEntries.style.backgroundColor = reportThemeForm['.dataTables_length_color'].value;
+    }
+    //Function for Header 
 
-    tableHeaders.forEach(th => {
-        th.style.padding = paddingValue;
-        th.style.border = borderValue;
-        th.style.backgroundColor = backgroundColorValue;
-        th.style.color = colorValue;
-        th.style.fontWeight = fontWeightValue;
-        th.style.fontSize = fontSizeValue;
-    });
-}
+    function updateHeader() {
+
+        reportHeader.style.textAlign = reportThemeForm['.report-container h2_text-align'].value;
+        reportHeader.style.gridColumn = reportThemeForm['.report-container h2_grid-column'].value;
+        reportHeader.style.color = reportThemeForm['.report-container h2_color'].value;
+        reportHeader.style.fontSize = reportThemeForm['.report-container h2_font-size'].value;
+
+
+    }
+
+
+
+    //Function for Table   
+    function updateTableProperties() {
+
+        reportTable.style.width = reportThemeForm['.report-table _width'].value;
+        reportTable.style.borderCollapse = reportThemeForm['.report-table _border-collapse'].value;
+        reportTable.style.borderSpacing = reportThemeForm['.report-table _border-spacing'].value;
+        reportTable.style.marginTop = reportThemeForm['.report-table _margin-top'].value;
+        reportTable.style.backgroundColor = reportThemeForm['.report-table _background-color'].value;
+
+    }
+
+    function updateTableHeader() {
+        const paddingValue = thPaddingInput.value;
+        const borderValue = thBorderInput.value;
+        const backgroundColorValue = thBackgroundColorInput.value;
+        const colorValue = thColorInput.value;
+        const fontWeightValue = thFontWeightInput.value;
+        const fontSizeValue = thFontSizeInput.value;
+
+        tableHeaders.forEach(th => {
+            th.style.padding = paddingValue;
+            th.style.border = borderValue;
+            th.style.backgroundColor = backgroundColorValue;
+            th.style.color = colorValue;
+            th.style.fontWeight = fontWeightValue;
+            th.style.fontSize = fontSizeValue;
+        });
+    }
 
     // Adding Listener Grid Container 
     reportThemeForm['.report-container_grid'].addEventListener("input", updateGridContainerProperties);
@@ -84,108 +91,113 @@ function updateTableHeader() {
     reportThemeForm['.report-container_font-family'].addEventListener("input", updateGridContainerProperties);
     reportThemeForm['.report-container_width'].addEventListener("input", updateGridContainerProperties);
     reportThemeForm['.report-container_margin'].addEventListener("input", updateGridContainerProperties);
-  
-  
+
+
     // Adding Listener Report Header
-    reportThemeForm['.report-container h2_text-align'].addEventListener('input',updateHeader);
+    reportThemeForm['.report-container h2_text-align'].addEventListener('input', updateHeader);
     reportThemeForm['.report-container h2_grid-column'].addEventListener('input', updateHeader);
     reportThemeForm['.report-container h2_color'].addEventListener('input', updateHeader);
     reportThemeForm['.report-container h2_font-size'].addEventListener('input', updateHeader);
 
 
-  
-  
-     // Adding Listener Table 
-     
-   reportThemeForm['.report-table _width'].addEventListener("input", updateTableProperties); 
-   reportThemeForm['.report-table _border-collapse'].addEventListener("input", updateTableProperties);
-   reportThemeForm['.report-table _border-spacing'].addEventListener("input", updateTableProperties);
-   reportThemeForm['.report-table _margin-top'].addEventListener("input", updateTableProperties);
-   reportThemeForm['.report-table _background-color'].addEventListener("input", updateTableProperties);
 
-   //for table header 
-reportThemeForm['th_background-color'].addEventListener("input", updateTableHeader);
-thPaddingInput.addEventListener("input", updateTableHeader);
-thBorderInput.addEventListener("input", updateTableHeader);
-thBackgroundColorInput.addEventListener("input", updateTableHeader);
-thColorInput.addEventListener("input", updateTableHeader);
-thFontWeightInput.addEventListener("input", updateTableHeader);
-thFontSizeInput.addEventListener("input", updateTableHeader);
 
-  //   FOR table data td 
-  
-  const tdInputs = {
-    padding: document.getElementById('td_padding'),
-    border: document.getElementById('td_border'),
-    color: document.getElementById('td_color'),
-    fontFamily: document.getElementById('td_font-family'),
-    fontSize: document.getElementById('td_font-size'),
-    fontStyle: document.getElementById('td_font-style')
-};
+    // Adding Listener Table 
 
-const tableCells = document.querySelectorAll('td');
+    reportThemeForm['.report-table _width'].addEventListener("input", updateTableProperties);
+    reportThemeForm['.report-table _border-collapse'].addEventListener("input", updateTableProperties);
+    reportThemeForm['.report-table _border-spacing'].addEventListener("input", updateTableProperties);
+    reportThemeForm['.report-table _margin-top'].addEventListener("input", updateTableProperties);
+    reportThemeForm['.report-table _background-color'].addEventListener("input", updateTableProperties);
 
-function updateTableCellProperties() {
-    const styles = {
-        padding: tdInputs.padding.value,
-        border: tdInputs.border.value,
-        color: tdInputs.color.value,
-        fontFamily: tdInputs.fontFamily.value,
-        fontSize: tdInputs.fontSize.value,
-        fontStyle: tdInputs.fontStyle.value
+    //for table header 
+    reportThemeForm['th_background-color'].addEventListener("input", updateTableHeader);
+    thPaddingInput.addEventListener("input", updateTableHeader);
+    thBorderInput.addEventListener("input", updateTableHeader);
+    thBackgroundColorInput.addEventListener("input", updateTableHeader);
+    thColorInput.addEventListener("input", updateTableHeader);
+    thFontWeightInput.addEventListener("input", updateTableHeader);
+    thFontSizeInput.addEventListener("input", updateTableHeader);
+    
+    //for table Data Table
+    reportThemeForm['.dataTables_length_color'].addEventListener("input", updateDataTableProperties);
+    console.log(reportThemeForm);
+
+    //   FOR table data td 
+
+    const tdInputs = {
+        padding: document.getElementById('td_padding'),
+        border: document.getElementById('td_border'),
+        color: document.getElementById('td_color'),
+        fontFamily: document.getElementById('td_font-family'),
+        fontSize: document.getElementById('td_font-size'),
+        fontStyle: document.getElementById('td_font-style')
     };
 
-    tableCells.forEach(td => {
-        Object.entries(styles).forEach(([property, value]) => {
-            td.style[property] = value;
+    const tableCells = document.querySelectorAll('td');
+
+    function updateTableCellProperties() {
+        const styles = {
+            padding: tdInputs.padding.value,
+            border: tdInputs.border.value,
+            color: tdInputs.color.value,
+            fontFamily: tdInputs.fontFamily.value,
+            fontSize: tdInputs.fontSize.value,
+            fontStyle: tdInputs.fontStyle.value
+        };
+
+        tableCells.forEach(td => {
+            Object.entries(styles).forEach(([property, value]) => {
+                td.style[property] = value;
+            });
         });
+    }
+
+    Object.values(tdInputs).forEach(input => {
+        input.addEventListener("input", updateTableCellProperties);
     });
-}
 
-Object.values(tdInputs).forEach(input => {
-    input.addEventListener("input", updateTableCellProperties);
-});
-
-const tfootInputs = {
-    backgroundColor: document.getElementById('tfoot_background-color'),
-    color: document.getElementById('tfoot_color'),
-    fontWeight: document.getElementById('tfoot_font-weight')
-};
-
-const tfootElement = document.getElementById('tfoot');
-
-function updateTfootProperties() {
-    const styles = {
-        backgroundColor: tfootInputs.backgroundColor.value,
-        color: tfootInputs.color.value,
-        fontWeight: tfootInputs.fontWeight.value
+    const tfootInputs = {
+        backgroundColor: document.getElementById('tfoot_background-color'),
+        color: document.getElementById('tfoot_color'),
+        fontWeight: document.getElementById('tfoot_font-weight')
     };
 
-    // Apply styles directly to the <tfoot> element
-    Object.entries(styles).forEach(([property, value]) => {
-        tfootElement.style[property] = value;
-    });
-}
+    const tfootElement = document.getElementById('tfoot');
+
+    function updateTfootProperties() {
+        const styles = {
+            backgroundColor: tfootInputs.backgroundColor.value,
+            color: tfootInputs.color.value,
+            fontWeight: tfootInputs.fontWeight.value
+        };
+
+        // Apply styles directly to the <tfoot> element
+        Object.entries(styles).forEach(([property, value]) => {
+            tfootElement.style[property] = value;
+        });
+    }
 
 // Add event listeners to input fields
-Object.values(tfootInputs).forEach(input => {
-    input.addEventListener("input", updateTfootProperties);
-});
+    Object.values(tfootInputs).forEach(input => {
+        input.addEventListener("input", updateTfootProperties);
+    });
 
 // Initial update
-updateTfootProperties();
+    updateTfootProperties();
 
-   
+
     // Calling functions for each tabs 
     updateGridContainerProperties();
+    updateDataTableProperties();
     updateHeader();
     updateTableProperties();
-   updateTableHeader();
-   updateTableCellProperties();
-   
-   
-   
-   const trInputs = {
+    updateTableHeader();
+    updateTableCellProperties();
+
+
+
+    const trInputs = {
         evenBackgroundColor: document.getElementById('tr:nth-child(even)_background-color'),
         oddBackgroundColor: document.getElementById('tr:nth-child(odd)_background-color'),
         hoverBackgroundColor: document.getElementById('tr:hover_background-color')
@@ -229,26 +241,25 @@ updateTfootProperties();
     trElements.forEach(tr => {
         handleHoverEffects(tr);
     });
-    
-  
-const dataTableLength = document.getElementsByClassName('dataTables_length'); // Selecting all elements with the class 'dataTables_length'
 
-function updateDataTableLengthColor() {
-    const colorInput = document.getElementById('.dataTables_length_color');
-    if (colorInput) {
-        const color = colorInput.value;
-        for (let i = 0; i < dataTableLength.length; i++) {
-            dataTableLength[i].style.color = color;
+
+    const dataTableLength = document.getElementsByClassName('dataTables_length'); // Selecting all elements with the class 'dataTables_length'
+
+    function updateDataTableLengthColor() {
+        const colorInput = document.getElementById('.dataTables_length_color');
+        if (colorInput) {
+            const color = colorInput.value;
+            for (let i = 0; i < dataTableLength.length; i++) {
+                dataTableLength[i].style.color = color;
+            }
         }
     }
-}
 
 
 
-updateDataTableLengthColor();
+    updateDataTableLengthColor();
 
 
 
 
 });
-

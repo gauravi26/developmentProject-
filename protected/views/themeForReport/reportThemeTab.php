@@ -43,8 +43,33 @@
         width: 600px
     }
     .tab {
+        display: flex;
         margin-bottom: 20px;
+        border: solid;
+        border-width: 2px 0px 2px 2px;
+        border-color: #256df7;
+        border-radius: 5px;
     }
+    
+    .tab > * {
+        padding: 0.75rem 1.5rem;
+        border: solid;
+        border-width: 0 2px 0 0;
+        border-color: #256df7;
+        color: #256df7;
+        font-weight: bold;
+        background: transparent;
+    }
+    
+    .tab *:last-child{
+        border-radius: 0 5px 5px 0;
+    }
+    
+    .tabSelected{
+        background-color: #256df7;
+        color: white;
+    }
+    
     label {
         display: inline-block;
         max-width: 100%;
@@ -74,7 +99,10 @@
     }
 
     #reportThemeForm{
-
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
         width: 600px;
     }
 
@@ -83,7 +111,7 @@
     .previewDiv {
         position: fixed;
         right: 20px; /* Adjust the right distance as needed */
-        bottom: -50px;
+        bottom: 0px;
         margin-top : -333px
             /*        height: 300px*/
     }
@@ -94,6 +122,15 @@
         /*        background-color: red;*/
     }
 </style>
+
+<script>
+
+    function tabSelected(e) {
+        document.querySelector('.tabSelected').classList.remove('tabSelected');
+        e.classList.add("tabSelected");
+    }
+
+</script>
 
 <?php
 /* @var $themeReportModel ThemeForReport */
@@ -108,14 +145,14 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
 
 
     <div class="tab">
-        <button class="tablinks" onclick="openCss(event, 'GridContainer')">GridContainer</button>
-        <button class="tablinks" onclick="openCss(event, 'Heading')">Heading</button>
-        <button class="tablinks" onclick="openCss(event, 'Table')">Table</button>
-        <button class="tablinks" onclick="openCss(event, 'TableHeader')">TableHeader</button>
-        <button class="tablinks" onclick="openCss(event, 'TableRows')">TableRows</button>
-        <button class="tablinks" onclick="openCss(event, 'TableCells')">TableCells</button>
-        <button class="tablinks" onclick="openCss(event, 'TableFooter')">TableFooter</button>
-        <button class="tablinks" onclick="openCss(event, 'DataTable')">DataTable</button>
+        <button class="tablinks tabSelected" onclick="openCss(event, 'GridContainer'); tabSelected(this);">GridContainer</button>
+        <button class="tablinks" onclick="openCss(event, 'Heading'); tabSelected(this);">Heading</button>
+        <button class="tablinks" onclick="openCss(event, 'Table'); tabSelected(this);">Table</button>
+        <button class="tablinks" onclick="openCss(event, 'TableHeader'); tabSelected(this);">TableHeader</button>
+        <button class="tablinks" onclick="openCss(event, 'TableRows'); tabSelected(this);">TableRows</button>
+        <button class="tablinks" onclick="openCss(event, 'TableCells'); tabSelected(this);">TableCells</button>
+        <button class="tablinks" onclick="openCss(event, 'TableFooter'); tabSelected(this);">TableFooter</button>
+        <button class="tablinks" onclick="openCss(event, 'DataTable'); tabSelected(this);">DataTable</button>
 
     </div>
     <?php
@@ -169,19 +206,19 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
 
     <!-- Render tabs and associated input fields -->
     <!-- Content for the tab goes here -->
-<?php foreach ($inputFieldsByTab as $tabId => $inputFields): ?>
+    <?php foreach ($inputFieldsByTab as $tabId => $inputFields): ?>
         <div id="<?php echo $tabId; ?>" class="tabcontent">
             <h3><?php echo ucfirst($tabId); ?></h3>
             <!-- Check if input fields are set for this tab -->
-    <?php if (isset($inputFields)): ?>
+            <?php if (isset($inputFields)): ?>
                 <?php foreach ($inputFields as $inputField): ?>
                     <div>
                         <label for="<?php echo $inputField['inputName']; ?>">
-            <?php echo ucfirst($inputField['label']); ?>
+                            <?php echo ucfirst($inputField['label']); ?>
                         </label>
 
 
-            <?php if ($inputField['inputName'] === '60_35'): // Check if the input field corresponds to '60_35'  ?>
+                        <?php if ($inputField['inputName'] === '60_35'): // Check if the input field corresponds to '60_35'  ?>
                             <!-- Include a dropdown for justify-content -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -190,7 +227,7 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="center">Center</option>
                                 <option value="justify">Justified</option>
                             </select>
-            <?php elseif ($inputField['inputName'] === '60_32'): // Check if the input field corresponds to '60_35'  ?>
+                        <?php elseif ($inputField['inputName'] === '60_32'): // Check if the input field corresponds to '60_35'  ?>
                             <!-- Include a dropdown for justify-content -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -198,7 +235,7 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="centered">Center</option>
 
                             </select>
-            <?php elseif ($inputField['inputName'] === '60_33'): // Check if the input field corresponds to another input name  ?>
+                        <?php elseif ($inputField['inputName'] === '60_33'): // Check if the input field corresponds to another input name  ?>
                             <!-- Include a dropdown for another property -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -206,7 +243,7 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="100px 200px 100px">100px 200px 100px</option>
                                 <option value="1fr 2fr 1fr">1fr 2fr 1fr</option>
                             </select>
-            <?php elseif ($inputField['inputName'] === '60_36'): // Check if the input field corresponds to '60_35'  ?>
+                        <?php elseif ($inputField['inputName'] === '60_36'): // Check if the input field corresponds to '60_35'  ?>
                             <!-- Include a dropdown for justify-content -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -216,7 +253,7 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="justify">Justified</option>
 
                             </select>
-            <?php elseif ($inputField['inputName'] === '60_37'): // Check if the input field corresponds to '60_35'  ?>
+                        <?php elseif ($inputField['inputName'] === '60_37'): // Check if the input field corresponds to '60_35'  ?>
                             <!-- Include a dropdown for justify-content -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value="Roboto, 'sans-serif'">Roboto</option>
@@ -230,7 +267,19 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
 
                             </select>
 
-            <?php elseif ($inputField['inputName'] === '115_38'): // Check if the input field corresponds to another input name  ?>
+                        <?php elseif ($inputField['inputName'] === '60_1'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#ffffff'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
+
+                        <?php elseif ($inputField['inputName'] === '115_38'): // Check if the input field corresponds to another input name  ?>
                             <!-- Include a dropdown for another property -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -241,7 +290,7 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="start">Start</option>
                                 <option value="end">End</option>
                             </select>
-            <?php elseif ($inputField['inputName'] === '115_12'): // Check if the input field corresponds to another input name  ?>
+                        <?php elseif ($inputField['inputName'] === '115_12'): // Check if the input field corresponds to another input name  ?>
                             <!-- Include a dropdown for another property -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -249,14 +298,27 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="left"> Left</option>
                                 <option value="center"> Center</option>
                             </select>
-            <?php elseif ($inputField['inputName'] === '61_39'): // Check if the input field corresponds to another input name  ?>
+                            
+                        <?php elseif ($inputField['inputName'] === '115_3'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#000000'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
+                            
+                        <?php elseif ($inputField['inputName'] === '61_39'): // Check if the input field corresponds to another input name  ?>
                             <!-- Include a dropdown for another property -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
                                 <option value="separate">Separate</option>
                                 <option value="collapse">Collapse</option>
                             </select>
-            <?php elseif ($inputField['inputName'] === '61_40'): // Check if the input field corresponds to another input name  ?>
+                        <?php elseif ($inputField['inputName'] === '61_40'): // Check if the input field corresponds to another input name  ?>
                             <!-- Include a dropdown for another property -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -267,7 +329,7 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="0 1px">Borders Only Between Columns</option>
                                 <option value="1px 1px">Borders Between Rows and Columns</option>
                             </select>
-            <?php elseif ($inputField['inputName'] === '61_41'): // Check if the input field corresponds to another input name  ?>
+                        <?php elseif ($inputField['inputName'] === '61_41'): // Check if the input field corresponds to another input name  ?>
                             <!-- Include a dropdown for another property -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -275,7 +337,20 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="10px">10px</option>
                                 <option value="15px">15px</option>
                             </select>
-            <?php elseif ($inputField['inputName'] === '53_4'): // Check if the input field corresponds to another input name  ?>
+                            
+                        <?php elseif ($inputField['inputName'] === '61_1'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#ffffff'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
+                            
+                        <?php elseif ($inputField['inputName'] === '53_4'): // Check if the input field corresponds to another input name  ?>
                             <!-- Include a dropdown for another property -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -286,7 +361,7 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="1px solid #6495ED">1px Solid Blue</option>
                                 <option value="2px solid #6495ED">2px Solid Blue</option>
                             </select>
-            <?php elseif ($inputField['inputName'] === '53_18'): // Check if the input field corresponds to another input name  ?>
+                        <?php elseif ($inputField['inputName'] === '53_18'): // Check if the input field corresponds to another input name  ?>
                             <!-- Include a dropdown for another property -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -294,8 +369,68 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="bolder">Bolder</option>
                                 <option value="lighter">Lighter</option>
                             </select>
+                            
+                        <?php elseif ($inputField['inputName'] === '53_1'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#ffffff'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
+                            
+                        <?php elseif ($inputField['inputName'] === '53_3'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#000000'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
+                            
+                        <?php elseif ($inputField['inputName'] === '55_1'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#ffffff'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
+                            
+                        <?php elseif ($inputField['inputName'] === '56_1'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#ffffff'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
+                            
+                        <?php elseif ($inputField['inputName'] === '57_1'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#c8e2f7'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
 
-            <?php elseif ($inputField['inputName'] === '116_4'): // Check if the input field corresponds to '60_35'  ?>
+                        <?php elseif ($inputField['inputName'] === '116_4'): // Check if the input field corresponds to '60_35'  ?>
                             <!-- Include a dropdown for justify-content -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -312,7 +447,7 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
 
                             </select>
 
-            <?php elseif ($inputField['inputName'] === '116_37'): // Check if the input field corresponds to '60_35'  ?>
+                        <?php elseif ($inputField['inputName'] === '116_37'): // Check if the input field corresponds to '60_35'  ?>
                             <!-- Include a dropdown for justify-content -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -326,7 +461,7 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="'Merriweather', serif">Merriweather</option>
 
                             </select>
-            <?php elseif ($inputField['inputName'] === '116_23'): // Check if the input field corresponds to '60_35'  ?>
+                        <?php elseif ($inputField['inputName'] === '116_23'): // Check if the input field corresponds to '60_35'  ?>
                             <!-- Include a dropdown for justify-content -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -335,8 +470,44 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="oblique">Oblique</option>
 
                             </select>
+                            
+                        <?php elseif ($inputField['inputName'] === '116_3'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#000000'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
 
-            <?php elseif ($inputField['inputName'] === '117_18'): // Check if the input field corresponds to '60_35'  ?>
+                        <?php elseif ($inputField['inputName'] === '58_1'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#ffffff'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
+                            
+                        <?php elseif ($inputField['inputName'] === '58_3'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#000000'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
+                            
+                        <?php elseif ($inputField['inputName'] === '117_18'): // Check if the input field corresponds to '60_35'  ?>
                             <!-- Include a dropdown for justify-content -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -345,8 +516,20 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="lighter">Lighter</option>
 
                             </select>
-
-            <?php elseif ($inputField['inputName'] === '118_18'): // Check if the input field corresponds to '60_35'  ?>
+                            
+                        <?php elseif ($inputField['inputName'] === '117_3'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#000000'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
+                            
+                        <?php elseif ($inputField['inputName'] === '118_18'): // Check if the input field corresponds to '60_35'  ?>
                             <!-- Include a dropdown for justify-content -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -355,7 +538,20 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="lighter">Lighter</option>
 
                             </select>
-            <?php elseif ($inputField['inputName'] === '119_18'): // Check if the input field corresponds to '60_35'  ?>
+                            
+                        <?php elseif ($inputField['inputName'] === '118_3'): // Check if the input field corresponds to '60_1'  ?>
+                            <!-- Include a dropdown for justify-content -->
+                            <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#000000'; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                       required
+                                   <?php endif; ?>
+                            >
+                            
+                        <?php elseif ($inputField['inputName'] === '119_18'): // Check if the input field corresponds to '60_35'  ?>
                             <!-- Include a dropdown for justify-content -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -364,7 +560,20 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="lighter">Lighter</option>
 
                             </select>
-            <?php elseif ($inputField['inputName'] === '120_18'): // Check if the input field corresponds to '60_35'  ?>
+                            
+                        <?php elseif ($inputField['inputName'] === '119_3'): // Check if the input field corresponds to '60_1'  ?>
+                        <!-- Include a dropdown for justify-content -->
+                        <input type="color" 
+                               name="<?php echo $inputField['inputName']; ?>" 
+                               value="<?php echo!empty($inputField['value']) ? $inputField['value'] : '#000000'; ?>"
+                               class="container-property-input"
+                               id="<?php echo $inputField['id']; ?>"
+                               <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                   required
+                               <?php endif; ?>
+                        >
+                            
+                        <?php elseif ($inputField['inputName'] === '120_18'): // Check if the input field corresponds to '60_35'  ?>
                             <!-- Include a dropdown for justify-content -->
                             <select name="<?php echo $inputField['inputName']; ?>" class="container-property-input" id="<?php echo $inputField['id']; ?>">
                                 <option value=" ">Select</option>
@@ -373,28 +582,28 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="lighter">Lighter</option>
 
                             </select>
-         <?php elseif (strpos($inputField['label'], 'color') !== false): ?>
-    <!-- Include a color picker for properties containing the word "color" -->
-    <input type="color" 
-           name="<?php echo $inputField['inputName']; ?>" 
-           value="<?php echo !empty($inputField['value']) ? $inputField['value'] : '#00000000'; ?>" <!-- Default value is transparent -->
-           class="container-property-input"
-           id="<?php echo $inputField['id']; ?>"
-           <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
-               required
-           <?php endif; ?>
-    >
+                        <?php elseif (strpos($inputField['label'], 'color') !== false): ?>
+                            <!-- Include a color picker for properties containing the word "color" -->
+                        <!--    <input type="color" 
+                                   name="<?php echo $inputField['inputName']; ?>" 
+                                   value="<?php echo!empty($inputField['value']) ? $inputField['value'] : null; ?>"
+                                   class="container-property-input"
+                                   id="<?php echo $inputField['id']; ?>"
+                            <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                                   required
+                            <?php endif; ?>
+                            >-->
 
-                                   
 
-            <?php else: ?>
+
+                        <?php else: ?>
                             <!-- Keep the existing text input for other fields -->
                             <input type="text" 
                                    name="<?php echo $inputField['inputName']; ?>" 
                                    value="<?php echo!empty($inputField['value']) ? $inputField['value'] . '' : 'px'; ?>" 
                                    class="container-property-input"
                                    id="<?php echo $inputField['id']; ?>"
-                <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+                                   <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
                                        required
                                    <?php endif; ?>
                                    >
@@ -402,13 +611,13 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
 
 
                         <span class='star'>
-            <?php echo (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])) ? '*' : ''; ?>
+                            <?php echo (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])) ? '*' : ''; ?>
                         </span>
                     </div>
-        <?php endforeach; ?>
+                <?php endforeach; ?>
             <?php endif; ?>
         </div>
-        <?php endforeach; ?>
+    <?php endforeach; ?>
 
 
     <br><input type="submit" value="Save" name ="saveTheme">
@@ -416,14 +625,14 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
 
 <!--INCLUDING PREVIEW PAGE -->
 <div class="previewDiv">
-<?php
-include 'preview.php';
-?>
+    <?php
+    include 'preview.php';
+    ?>
 </div>
 <!--Script for preview -->
-<script src="http://localhost/report/AjaxFiles/reportPreview.js"></script>
+<script src="<?php echo Yii::app()->baseUrl; ?>/AjaxFiles/reportPreview.js"></script>
+<!--<script src="http://localhost/report/AjaxFiles/reportPreview.js"></script>-->
 <script src="http://localhost/report/AjaxFiles/tabView.js"></script>
-
 
 
 

@@ -591,17 +591,17 @@ if (empty($inputValue) || $inputValue === '#000000') {
                 }
             }
     }
-        echo '<script>alert("Data saved successfully!");</script>';
+//        echo '<script>alert("Data saved successfully!");</script>';
         $this->render('success');
         
 
 }
-
+else{
  $this->render('tab-view-updatetheme_element_value', array(
         'elementModels' => $elementModels,
         'form' => $form,
     ));
-                             
+}                          
 
 }
 /////////////////////////////////////////////////////////////////Current /////////////////////////////////////////////////////////////////////////////////////
