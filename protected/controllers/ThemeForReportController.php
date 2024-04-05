@@ -326,13 +326,13 @@ private function findThemeForReport($themeForReports, $elementId, $cssPropertyId
     return null;
 }
 
-public function actionReportTestTheme(){
-    
-   $themeReportData = ThemeForReport::model()->findAll();
-   
-   $this->render('report', array('Themeforreport' => $themeReportData ));
-
-}
+//public function actionReportTestTheme(){
+//    
+//   $themeReportData = ThemeForReport::model()->findAll();
+//   
+//   $this->render('report', array('Themeforreport' => $themeReportData ));
+//
+//}
         
 public function actionReportThemeUpdate(){
     
@@ -344,10 +344,10 @@ public function actionSelectReport(){
 }
 
 public function actionCustomDelete($reportThemeID){
-//    $reportThemeID = isset($_POST['report_theme_id']) ? $_POST['report_theme_id'] : null;
-    print_r($reportThemeID);
-    die();
-    // $reportThemeID = 1633;
+//    $reportThemeID = Yii::app()->request->getPost('reportThemeID');
+//    print_r($reportThemeID); 
+//    die(); 
+
     if($reportThemeID != null){
         
         $formFieldCssModel = ThemeForReport::model()->findAllByAttributes(array('reference_id' => $reportThemeID));
@@ -370,6 +370,7 @@ public function actionCustomDelete($reportThemeID){
         echo "Report Id not found ";
     }
 }
+
 
 
         

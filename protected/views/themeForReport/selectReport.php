@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Delete Form Styles</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <?php
@@ -22,31 +23,58 @@
                 <option value="<?php echo $id; ?>"><?php echo $formName; ?></option>
             <?php endforeach; ?>  
         </select>
-        <!-- Add a button for deletion -->
+        <!-- Add buttons for deletion and updating -->
         <button type="button" id="deleteButton">Delete Styles</button>
-        <button type="button" id="updateButton">Updates Styles</button>
+        <button type="button" id="updateButton">Update Styles</button>
     </form>
 
     <script>
-        document.getElementById("deleteButton").addEventListener("click", function() {
-            var reportID = document.getElementById("report_theme_id").value;
-            console.log(reportID);
-            if (reportID) {
-                // Send an AJAX request to the controller method
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "index.php?r=themeForReport/customDelete", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        console.log(xhr.responseText);
+    $(document).ready(function() {
+        // Click event handler for deleting styles
+        $("#deleteButton").click(function() {
+            var reportThemeID = $("#report_theme_id").val();
+            console.log(reportThemeID);
+            if (reportThemeID) {
+                $.ajax({
+                    url: "index.php?r=themeForReport/customDelete&reportThemeID=" + reportThemeID,
+                    type: "POST",
+                    data: {reportThemeID: reportThemeID},
+                    success: function(response) {
+                        console.log(response);
+                        alert("Report Theme Deleted.");
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error occurred: " + error);
                     }
-                };
-                // Send the report_theme_id as a parameter in the POST request
-                xhr.send("report_theme_id=" + reportID);
+                });
+            } else {
+                alert("Please select a Theme.");
+            }
+        });
+
+        // Click event handler for updating styles
+        $("#updateButton").click(function() {
+            var reportThemeID = $("#report_theme_id").val();
+            console.log(reportThemeID);
+            if (reportThemeID) {
+                $.ajax({
+                    url: "index.php?r=themeForReport/tabThemeReport&themeReportId=" + reportThemeID,
+                    type: "POST",
+                    data: {reportThemeID: reportThemeID},
+                    success: function(response) {
+                        console.log(response);
+                            window.location.href = "index.php?r=themeForReport/tabThemeReport&themeReportId=" + reportThemeID;
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error occurred: " + error);
+                    }
+                });
             } else {
                 alert("Please select a form.");
             }
         });
+    });
     </script>
 </body>
 </html>
