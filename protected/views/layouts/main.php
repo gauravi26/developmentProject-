@@ -118,7 +118,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="index.php?r=report/index">Report</a></li>
                                 <li><a href="index.php?r=themeForReport/reportTheme">Create Theme for Report</a></li>
-                                <li><a href="index.php?r=themeForReport/selectReport">Select Report</a></li>
+                                <li><a href="index.php?r=themeForReport/selectReport">Edit Report Theme</a></li>
                                 <li><a href="index.php?r=reportThemeMapping/create">Apply Theme to Report</a></li>
                                 <li><a href="index.php?r=reportSelectorFunctionMapping/customCreate">Apply Conditional Style to Report</a></li>
                                 <li><a href="index.php?r=reportSelectorFunctionMapping/customUpdate">Update Conditional Style to Report</a></li>
