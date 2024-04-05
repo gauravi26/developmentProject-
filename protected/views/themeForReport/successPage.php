@@ -13,7 +13,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHPWebPage.php to 
              Theme For Report Successfully Saved 
         </h2>
         
-        <a href='http://localhost/report/index.php?r=report/testReport'>
+        <a href='http://localhost/report/index.php?r=report/themebuilder11'>
         <button >Test</button>
        </a>
         <button onclick ="history.go(-1)">Edit Again</button>

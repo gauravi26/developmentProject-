@@ -26,7 +26,8 @@
       tabName === "Select_Input" ||
       tabName === "Radio_Button" ||
       tabName === "Check_Box" ||
-      tabName === "Button"
+      tabName === "Button"||
+      tabName === "Date"
     ) {
       nestedTabContainer.style.display = "block";
     } else {
@@ -86,4 +87,4 @@
   }
 
   // Trigger click event on the "Size" button to open it by default
-  document.querySelector(".nested-tablinks").click();
+//  document.querySelector(".nested-tablinks").click();

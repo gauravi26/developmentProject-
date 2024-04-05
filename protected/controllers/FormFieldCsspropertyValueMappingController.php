@@ -282,12 +282,13 @@ public function actionFormDelete(){
             $ids[]=$model->id;
             
         }
-//        print_r($ids);
-//        die();
+
         if(!empty($ids)){
             
             $idList = implode(',', $ids);
-            $delete = "DELETE FROM form_field_cssproperty_value_mapping WHERE form_id IN ($idsList)";
+//                    print_r($idList);
+//        die();
+            $delete = "DELETE FROM form_field_cssproperty_value_mapping WHERE id IN ($idList)";
             $command = Yii::app()->db->createCommand($delete);
             $command->execute();
                         echo "Records deleted successfully.";

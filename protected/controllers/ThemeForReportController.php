@@ -32,7 +32,7 @@ class ThemeForReportController extends Controller
 				'users'=>array('*'),
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update', 'reportTheme','tabThemeReport','saveThemeValues','reportTestTheme'),
+				'actions'=>array('create','update', 'reportTheme','tabThemeReport','saveThemeValues','reportTestTheme','reportThemeUpdate','customDelete','selectReport'),
 				'users'=>array('@'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -285,9 +285,10 @@ public function actionTabThemeReport($themeReportId) {
 
 public function actionSaveThemeValues() {
     // Fetch all records for the given reference_id
+    
     $referenceId = $_POST['themeReportId'];
     $themeForReports = ThemeForReport::model()->findAllByAttributes(array('reference_id' => $referenceId));
-
+$matches=[];
     // Iterate through the POST data
     foreach ($_POST as $key => $value) {
         // Check if the key corresponds to an element_id_css_property_id pair
@@ -333,82 +334,43 @@ public function actionReportTestTheme(){
 
 }
         
+public function actionReportThemeUpdate(){
+    
 
 
-//public function actionSaveThemeValues() {
-//    print_r($_POST);  // Print POST data for debugging
-//die();
-//    if (isset($_POST['values'])) {
-//        foreach ($_POST['values'] as $key => $value) {
-//            // Extract element_id and css_property_id from the input field name
-//            list($element_id, $css_property_id) = explode('_', $key);
-//
-//            // Find the corresponding record and update the value
-//            $themeReportModel = ThemeForReport::model()->findByAttributes(array(
-//                'reference_id' => $_POST['themeReportId'],
-//                'element_id' => $element_id,
-//                'css_property_id' => $css_property_id,
-//            ));
-//
-//            if ($themeReportModel !== null) {
-//                $themeReportModel->value = $value;
-//                
-//                // Debug: Print the values before saving
-//                echo "Element ID: $element_id, CSS Property ID: $css_property_id, New Value: $value<br>";
-//
-//                // Save the changes
-//                if ($themeReportModel->save()) {
-//                    echo "Record updated successfully<br>";
-//                } else {
-//                    echo "Failed to update record<br>";
-//                    print_r($themeReportModel->getErrors()); // Display errors, if any
-//                    die(); // Stop execution for debugging
-//                }
-//            } else {
-//                echo "Record not found for Element ID: $element_id, CSS Property ID: $css_property_id<br>";
-//            }
-//        }
-//    }
-//
-//    // Redirect to the tab view page
-//    $this->redirect(array('tabThemeReport', 'themeReportId' => $_POST['themeReportId']));
-//}
+}
+public function actionSelectReport(){
+    $this->render('selectReport');
+}
+
+public function actionCustomDelete($reportThemeID){
+//    $reportThemeID = isset($_POST['report_theme_id']) ? $_POST['report_theme_id'] : null;
+    print_r($reportThemeID);
+    die();
+    // $reportThemeID = 1633;
+    if($reportThemeID != null){
+        
+        $formFieldCssModel = ThemeForReport::model()->findAllByAttributes(array('reference_id' => $reportThemeID));
+        
+        $ids = array();
+        foreach($formFieldCssModel as $model){
+            $ids[] = $model->id;
+        }
+
+        if(!empty($ids)){
+            $idList = implode(',', $ids);
+            $delete = "DELETE FROM theme_for_report WHERE id IN ($idList)";
+            $command = Yii::app()->db->createCommand($delete);
+            $command->execute();
+            echo "Records deleted successfully.";
+        } else {
+           echo  "No Style for Form Found";
+        }
+    } else {
+        echo "Report Id not found ";
+    }
+}
 
 
-
-//      public function actionSaveThemeValues() {
-//    if (isset($_POST['themeReportId'])) {
-//        $referenceId = $_POST['themeReportId'];
-//
-//        // Fetch all records for the given reference_id
-//        $themeForReports = ThemeForReport::model()->findAllByAttributes(array('reference_id' => $referenceId));
-//
-//        // Iterate through the fetched records and update them
-//        foreach ($themeForReports as $themeReportModel) {
-//            // Check if the input field name matches the pattern "{theme_name} - {element_id}_{css_property_id}"
-//            $key = $themeReportModel->theme_name . ' - ' . $themeReportModel->element_id . '_' . $themeReportModel->css_property_id . '_value';
-//
-//            if (isset($_POST['theme_values'][$key])) {
-//                $value = $_POST['theme_values'][$key];
-//                $themeReportModel->value = $value;
-//
-//                // Save the changes
-//                if ($themeReportModel->save()) {
-//                    
-////                    print_r($themeReportModel);
-////                    die();
-//                    echo "Record updated successfully<br>";
-//                } else {
-//                    echo "Failed to update record<br>";
-//                    print_r($themeReportModel->getErrors()); // Display errors, if any
-//                    die(); // Stop execution for debugging
-//                }
-//            }
-//        }
-//
-//    }
-//}
-
-
-
+        
 }

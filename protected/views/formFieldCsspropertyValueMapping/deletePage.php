@@ -18,7 +18,7 @@
 <?php endforeach;?>  
             </select>   
             <input type="submit" value="Submit"><br><br>
-            <p style="font-weight: bolder">NOTE THIS WILL DELETE ALL STYLES FOR SELETED FORM </p>
+            <p style="font-weight: bolder">NOTE THIS WILL DELETE ALL STYLES FOR SELECTED FORM </p>
        </form>
            
     </body>

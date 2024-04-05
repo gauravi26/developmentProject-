@@ -373,17 +373,19 @@ $this->pageTitle = 'Report Theme: ' . CHtml::encode($themeReportModel->theme_nam
                                 <option value="lighter">Lighter</option>
 
                             </select>
-            <?php elseif (strpos($inputField['label'], 'color') !== false): ?>
-                            <!-- Include a color picker for properties containing the word "color" -->
-                            <input type="color" 
-                                   name="<?php echo $inputField['inputName']; ?>" 
-                                   value="<?php echo $inputField['value']; ?>" 
-                                   class="container-property-input"
-                                   id="<?php echo $inputField['id']; ?>"
-                <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
-                                       required
-                                   <?php endif; ?>
-                                   >
+         <?php elseif (strpos($inputField['label'], 'color') !== false): ?>
+    <!-- Include a color picker for properties containing the word "color" -->
+    <input type="color" 
+           name="<?php echo $inputField['inputName']; ?>" 
+           value="<?php echo !empty($inputField['value']) ? $inputField['value'] : '#00000000'; ?>" <!-- Default value is transparent -->
+           class="container-property-input"
+           id="<?php echo $inputField['id']; ?>"
+           <?php if (in_array($inputField['inputName'], $requiredName) && empty($inputField['value'])): ?>
+               required
+           <?php endif; ?>
+    >
+
+                                   
 
             <?php else: ?>
                             <!-- Keep the existing text input for other fields -->

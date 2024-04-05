@@ -34,7 +34,7 @@ class ReportSelectorFunctionMapping extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('report_id, report_column, function_library_id', 'required'),
+			array('report_id, report_column, report_row, function_library_id', 'required'),
 			array('report_id, function_library_id', 'numerical', 'integerOnly'=>true),
 			array('report_column, report_row', 'length', 'max'=>255),
 			// The following rule is used by search().

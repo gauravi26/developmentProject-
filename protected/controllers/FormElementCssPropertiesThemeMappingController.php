@@ -570,7 +570,9 @@ public function actionElementCssCustomUpdate($themeId)
     foreach ($inputFieldMapping as $inputField => $formElementCssPropertiesId) {
             if (isset($_POST[$inputField])) {
                 $inputValue = $_POST[$inputField];
-
+if (empty($inputValue) || $inputValue === '#000000') {
+            $inputValue = null; // Set empty values to NULL
+        }
                 // Check if the input is empty and set the value accordingly
                 if (empty($inputValue)) {
                     $inputValue = null; // Set empty values to NULL

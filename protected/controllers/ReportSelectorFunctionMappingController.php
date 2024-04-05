@@ -31,7 +31,7 @@ class ReportSelectorFunctionMappingController extends Controller {
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
                 'actions' => array('create', 'update', 'applyfunctionAction', 'query', 'fetchParametersForFunction',
-                    'fetchParametersForAction', 'customCreate', 'save', 'fetchReportColumns', 'customDelete', 'mapping'),
+                    'fetchParametersForAction', 'customCreate', 'save', 'fetchReportColumns', 'customDelete', 'customUpdate','loadModels'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -944,6 +944,7 @@ private function fetchSelector($model) {
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id the ID of the model to be updated
      */
+
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
 
@@ -1093,5 +1094,97 @@ WHERE report_id IN ($reportId);
         }
     }
 
-    //****************Applying Script to report ************//
+    //**************** Custom Update Page  ************//
+    
+        public function actionGetThemeDropBox()
+{
+    $this->render('customUpdate');
+}
+
+public function  actionLoadModels() {
+    $selectedReportId = Yii::app()->request->getPost('reportId');
+//    print_r($selectedReportId);
+//    die();
+    if ($selectedReportId !== null) {
+        $fetchQuery = Report::model()->findByPk($selectedReportId);
+   
+        if ($fetchQuery !== null) {
+            $reportColumns = $fetchQuery->reportColumn;
+          
+            $dataForUpdate = $this->dataForUpdate($selectedReportId);
+             
+            $responseData = array(
+                'reportColumns' => $reportColumns,
+                'dataForUpdate' => $dataForUpdate
+            );
+//           
+            echo json_encode($responseData);
+        } else {
+            echo json_encode(array('error' => 'Report not found'));
+        }
+    } else {
+        echo json_encode(array('error' => 'No report ID provided'));
+    }
+}
+
+  private function dataForUpdate($selectedReportId) {
+    $reportFunctionMappingModels = ReportSelectorFunctionMapping::model()->findAllByAttributes(array('report_id' => $selectedReportId));
+    
+    $reportFunctionMappingIDs = array();
+    $functionArgValues = array();
+    $reportActionMappingIDs = array();
+    $ActionargValues = array();
+    $targetColumns = array(); // Corrected variable name
+    $reportColumnName = array();
+    
+    foreach ($reportFunctionMappingModels as $model) {
+        $reportFunctionMappingIDs[] = $model->id;
+        $reportColumnName[] = $model->report_column;
+        
+        $reportFunctionArgModels = ReportFunctionArgValueMapping::model()->findAllByAttributes(array('report_function_mapping_id' => $model->id));
+        
+        foreach ($reportFunctionArgModels as $reportFunctionArgModel){
+            $functionArgValues[] = $reportFunctionArgModel->value;
+        }
+        
+        $reportActionModels = ReportFunctionActionMapping::model()->findAllByAttributes(array('report_function_mapping_id' => $model->id));
+
+        foreach ($reportActionModels as $reportActionModel){
+            $reportActionMappingIDs[] = $reportActionModel->id;
+            $reportFunctionActionArgValueModels = ReportFunctionMappingActionValue::model()->findAllByAttributes(array('report_function_action_mapping_id' => $reportActionModel->id));
+
+            if ($reportFunctionActionArgValueModels === null) {
+                Yii::log("No report function action arg value models found for report action mapping ID: {$reportActionModel->id}", CLogger::LEVEL_ERROR);
+            } else {
+                foreach ($reportFunctionActionArgValueModels as $argValueModel) {
+                    $ActionargValues[] = $argValueModel->action_parameter_value;
+                }
+                $targetColumnModels = TargetColumn::model()->findAllByAttributes(array('report_function_action_mapping_id' => $reportActionModel->id));
+
+                foreach ($targetColumnModels as $targetColumnModel) {
+                    $targetColumns[] = $targetColumnModel->target_column; // Collecting target columns
+                }
+            }
+        }
+    }
+    
+    return array(
+        'reportColumnNames'=>$reportColumnName,
+        'reportFunctionMappingIDs' => $reportFunctionMappingIDs,
+        'functionArgValues' => $functionArgValues,
+        'reportActionMappingIDs' => $reportActionMappingIDs,
+        'ActionargValues' => $ActionargValues,
+        'targetColumns' => $targetColumns // Corrected variable name
+    );
+}
+
+public function actionCustomUpdate() {
+    $selectedReportId = Yii::app()->request->getPost('reportId');
+    $data = $this->dataForUpdate($selectedReportId);
+    $this->render('customUpdate', array(
+        'data' => $data,
+    ));
+}
+
+    
 }

@@ -11,7 +11,6 @@
                 "js": "$(document).ready(function() { $('#field_39').hover(function() { var element = $(this); element.addClass('blink'); setTimeout(function() { element.removeClass('blink'); }, 1000); }); });"
             }
         },
-       
         {
             "form_id": "4",
             "field_id": "29",
@@ -21,6 +20,50 @@
             "code": {
                 "css": ".blink { border: 3px solid #FBB72D; font-weight: bold; border-radius: 5px; }",
                 "js": "$(document).ready(function() { $('#field_29').hover(function() { var element = $(this); element.addClass('blink'); setTimeout(function() { element.removeClass('blink'); }, 1000); }); });"
+            }
+        },
+        {
+            "form_id": "4",
+            "field_id": "28",
+            "effect_id": "1",
+            "trigger": "hover",
+            "title": "phone-number",
+            "code": {
+                "css": ".blink { border: 3px solid #FBB72D; font-weight: bold; border-radius: 5px; }",
+                "js": "$(document).ready(function() { $('#field_28').hover(function() { var element = $(this); element.addClass('blink'); setTimeout(function() { element.removeClass('blink'); }, 1000); }); });"
+            }
+        },
+        {
+            "form_id": "4",
+            "field_id": "24",
+            "effect_id": "109",
+            "trigger": "hover",
+            "title": "first-name",
+            "code": {
+                "css": ".border-around{border: solid 10px salmon !important;}",
+                "js": "$('#field_24').hover(function() { var element = $(this); element.addClass('border-around'); setTimeout(function() { element.removeClass('border-around'); }, 1000); });"
+            }
+        },
+        {
+            "form_id": "4",
+            "field_id": "39",
+            "effect_id": "112",
+            "trigger": "hover",
+            "title": "student_btn",
+            "code": {
+                "css": ".changeBg{background-color:salmon!important;}",
+                "js": "$('#field_39').hover(function() { \\nvar element = $(this); \\nelement.addClass('changeBg'); \\nsetTimeout(function() { \\nelement.removeClass('changeBg'); \\n}, 1000); \\n}\\n);"
+            }
+        },
+        {
+            "form_id": "4",
+            "field_id": "25",
+            "effect_id": "82",
+            "trigger": "focus",
+            "title": "last-name",
+            "code": {
+                "css": "",
+                "js": "  var opacity=0; \n    var intervalID=0; \n    window.onload=fadeout; \n        function fadeout(){ \n            setInterval(hide, 200); \n        } \n    function hide(){ \n        var body=document.getElementById(\"field_25\"); \n        opacity = \n    Number(window.getComputedStyle(body).getPropertyValue(\"opacity\")) \n      \n            if(opacity>0){ \n                opacity=opacity-0.1; \n                        body.style.opacity=opacity \n            } \n            else{ \n                clearInterval(intervalID); \n            } \n        } "
             }
         }
     ],
@@ -34,6 +77,19 @@
             "code": {
                 "css": ".shake { animation: shake 0.5s; } @keyframes shake { 0% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-10px); } 80% { transform: translateX(10px); } 100% { transform: translateX(0); } }",
                 "js": "$('#field_9').change(function() { var element = $(this); element.addClass('shake'); setTimeout(function() { element.removeClass('shake'); }, 1000); });"
+            }
+        }
+    ],
+    "1": [
+        {
+            "form_id": "1",
+            "field_id": "14",
+            "effect_id": "109",
+            "trigger": "hover",
+            "title": "faculty_name",
+            "code": {
+                "css": "border-around{border:solid10pxsalmon!important;}",
+                "js": "$('#field_14').hover(function() { var element = $(this); element.addClass('border-around'); setTimeout(function() { element.removeClass('border-around'); }, 1000); });\n"
             }
         }
     ]
