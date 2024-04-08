@@ -1103,8 +1103,8 @@ WHERE report_id IN ($reportId);
 
 public function  actionLoadModels() {
     $selectedReportId = Yii::app()->request->getPost('reportId');
-//    print_r($selectedReportId);
-//    die();
+    print_r($_POST);
+    die();
     if ($selectedReportId !== null) {
         $fetchQuery = Report::model()->findByPk($selectedReportId);
    

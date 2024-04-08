@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Delete Form Styles</title>
+    <title>Edit Report Theme</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -16,16 +16,16 @@
     ?>
 
     <form id="deleteForm">
-        <label for="report_theme_id">Select Form to delete its styles</label>
+        <label for="report_theme_id">Select Report Theme to edit its Theme</label>
         <select id="report_theme_id" name="report_theme_id">
-            <option value="">Select Form</option>
+            <option value="">Select Report Theme</option>
             <?php foreach ($themeList as $id => $formName): ?>
                 <option value="<?php echo $id; ?>"><?php echo $formName; ?></option>
             <?php endforeach; ?>  
         </select>
         <!-- Add buttons for deletion and updating -->
-        <button type="button" id="deleteButton">Delete Styles</button>
-        <button type="button" id="updateButton">Update Styles</button>
+        <button type="button" id="deleteButton">Delete Report Theme</button>
+        <button type="button" id="updateButton">Update Report Theme</button>
     </form>
 
     <script>
