@@ -3,15 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/controllers/ThemeForReportController.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/reportThemeMapping/_form.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/layouts/main.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/themeForReport/createTheme.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/controllers/FormFieldCsspropertyValueMappingController.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/themeForReport/successPage.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/formFieldCsspropertyValueMapping/deletePage.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/themeForReport/selectReport.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/themeForReport/reportThemeTab.php</file>
+            <file>file:/C:/xampp/htdocs/themebuilder11/protected/models/Themes.php</file>
         </group>
     </open-files>
 </project-private>
